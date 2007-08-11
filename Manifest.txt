@@ -1,0 +1,7 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+bin/impostor
+lib/impostor.rb
+test/test_impostor.rb

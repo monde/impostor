@@ -1,0 +1,6 @@
+== 0.0.1 / 2007-08-07
+
+* 1 major enhancement
+  * Birthday!
+  * phpBB2 support completed
+
