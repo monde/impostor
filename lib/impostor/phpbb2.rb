@@ -85,13 +85,14 @@ module WWW
         begin
           u = URI.parse(link['href'])
           topic = CGI::parse(u.query)['t'][0]
+          raise PostError.new('unexpected new topic response') if topic.nil?
         rescue StandardError => err
           raise PostError.new(err)
         end
 
         # save new topic id and topic name
         add_subject(forum, topic, subject)
-        @forum=forum, @topic=topic, @subject=subject, @message=message
+        @forum=forum; @topic=topic; @subject=subject; @message=message
         true
       end
 
@@ -151,7 +152,10 @@ module WWW
         return if logged_in?(page)
 
         # setup the form and submit
-        form = page.forms.first
+        form = page.forms
+        form = page.forms.first if page.forms
+        raise LoginError.new("unknown login page format") unless form
+        
         button = page.forms.first.buttons.with.name('login').first
         form['username'] = username
         form['password'] = password
@@ -169,7 +173,7 @@ module WWW
       end
 
       def version
-        @version
+        @version ||= self.class.to_s
       end
 
       private
@@ -178,7 +182,9 @@ module WWW
       # Checks if the agent is already logged by stored cookie
 
       def logged_in?(page)
-        mm = page.search("//a[@class='mainmenu']").last
+        mm = page.search("//a[@class='mainmenu']")
+        mm = mm.last if mm
+        return false unless mm
         return false if mm.innerText =~ /Log in/
         return true if mm.innerText =~ /Log out \[ #{username} \]/
         false

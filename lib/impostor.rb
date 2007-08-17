@@ -94,7 +94,7 @@ module WWW
     attr_accessor :version
   
     ##
-    # Login to the forum, true if logged in, false otherwise
+    # Login to the forum, returns true if logged in, false otherwise
   
     def login; end
   

@@ -10,6 +10,14 @@ class WWW::ImpostorTest < Test::Unit::TestCase
     assert_equal WWW::Impostor::Fake, im.class 
   end
 
+  def test_add_subject_should_work
+    im = WWW::Impostor.create({:impostor_type => WWW::Impostor::Fake})
+    im.add_subject(f=10,t=10,s="hello world")
+    assert_equal s, im.get_subject(f,t)
+    im.add_subject(f=10,t=11,s="hello world2")
+    assert_equal s, im.get_subject(f,t)
+  end
+
   def test_config_should_not_be_nil
     assert_nothing_raised(StandardError) do
       impostor = fake(Hash.new)
@@ -78,6 +86,9 @@ class WWW::ImpostorTest < Test::Unit::TestCase
     assert_equal 'hello world', impostor.get_subject(forum_one, topic_two)
     assert_equal 'foo bar', impostor.get_subject(forum_two, topic_two)
     assert_equal nil, impostor.get_subject(82, 101)
+
+    # test topics_cache
+    assert_equal topics_file.path, impostor.topics_cache
 
     #dump the test file
     topics_file.unlink
