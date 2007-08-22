@@ -5,6 +5,10 @@ require 'impostor'
 
 class WWW::ImpostorTest < Test::Unit::TestCase
 
+  def test_impostor_error
+    assert WWW::Impostor::ImpostorError.new(StandardError.new)
+  end
+
   def test_create_should_return_an_instance
     im = WWW::Impostor.create({:impostor_type => WWW::Impostor::Fake})
     assert_equal WWW::Impostor::Fake, im.class 
@@ -28,6 +32,11 @@ class WWW::ImpostorTest < Test::Unit::TestCase
   def test_login_page_should_be_clean
     impostor = fake({:app_root => 'http://localhost/', :login_page => '/foo/bar'})
     assert_equal 'http://localhost/foo/bar', impostor.test_helper_login_page.to_s
+  end
+
+  def test_posting_page_should_be_clean
+    impostor = fake({:app_root => 'http://localhost/', :posting_page => '/foo/bar'})
+    assert_equal 'http://localhost/foo/bar', impostor.test_helper_posting_page.to_s
   end
 
   def test_load_topics_should_do_so
@@ -123,9 +132,13 @@ class WWW::ImpostorTest < Test::Unit::TestCase
 
   private
 
-  class WWW::Impostor::Fake < WWW::Impostor;
+  class WWW::Impostor::Fake < WWW::Impostor
     def test_helper_login_page
       login_page
+    end
+
+    def test_helper_posting_page
+      posting_page
     end
 
     def test_helper_add_topic(f,t,n)

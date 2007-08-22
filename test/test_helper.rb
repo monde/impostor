@@ -9,6 +9,7 @@ module Impostor
     def load_page(file)
       IO.readlines("#{File.dirname(__FILE__)}/fixtures/#{file}")
     end
+
   end
 end
 
@@ -37,3 +38,4 @@ class FakeResponse < Net::HTTPResponse
     yield body
   end
 end
+

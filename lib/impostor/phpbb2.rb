@@ -71,6 +71,8 @@ module WWW
 
         # if the response is correct there will be a link that looks something like
         # Click <a href="http://localhost/phpbb2/viewtopic.php?p=29#29">Here</a> to view your message
+        # MIKE TODO <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
+        #
         # this link needs to be clicked, the page it leads to will give us
         # the topic id that was created for the topic name that we created
         a = page.search("//span[@class='gen']//a").first
@@ -95,7 +97,6 @@ module WWW
         @forum=forum; @topic=topic; @subject=subject; @message=message
         true
       end
-
 
       ##
       # Attempt to post to the forum
@@ -139,33 +140,23 @@ module WWW
         false
       end
 
+      ##
+      # does the work of logging into phpbb
+
       def login
         return if @loggedin
   
-        begin
-          page = @agent.get(login_page)
-        rescue StandardError => err
-          raise LoginError.new(err)
-        end
+        # get the login page
+        page = fetch_login_page
 
         # return if we are already logged in from a cookie state
         return if logged_in?(page)
 
         # setup the form and submit
-        form = page.forms
-        form = page.forms.first if page.forms
-        raise LoginError.new("unknown login page format") unless form
-        
-        button = page.forms.first.buttons.with.name('login').first
-        form['username'] = username
-        form['password'] = password
-        form['autologin'] = 'on'
-        begin
-          page = @agent.submit(form, button)
-        rescue StandardError => err
-          raise LoginError.new(err)
-        end
+        form, button = login_form_and_button(page)
+        page = post_login(form, button)
 
+        # set up the rest of the state if we are logged in
         @loggedin = logged_in?(page)
         load_topics if @loggedin
 
@@ -176,7 +167,45 @@ module WWW
         @version ||= self.class.to_s
       end
 
-      private
+      protected
+
+      ##
+      # does the work of posting the login form
+
+      def post_login(form, button)
+        begin
+          page = @agent.submit(form, button)
+        rescue StandardError => err
+          raise LoginError.new(err)
+        end
+      end
+
+      ##
+      # returns the login form and its button from the login page
+
+      def login_form_and_button(page)
+        form = page.forms
+        form = page.forms.first if page.forms
+        raise LoginError.new("unknown login page format") unless form
+        
+        button = page.forms.first.buttons.with.name('login').first
+        form['username'] = username
+        form['password'] = password
+        form['autologin'] = 'on'
+
+        return form, button
+      end
+
+      ##
+      # fetches the login page
+
+      def fetch_login_page
+        begin
+          page = @agent.get(login_page)
+        rescue StandardError => err
+          raise LoginError.new(err)
+        end
+      end
 
       ##
       # Checks if the agent is already logged by stored cookie
