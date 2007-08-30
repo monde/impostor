@@ -70,7 +70,6 @@ module WWW
  
     def initialize(config={})
       @config = config
-      @loggedin = false
       load_topics
     end
 

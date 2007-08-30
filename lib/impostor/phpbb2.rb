@@ -136,6 +136,7 @@ module WWW
 
         raise PostError.new("too many posts in too short amount of time") if 
           mes.innerText =~ /You cannot make another post so soon after your last; please try again in a short while./
+
         # false otherwise
         false
       end

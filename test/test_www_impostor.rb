@@ -1,7 +1,9 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
+# test helper loads all the required libraries for testing
+# with fake web
+require File.dirname(__FILE__) + "/test_helper"
+
 require 'tempfile'
 require 'test/unit'
-require 'impostor'
 
 class WWW::ImpostorTest < Test::Unit::TestCase
 

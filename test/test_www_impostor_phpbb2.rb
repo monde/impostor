@@ -1,37 +1,11 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
+# test helper loads all the required libraries for testing
+# with fake web
 require File.dirname(__FILE__) + "/test_helper"
 
 require 'test/unit'
-require 'rubygems'
-require 'hpricot'
-require 'fake_web'
-require 'open-uri'
-require 'impostor'
-require 'yaml'
-require 'pp'
-
-module FakeWeb
-  class << self
-    alias :original_registered_uri? :registered_uri?
-  end
-
-  def FakeWeb.registered_uri?(uri, method)
-    registered = self.original_registered_uri?(uri, method)
-    unless registered
-      puts "FakeWeb UNREGISTERED METHOD: #{method}, URI: #{uri}"
-    end
-    registered
-  end
-end
 
 class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   include Impostor::TestHelper
-
-  class WWW::Impostor::FakePhpbb2 < WWW::Impostor::Phpbb2
-    def fake_loggedin=(loggedin)
-      @loggedin = loggedin
-    end
-  end
 
   def fake(config = {})
     WWW::Impostor::FakePhpbb2.new(config)
@@ -39,18 +13,30 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def setup
     FakeWeb.clean_registry()
+    @good_index = 'http://localhost/phpbb2/'
+    @good_login = 'http://localhost/phpbb2/login.php'
   end
 
-  # these tests could be refactored to be less procedural, but resist
-  # that tempation so that the mechanics of the library and its tests
-  # are clear
+  class WWW::Impostor::FakePhpbb2 < WWW::Impostor::Phpbb2
+    def fake_loggedin=(loggedin)
+      @loggedin = loggedin
+    end
+
+    def test_fetch_login_page
+        fetch_login_page
+    end
+  end
+
+  def test_fetch_login_page
+    register_good_index
+    register_good_login
+    page = fake(config).test_fetch_login_page 
+    assert page
+  end
 
   def test_should_login
-    index = 'http://localhost/phpbb2/'
-    login = 'http://localhost/phpbb2/login.php'
-    FakeWeb.register_uri(index, :method => :get, :response => response(load_page('phpbb2-index.html')))
-    FakeWeb.register_uri(login, :method => :get, :response => response(load_page('phpbb2-login.html')))
-    FakeWeb.register_uri(login, :method => :post, :response => response(load_page('phpbb2-logged-in.html')))
+    register_good_index
+    register_good_login
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
     assert_equal true, im.login
     im.logout
@@ -62,8 +48,8 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_bad_login_page_should_raise_exception
-    login = 'http://localhost/phpbb2/login.php'
-    FakeWeb.register_uri(login, :method => :get, :response => response("not found",404))
+    FakeWeb.register_uri(@good_login, :method => :get, 
+                         :response => response("not found",404))
 
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
 
@@ -73,12 +59,11 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_bad_login_post_should_raise_exception
-    index = 'http://localhost/phpbb2/'
-    login = 'http://localhost/phpbb2/login.php'
-    FakeWeb.register_uri(index, :method => :get, :response => response(load_page('phpbb2-index.html')))
-    FakeWeb.register_uri(login, :method => :get, :response => response(load_page('phpbb2-login.html')))
-    login = 'http://localhost/phpbb2/login.php'
-    FakeWeb.register_uri(login, :method => :post, :response => response("not found",404))
+    register_good_index
+    FakeWeb.register_uri(@good_login, :method => :get, 
+                         :response => response(load_page('phpbb2-login.html')))
+    FakeWeb.register_uri(@good_login, :method => :post, 
+                         :response => response("not found",404))
 
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
 
@@ -147,15 +132,18 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_should_post
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert_equal true, im.login
+    setup_good_fake_web
+
+    im = fake(config)
+    im.fake_loggedin = true
+
     im.forum = 2
     im.topic = 2
     im.message = "#{Time.now} Hello there #{Time.now}"
     assert im.post
   end
+=begin
 
   def test_new_topic_should_raise_exceptions_on_bad_input
     # new_topic 02
@@ -261,16 +249,25 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   private
 
+    def register_good_login
+      FakeWeb.register_uri(@good_login, :method => :get, 
+                           :response => response(load_page('phpbb2-login.html')))
+      FakeWeb.register_uri(@good_login, :method => :post, 
+                           :response => response(load_page('phpbb2-logged-in.html')))
+    end
+
+    def register_good_index
+      FakeWeb.register_uri(@good_index, :method => :get, 
+                        :response => response(load_page('phpbb2-index.html')))
+    end
+
   def setup_good_fake_web
-    index = 'http://localhost/phpbb2/'
-    login = 'http://localhost/phpbb2/login.php'
     posting_mode = '?mode=reply&t=2'
     posting = 'http://localhost/phpbb2/posting.php'
-    FakeWeb.register_uri(index, :method => :get, 
-                                :response => response(load_page('phpbb2-index.html')))
-    FakeWeb.register_uri(login, :method => :get, 
+    register_good_index
+    FakeWeb.register_uri(@good_login, :method => :get, 
                                 :response => response(load_page('phpbb2-login.html')))
-    FakeWeb.register_uri(login, :method => :post, 
+    FakeWeb.register_uri(@good_login, :method => :post, 
                                 :response => response(load_page('phpbb2-logged-in.html')))
     FakeWeb.register_uri(posting + posting_mode, :method => :get, 
                                 :response => response(load_page('phpbb2-posting-reply.html')))
@@ -280,7 +277,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def config(cookies=false, config={})
     cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
-    c = {:app_root => 'http://localhost/phpbb2/',
+    c = {:app_root => @good_index,
       :login_page => 'login.php', 
       :posting_page => 'posting.php', 
       :user_agent => 'Windows IE 7', 
@@ -297,74 +294,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     res['Content-Type'] ||= 'text/html'
     res.body = body
     res
-  end
-
-
-
-
-
-  def register_pages
-    good_pages = {
-=begin
-      'http://localhost/phpbb2/' =>
-        load_page('phpbb2-index.html'),
-      'http://localhost/phpbb2/login.php' =>
-        load_page('phpbb2-login.html')
-      'http://localhost/phpbb2/POST-login.php' =>
-        load_page('phpbb2-logged-in.html'),
-      'http://localhost/phpbb2/will-not-login.php' =>
-        load_page('phpbb2-will-not-login.html'),
-      'http://localhost/phpbb2/POST-will-not-login.php' =>
-        load_page('phpbb2-not-logged-in.html'),
-      'http://localhost/phpbb2/posting.php?mode=reply&t=2' =>
-        load_page('phpbb2-PRE-posting.html'),
-      'http://localhost/phpbb2/POST-GOOD-MESSAGE-posting.php' =>
-        load_page('phpbb2-good-post-message.html'),
-      'http://localhost/phpbb2/posting.php?mode=newtopic&f=2' =>
-        load_page('phpbb2-PRE-new-topic.html'),
-      'http://localhost/phpbb2/POST-GOOD-NEWTOPIC-posting.php' =>
-        load_page('phpbb2-good-post-newtopic.html'),
-      'http://localhost/phpbb2/viewtopic.php?p=29' =>
-        load_page('phpbb2-good-post-newtopic-follow.html'),
-      'http://localhost/phpbb2/bad-login.php' =>
-        "",
-      'http://localhost/phpbb2/posting-new-topic-with-bad-action.php?mode=newtopic&f=2' =>
-        load_page('phpbb2-PRE-new-topic-BAD-ACTION.html'),
-      'http://localhost/phpbb2/posting-09A-form.php?mode=newtopic&f=2' =>
-        load_page('phpbb2-posting-09A-form.html'),
-      'http://localhost/phpbb2/posting-09B-response.php' =>
-        load_page('phpbb2-posting-09B-response.html'),
-      'http://localhost/phpbb2/viewtopic-09C-response.php?p=29' =>
-        load_page('phpbb2-viewtopic-09C-response.html')
-=end
-    }
-    good_pages.each do |url,body|
-      res = FakeResponse.new
-      res.code = 200
-      res['Content-Type'] ||= 'text/html'
-      res.body = body
-      FakeWeb.register_uri(url, :response => res)
-    end
-
-=begin
-    error_pages = {
-      #'http://localhost/phpbb2/404-posting.php?mode=reply&t=2' =>
-      #  "",
-      'http://localhost/phpbb2/404-posting.php?mode=newtopic&f=2' =>
-        "",
-      'http://localhost/phpbb2/POST-BAD-NEWTOPIC-posting.php' =>
-        ""
-    }
-
-    error_pages.each do |url,body|
-      res = FakeResponse.new
-      res.code = 404
-      res['Content-Type'] ||= 'text/html'
-      res.body = body
-      FakeWeb.register_uri(url, :response => res)
-    end
-=end
-
   end
 
 end
