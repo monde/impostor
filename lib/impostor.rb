@@ -96,7 +96,7 @@ module WWW
     # Login to the forum, returns true if logged in, false otherwise
   
     def login; end
-  
+
     ##
     # Log out of the forum, true if logged in, false otherwise
   
@@ -185,12 +185,7 @@ module WWW
       @config[:app_root]
     end
 
-=begin
-end of the basic interface methods
-
-helpers based on config
-=end
-#    protected
+    protected
 
     ##
     # Get the topics cache

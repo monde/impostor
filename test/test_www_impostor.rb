@@ -99,7 +99,7 @@ class WWW::ImpostorTest < Test::Unit::TestCase
     assert_equal nil, impostor.get_subject(82, 101)
 
     # test topics_cache
-    assert_equal topics_file.path, impostor.topics_cache
+    assert_equal topics_file.path, impostor.test_helper_topics_cache
 
     #dump the test file
     topics_file.unlink
@@ -141,6 +141,10 @@ class WWW::ImpostorTest < Test::Unit::TestCase
 
     def test_helper_posting_page
       posting_page
+    end
+
+    def test_helper_topics_cache
+      topics_cache
     end
 
     def test_helper_add_topic(f,t,n)

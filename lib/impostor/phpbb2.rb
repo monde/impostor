@@ -213,10 +213,7 @@ module WWW
 
       def logged_in?(page)
         mm = page.search("//a[@class='mainmenu']")
-        mm = mm.last if mm
-        return false unless mm
-        return false if mm.innerText =~ /Log in/
-        return true if mm.innerText =~ /Log out \[ #{username} \]/
+        return true if mm.last.innerText =~ /Log out \[ #{username} \]/ rescue false
         false
       end
  

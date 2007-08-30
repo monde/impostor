@@ -27,24 +27,16 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+  def test_version
+    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
+    assert im.version
+  end
+
   def test_fetch_login_page
     register_good_index
     register_good_login
     page = fake(config).test_fetch_login_page 
     assert page
-  end
-
-  def test_should_login
-    register_good_index
-    register_good_login
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert_equal true, im.login
-    im.logout
-  end
-
-  def test_version
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert im.version
   end
 
   def test_bad_login_page_should_raise_exception
@@ -72,10 +64,17 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+  def test_should_login
+    register_good_index
+    register_good_login
+    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
+    assert_equal true, im.login
+    im.logout
+  end
+
   def test_posting_without_message_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
-    im.fake_loggedin = true
 
     im.forum = 2
     im.topic = 2
@@ -100,8 +99,9 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_posting_not_logged_in_should_raise_exception
     setup_good_fake_web
+    FakeWeb.register_uri(@good_login, :method => :post, 
+                                :response => response(load_page('phpbb2-not-logged-in.html')))
     im = fake(config)
-    im.fake_loggedin = false
 
     im.forum = 2
     im.topic = 2
@@ -117,11 +117,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
     posting_mode = '?mode=reply&t=2'
     posting = 'http://localhost/phpbb2/posting.php'
-    FakeWeb.register_uri(posting + posting_mode, :method => :post, 
+    FakeWeb.register_uri(posting + posting_mode, :method => :get, 
                          :response => response("not found",404))
 
     im = fake(config)
-    im.fake_loggedin = false
 
     im.forum = 2
     im.topic = 2
@@ -132,17 +131,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_should_post
-    setup_good_fake_web
-
-    im = fake(config)
-    im.fake_loggedin = true
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "#{Time.now} Hello there #{Time.now}"
-    assert im.post
-  end
 =begin
 
   def test_new_topic_should_raise_exceptions_on_bad_input
@@ -231,7 +219,25 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_new_topic_should_work
+
+=end
+
+# save these for end so that rcov covers the code incrementally
+# as we write tests
+=begin
+  def test_should_post
+    setup_good_fake_web
+
+    im = fake(config)
+    im.fake_loggedin = true
+
+    im.forum = 2
+    im.topic = 2
+    im.message = "#{Time.now} Hello there #{Time.now}"
+    assert im.post
+  end
+
+  def test_new_topic_should_create_topic_with_post
     # new_topic 10
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
     forum = 2
@@ -244,8 +250,8 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_equal subject, im.subject
     assert_equal message, im.message
   end
-
 =end
+
 
   private
 
