@@ -318,59 +318,47 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-#viewtopic.php?p=17#17
-#
+  def test_unexpected_viewtopic_for_new_topic_should_raise_exception
+    setup_good_fake_web :new_topic
 
-=begin
+    FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
+                         :response => response("junk",200))
 
-  def test_new_topic_with_form_error_should_raise_exception
-    # new_topic 07
-    im = WWW::Impostor::Phpbb2.new(
-           config(cookies=false,options={:posting_page=>'404-posting.php'}))
+    im = fake(config)
+
+    # bad submit response should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert_equal true, im.new_topic(forum=2,subject="s",message="m")
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
 
-  def test_new_topic_with_bad_form_action_should_raise_exception
-    # new_topic 08
-    im = WWW::Impostor::Phpbb2.new(
-           config(cookies=false,options={:posting_page=>'posting-new-topic-with-bad-action.php'}))
+  def test_malformed_viewtopic_response_for_new_topic_should_raise_exception
+    setup_good_fake_web :new_topic
+
+    FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
+                        :response => response(load_page('phpbb2-get-viewtopic-for-new-topic-malformed-response.html')))
+
+    im = fake(config)
+
+    # bad submit response should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert_equal true, im.new_topic(forum=2,subject="s",message="m")
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
 
-  def test_new_topic_with_bad_final_response_should_raise_exception
-    # new_topic 09
-    im = WWW::Impostor::Phpbb2.new(
-           config(cookies=false,options={:posting_page=>'posting-09A-form.php?mode=newtopic&f=2'}))
-    assert_raises(WWW::Impostor::PostError) do
-      assert_equal true, im.new_topic(forum=2,subject="s",message="m")
-    end
-  end
+  def test_new_topic_should_work
+    setup_good_fake_web :new_topic
 
+    im = fake(config)
 
-=end
-
-# save these for end so that rcov covers the code incrementally
-# as we write tests
-=begin
-  def test_new_topic_should_create_topic_with_post
-    # new_topic 10
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    forum = 2
-    subject = "hello world"
-    message = "hello ruby"
+    # bad submit response should throw an exception
     assert_nothing_raised(WWW::Impostor::ImpostorError) do
-      assert_equal true, im.new_topic(forum,subject,message)
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+      assert_equal 2, im.forum
+      assert_equal "hello world", im.subject
+      assert_equal "hello ruby", im.message
     end
-    assert_equal forum, im.forum
-    assert_equal subject, im.subject
-    assert_equal message, im.message
   end
-=end
-
 
   private
 

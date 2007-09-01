@@ -87,9 +87,9 @@ module WWW
         # t=XXX will be our new topic id, i.e.
         # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
         begin
-          u = URI.parse(link)
-          topic = CGI::parse(u.query)['t'][0]
-          raise PostError.new('unexpected new topic response') if topic.nil?
+          u = (URI.parse(link) rescue nil)
+          topic = (CGI::parse(u.query)['t'][0] rescue nil)
+          raise PostError.new('unexpected new topic response') unless topic
         rescue StandardError => err
           raise PostError.new(err)
         end
@@ -219,7 +219,10 @@ module WWW
 
       def logged_in?(page)
         mm = page.search("//a[@class='mainmenu']")
-        return true if mm.last.innerText =~ /Log out \[ #{username} \]/ rescue false
+        return false unless mm
+        mm.each do |m|
+          return true if (m.innerText =~ /Log out \[ #{username} \]/ rescue false)
+        end
         false
       end
  
