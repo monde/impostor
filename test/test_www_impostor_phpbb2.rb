@@ -16,6 +16,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @good_index = 'http://localhost/phpbb2/'
     @good_login = 'http://localhost/phpbb2/login.php'
     @good_posting = 'http://localhost/phpbb2/posting.php'
+    @good_viewtopic = 'http://localhost/phpbb2/viewtopic.php'
   end
 
   class WWW::Impostor::FakePhpbb2 < WWW::Impostor::Phpbb2
@@ -303,6 +304,23 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+  def test_unexpected_text_for_new_topic_should_raise_exception
+    setup_good_fake_web :new_topic
+
+    FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response("junk",200))
+
+    im = fake(config)
+
+    # bad submit response should throw an exception
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+    end
+  end
+
+#viewtopic.php?p=17#17
+#
+
 =begin
 
   def test_new_topic_with_form_error_should_raise_exception
@@ -381,6 +399,8 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
                          :response => response(load_page('phpbb2-get-new_topic-form-good-response.html')))
       FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response(load_page('phpbb2-post-new_topic-good-response.html')))
+      FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
+                         :response => response(load_page('phpbb2-get-viewtopic-for-new-topic-good-response.html')))
     else
       raise "unknown type parameter"
     end

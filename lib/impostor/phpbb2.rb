@@ -42,9 +42,9 @@ module WWW
       end
 
       def new_topic(forum=@forum, subject=@subject, message=@message)
-        raise PostError.new("forum not set") if forum.nil?
-        raise PostError.new("topic name not given") if subject.nil?
-        raise PostError.new("message not set") if message.nil?
+        raise PostError.new("forum not set") unless forum
+        raise PostError.new("topic name not given") unless subject
+        raise PostError.new("message not set") unless message
 
         login
         raise PostError.new("not logged in") unless @loggedin
@@ -70,23 +70,24 @@ module WWW
           raise PostError.new(err)
         end
 
-        # if the response is correct there will be a link that looks something like
-        # Click <a href="http://localhost/phpbb2/viewtopic.php?p=29#29">Here</a> to view your message
-        # MIKE TODO <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
+        # if the response is correct there will be a meta link that looks something like
+        # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
         #
-        # this link needs to be clicked, the page it leads to will give us
+        # this link needs to be followed, the page it leads to will give us
         # the topic id that was created for the topic name that we created
-        a = page.search("//span[@class='gen']//a").first
-        raise PostError.new('unexpected new topic response') if a.nil?
+        a = (page.search("//meta[@http-equiv='refresh']").attr('content') rescue nil)
+        a = (/url=(.*)/.match(a)[1] rescue nil)
+        raise PostError.new('unexpected new topic response') unless a
 
-        page = @agent.click(a)
-        link = page.search("//link[@rel='prev']").first
-        raise PostError.new('unexpected new topic response') if link.nil? || link['href'].nil?
+        a = URI.join(app_root, a)
+        page = @agent.get(a)
+        link = (page.search("//link[@rel='prev']").first['href'] rescue nil)
+        raise PostError.new('unexpected new topic response') unless link
+
         # t=XXX will be our new topic id, i.e.
         # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
-        
         begin
-          u = URI.parse(link['href'])
+          u = URI.parse(link)
           topic = CGI::parse(u.query)['t'][0]
           raise PostError.new('unexpected new topic response') if topic.nil?
         rescue StandardError => err
@@ -103,9 +104,9 @@ module WWW
       # Attempt to post to the forum
 
       def post(forum = @forum, topic = @topic, message = @message)
-        raise PostError.new("forum not set") if forum.nil?
-        raise PostError.new("topic not set") if topic.nil?
-        raise PostError.new("message not set") if message.nil?
+        raise PostError.new("forum not set") unless forum
+        raise PostError.new("topic not set") unless topic
+        raise PostError.new("message not set") unless message
 
         login
         raise PostError.new("not logged in") unless @loggedin
