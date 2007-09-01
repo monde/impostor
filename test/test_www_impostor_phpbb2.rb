@@ -290,7 +290,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_bad_submit_response_for_new_topic_should_raise_exception
-    setup_good_fake_web :reply
+    setup_good_fake_web :new_topic
 
     FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response("not found",404))
@@ -377,7 +377,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response(load_page('phpbb2-post-reply-good-response.html')))
     when :new_topic
-      FakeWeb.register_uri(@good_posting, :method => :post, 
+      FakeWeb.register_uri(@good_posting + '?mode=newtopic&f=2', :method => :get, 
                          :response => response(load_page('phpbb2-get-new_topic-form-good-response.html')))
       FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response(load_page('phpbb2-post-new_topic-good-response.html')))
