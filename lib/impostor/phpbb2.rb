@@ -22,6 +22,7 @@ module WWW
         # jar is a yaml file
         @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
         @message = nil
+        @loggedin = false
       end
 
       ##
@@ -41,9 +42,9 @@ module WWW
       end
 
       def new_topic(forum=@forum, subject=@subject, message=@message)
+        raise PostError.new("forum not set") if forum.nil?
         raise PostError.new("topic name not given") if subject.nil?
         raise PostError.new("message not set") if message.nil?
-        raise PostError.new("forum not set") if forum.nil?
 
         login
         raise PostError.new("not logged in") unless @loggedin
@@ -102,8 +103,9 @@ module WWW
       # Attempt to post to the forum
 
       def post(forum = @forum, topic = @topic, message = @message)
-        raise PostError.new("message not set") if message.nil?
+        raise PostError.new("forum not set") if forum.nil?
         raise PostError.new("topic not set") if topic.nil?
+        raise PostError.new("message not set") if message.nil?
 
         login
         raise PostError.new("not logged in") unless @loggedin
@@ -129,15 +131,18 @@ module WWW
         end
 
         mes = page.search("//span[@class='gen']").last
-        if mes.innerText =~ /Your message has been entered successfully./
+        posted = mes.innerText =~ /Your message has been entered successfully./ rescue false
+        if posted
           @forum=forum, @topic=topic, @subject=get_subject(forum,topic), @message=message
           return true
         end
 
-        raise PostError.new("too many posts in too short amount of time") if 
-          mes.innerText =~ /You cannot make another post so soon after your last; please try again in a short while./
+        too_many = (mes.innerText =~ 
+          /You cannot make another post so soon after your last; please try again in a short while./ rescue
+          false)
+        raise PostError.new("too many posts in too short amount of time") if too_many
 
-        # false otherwise
+        # false otherwise, should we raise an exception instead?
         false
       end
 

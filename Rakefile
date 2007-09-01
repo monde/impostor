@@ -31,7 +31,7 @@ rescue NameError
 end
 
 Rake::TestTask.new do |t|
-  t.libs << "test"
+  #t.libs << "test"
   t.test_files = FileList['test/test_www_impostor*.rb']
   t.verbose = true
 end

@@ -15,6 +15,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     FakeWeb.clean_registry()
     @good_index = 'http://localhost/phpbb2/'
     @good_login = 'http://localhost/phpbb2/login.php'
+    @good_posting = 'http://localhost/phpbb2/posting.php'
   end
 
   class WWW::Impostor::FakePhpbb2 < WWW::Impostor::Phpbb2
@@ -46,7 +47,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
 
     assert_raises(WWW::Impostor::LoginError) do
-      assert im.new_topic(f=1,s="hello world",m="hello world")
+      im.login
     end
   end
 
@@ -60,7 +61,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
 
     assert_raises(WWW::Impostor::LoginError) do
-      assert im.new_topic(f=1,s="hello world",m="hello world")
+      im.login
     end
   end
 
@@ -72,15 +73,20 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     im.logout
   end
 
-  def test_posting_without_message_set_should_raise_exception
+  def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
+    im.fake_loggedin = true
 
-    im.forum = 2
+    im.forum = nil
     im.topic = 2
-    # message is not set so posting should throw an exception
+    im.message = "hello ruby"
+    # topic not set so posting should throw an exception
     assert_raises(WWW::Impostor::PostError) do
       assert im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.post(f=nil,t=2,m="hello ruby")
     end
   end
 
@@ -90,17 +96,37 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     im.fake_loggedin = true
 
     im.forum = 2
+    im.topic = nil
     im.message = "hello ruby"
     # topic not set so posting should throw an exception
     assert_raises(WWW::Impostor::PostError) do
       assert im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.post(f=2,t=nil,m="hello ruby")
+    end
+  end
+
+  def test_posting_without_message_set_should_raise_exception
+    setup_good_fake_web
+    im = fake(config)
+
+    im.forum = 2
+    im.topic = 2
+    im.message = nil
+    # message is not set so posting should throw an exception
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.post(f=2,t=2,m=nil)
     end
   end
 
   def test_posting_not_logged_in_should_raise_exception
     setup_good_fake_web
     FakeWeb.register_uri(@good_login, :method => :post, 
-                                :response => response(load_page('phpbb2-not-logged-in.html')))
+      :response => response(load_page('phpbb2-not-logged-in.html')))
     im = fake(config)
 
     im.forum = 2
@@ -112,12 +138,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_bad_posting_page_should_raise_exception
+  def test_getting_bad_posting_for_post_page_should_raise_exception
     setup_good_fake_web
 
-    posting_mode = '?mode=reply&t=2'
-    posting = 'http://localhost/phpbb2/posting.php'
-    FakeWeb.register_uri(posting + posting_mode, :method => :get, 
+    FakeWeb.register_uri(@good_posting + '?mode=reply&t=2', :method => :get, 
                          :response => response("not found",404))
 
     im = fake(config)
@@ -131,66 +155,155 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
+  def test_bad_submit_for_post_response_should_raise_exception
+    setup_good_fake_web
 
-  def test_new_topic_should_raise_exceptions_on_bad_input
-    # new_topic 02
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
+    FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response("not found",404))
+
+    im = fake(config)
+
+    # bad submit should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=1,s=nil,m="hello world")
+      assert im.post(f=2,t=2,m="hello ruby")
     end
+  end
+
+  def test_too_many_posts_for_post_should_raise_exception
+    setup_good_fake_web
+
+    posting = 'http://localhost/phpbb2/posting.php'
+    FakeWeb.register_uri(@good_posting, :method => :post, 
+      :response => response(load_page('phpbb2-too-many-posts.html')))
+
+    im = fake(config)
+
+    im.forum = 2
+    im.topic = 2
+    im.message = "hello ruby"
+    # bad posting page should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=1,s="hello world",m=nil)
+      assert im.post
+    end
+  end
+
+  def test_getting_unknown_posting_response_should_return_false
+    setup_good_fake_web
+
+    FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response("junk response",200))
+
+    im = fake(config)
+
+    im.forum = 2
+    im.topic = 2
+    im.message = "hello ruby"
+    assert_equal false, im.post
+  end
+
+  def test_should_post
+    setup_good_fake_web
+
+    im = fake(config)
+    im.fake_loggedin = true
+
+    im.forum = 2
+    im.topic = 2
+    im.message = "#{Time.now} Hello there #{Time.now}"
+    assert im.post
+  end
+
+  def test_new_topic_without_forum_set_should_raise_exception
+    setup_good_fake_web
+    im = fake(config)
+    im.fake_loggedin = true
+
+    im.forum = nil
+    im.subject = "hello world"
+    im.message = "hello ruby"
+    # topic not set so posting should throw an exception
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.new_topic
     end
     assert_raises(WWW::Impostor::PostError) do
       assert im.new_topic(f=nil,s="hello world",m="hello world")
     end
   end
 
-  def test_new_topic_without_message_set_should_raise_exception
-    # new_topic 03
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert true, im.login
+  def test_new_topic_without_subject_set_should_raise_exception
+    setup_good_fake_web
+    im = fake(config)
+    im.fake_loggedin = true
+
     im.forum = 2
-    # creating a topic without a message should throw an exception
+    im.subject = nil
+    im.message = "hello ruby"
+    # topic not set so posting should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic('hello world')
+      assert im.new_topic
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.new_topic(f=1,s=nil,m="hello world")
     end
   end
 
-  def test_new_topic_without_topic_name_set_should_raise_exception
-    # new_topic 04
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert true, im.login
+  def test_new_topic_without_message_set_should_raise_exception
+    setup_good_fake_web
+    im = fake(config)
+
     im.forum = 2
-    im.message = "hello ruby"
-    # creating a nil named topic should throw an exception
+    im.subject = "hello world"
+    im.message = nil
+
+    # message is not set so posting should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(nil)
+      assert im.new_topic
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.new_topic(f=1,s="hello world",m=nil)
     end
   end
 
   def test_new_topic_not_logged_in_should_raise_exception
-    # new_topic 05
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    im.forum = 2
-    im.message = "hello ruby"
+    setup_good_fake_web
+    FakeWeb.register_uri(@good_login, :method => :post, 
+      :response => response(load_page('phpbb2-not-logged-in.html')))
+    im = fake(config)
     # not logged in so posting should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic('hello world')
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
 
-  def test_new_topic_without_forum_set_should_raise_exception
-    # new_topic 06
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert true, im.login
-    im.message = "hello ruby"
-    # forum not set should throw an exception
+  def test_getting_bad_posting_for_new_topic_page_should_raise_exception
+    setup_good_fake_web
+
+    FakeWeb.register_uri(@good_posting + 'mode=newtopic&f=2', :method => :get, 
+                         :response => response("not found",404))
+
+    im = fake(config)
+
+    # bad posting page should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic('hello world')
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
+
+  def test_bad_submit_response_for_new_topic_should_raise_exception
+    setup_good_fake_web :reply
+
+    FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response("not found",404))
+
+    im = fake(config)
+
+    # bad submit response should throw an exception
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+    end
+  end
+
+=begin
 
   def test_new_topic_with_form_error_should_raise_exception
     # new_topic 07
@@ -225,18 +338,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 # save these for end so that rcov covers the code incrementally
 # as we write tests
 =begin
-  def test_should_post
-    setup_good_fake_web
-
-    im = fake(config)
-    im.fake_loggedin = true
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "#{Time.now} Hello there #{Time.now}"
-    assert im.post
-  end
-
   def test_new_topic_should_create_topic_with_post
     # new_topic 10
     im = WWW::Impostor::Phpbb2.new(config(cookies=false))
@@ -267,18 +368,28 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
                         :response => response(load_page('phpbb2-index.html')))
     end
 
-  def setup_good_fake_web
-    posting_mode = '?mode=reply&t=2'
-    posting = 'http://localhost/phpbb2/posting.php'
+  def register_good_posting(type = :reply)
+    # different gets and posts for "reply" and "new_topic" mode
+    case type
+    when :reply
+      FakeWeb.register_uri(@good_posting + '?mode=reply&t=2', :method => :get, 
+                         :response => response(load_page('phpbb2-get-new_topic-form-good-response.html')))
+      FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response(load_page('phpbb2-post-reply-good-response.html')))
+    when :new_topic
+      FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response(load_page('phpbb2-get-new_topic-form-good-response.html')))
+      FakeWeb.register_uri(@good_posting, :method => :post, 
+                         :response => response(load_page('phpbb2-post-new_topic-good-response.html')))
+    else
+      raise "unknown type parameter"
+    end
+  end
+
+  def setup_good_fake_web(type = :reply)
     register_good_index
-    FakeWeb.register_uri(@good_login, :method => :get, 
-                                :response => response(load_page('phpbb2-login.html')))
-    FakeWeb.register_uri(@good_login, :method => :post, 
-                                :response => response(load_page('phpbb2-logged-in.html')))
-    FakeWeb.register_uri(posting + posting_mode, :method => :get, 
-                                :response => response(load_page('phpbb2-posting-reply.html')))
-    FakeWeb.register_uri(posting, :method => :post, 
-                                :response => response(load_page('phpbb2-posting-response.html')))
+    register_good_login
+    register_good_posting type
   end
 
   def config(cookies=false, config={})
