@@ -60,10 +60,17 @@ module WWW
     class PostError < ImpostorError; end
 
     ##
-    # An error for impostor when a topic id
-    # can't be found based on a name/title
+    # An error for impostor when a topic id can't be found based on a 
+    # name/title.
 
     class TopicError < ImpostorError; end
+
+    ##
+    # An error for impostor when the receiving forum rejects the post due to 
+    # a throttling or spam error but which the user can re-attempt at a later
+    # time.
+
+    class ThrottledError < ImpostorError; end
 
     ##
     # Pass in a config hash to initialize
