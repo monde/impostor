@@ -1,4 +1,3 @@
-require 'singleton'
 require 'rubygems'
 Dir.glob(File.join(File.dirname(__FILE__), 'impostor/*.rb')).each {|f| require f }
 
@@ -11,12 +10,12 @@ module WWW
   #  require 'rubygems'
   #  require 'impostor'
   #  
-  #  # config has class :impostor_type => WWW::Impostor::SomeKind
+  #  # config yaml has entry :impostor_type => WWW::Impostor::SomeKind
   #  post = WWW::Impostor.create(YAML.load_file('config.yml'))
   #  # or initialize a concrete impostor
   #  post = WWW::Impostor::Phpbb2.new(YAML.load_file('config.yml'))
-  #  message = %s{hello world is to application
-  #  programmers as tea pots are to graphics programmers}
+  #  message = %q!hello world is to application
+  #  programmers as tea pots are to graphics programmers!
   #  # your application store forum and topic ids
   #  post.post(forum=5,topic=10,message)
   #  post.logout
