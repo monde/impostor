@@ -1,5 +1,6 @@
-require 'impostor/phpbb2'
-#require 'impostor/wwf'
+require 'singleton'
+require 'rubygems'
+Dir.glob(File.join(File.dirname(__FILE__), 'impostor/*.rb')).each {|f| require f }
 
 module WWW
 
