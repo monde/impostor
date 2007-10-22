@@ -1,22 +1,24 @@
 require 'rubygems'
 require 'hpricot'
 require 'mechanize'
+require 'logger'
 require 'cgi'
 require 'pp'
 
 ##
-# phpBB version of the Impostor
+# Web Wiz Forums version 8.0 of the Impostor
 #
+
 class WWW::Impostor
   
-  class Phpbb2 < WWW::Impostor
+  class Wwf80 < WWW::Impostor
 
     ##
     # After initializing the parent a mechanize agent is created
 
     def initialize(config={})
       super(config)
-      @agent = WWW::Mechanize.new
+      @agent = WWW::Mechanize.new { |a| a.log = Logger.new("/tmp/impostor.log") }
       @agent.user_agent_alias = user_agent
       # jar is a yaml file
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
@@ -40,6 +42,7 @@ class WWW::Impostor
       @loggedin = false
     end
 
+=begin
     def new_topic(forum=@forum, subject=@subject, message=@message)
       raise PostError.new("forum not set") unless forum
       raise PostError.new("topic name not given") unless subject
@@ -98,6 +101,7 @@ class WWW::Impostor
       @forum=forum; @topic=topic; @subject=subject; @message=message
       true
     end
+=end
 
     ##
     # Attempt to post to the forum
@@ -111,7 +115,7 @@ class WWW::Impostor
       raise PostError.new("not logged in") unless @loggedin
 
       uri = posting_page
-      uri.query = "mode=reply&t=#{topic}"
+      uri.query = "TID=#{topic}"
 
       # get the submit form
       begin
@@ -119,10 +123,10 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('post')
+      form = page.form('frmMessageForm')
 
       # set up the form and submit it
-      button = form.buttons.with.name('post').first
+      button = form.buttons.with.name('Submit').first
       form.message = message
       begin
         page = @agent.submit(form, button)
@@ -130,24 +134,29 @@ class WWW::Impostor
         raise PostError.new(err)
       end
 
-      mes = page.search("//span[@class='gen']").last
-      posted = mes.innerText =~ /Your message has been entered successfully./ rescue false
-      if posted
-        @forum=forum, @topic=topic, @subject=get_subject(forum,topic), @message=message
-        return true
+      error = page.search("//table[@class='errorTable']")
+      if error
+        msgs = error.search("//td")
+
+        # throttled
+        too_many = (msgs.last.innerText =~ 
+        /You have exceeded the number of posts permitted in the time span/ rescue
+        false)
+        raise ThrottledError.new("too many posts in too short amount of time") if too_many
+
+        # general error
+        error = (error.last.innerText =~ 
+        /Error: Message Not Posted/ rescue
+        false)
+        raise PostError.new("too many posts in too short amount of time") if error
       end
 
-      too_many = (mes.innerText =~ 
-        /You cannot make another post so soon after your last; please try again in a short while./ rescue
-        false)
-      raise ThrottledError.new("too many posts in too short amount of time") if too_many
-
-      # false otherwise, should we raise an exception instead?
-      false
+      @forum=forum, @topic=topic, @subject=get_subject(forum,topic), @message=message
+      return true
     end
 
     ##
-    # does the work of logging into phpbb
+    # does the work of logging into WWF 8.0
 
     def login
       return if @loggedin
@@ -194,10 +203,9 @@ class WWW::Impostor
       form = page.forms.first if page.forms
       raise LoginError.new("unknown login page format") unless form
       
-      button = page.forms.first.buttons.with.name('login').first
-      form['username'] = username
+      button = page.forms.first.buttons.with.name('Submit').first
+      form['name'] = username
       form['password'] = password
-      form['autologin'] = 'on'
 
       return form, button
     end
@@ -217,13 +225,12 @@ class WWW::Impostor
     # Checks if the agent is already logged by stored cookie
 
     def logged_in?(page)
-      mm = page.search("//a[@class='mainmenu']")
+      mm = page.search("//a[@class='nav']")
       return false unless mm
       mm.each do |m|
-        return true if (m.innerText =~ /Log out \[ #{username} \]/ rescue false)
+        return true if (m.innerText =~ /Logout \[#{username}\]/ rescue false)
       end
       false
     end
-
   end
 end
