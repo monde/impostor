@@ -42,7 +42,6 @@ class WWW::Impostor
       @loggedin = false
     end
 
-=begin
     def new_topic(forum=@forum, subject=@subject, message=@message)
       raise PostError.new("forum not set") unless forum
       raise PostError.new("topic name not given") unless subject
@@ -51,8 +50,8 @@ class WWW::Impostor
       login
       raise PostError.new("not logged in") unless @loggedin
 
-      uri = posting_page
-      uri.query = "mode=newtopic&f=#{forum}"
+      uri = new_topic_page
+      uri.query = "FID=#{forum}"
 
       # get the submit form
       begin
@@ -60,10 +59,10 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('post')
+      form = page.form('frmMessageForm')
 
       # set up the form and submit it
-      button = form.buttons.with.name('post').first
+      button = form.buttons.with.name('Submit').first
       form.subject = subject
       form.message = message
       begin
@@ -72,36 +71,29 @@ class WWW::Impostor
         raise PostError.new(err)
       end
 
-      # if the response is correct there will be a meta link that looks something like
-      # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
-      #
-      # this link needs to be followed, the page it leads to will give us
-      # the topic id that was created for the topic name that we created
-      a = (page.search("//meta[@http-equiv='refresh']").attr('content') rescue nil)
-      a = (/url=(.*)/.match(a)[1] rescue nil)
-      raise PostError.new('unexpected new topic response') unless a
+      error = page.search("//table[@class='errorTable']")
+      if error
+        msgs = error.search("//td")
 
-      a = URI.join(app_root, a)
-      page = @agent.get(a)
-      link = (page.search("//link[@rel='prev']").first['href'] rescue nil)
-      raise PostError.new('unexpected new topic response') unless link
+        # throttled
+        too_many = (msgs.last.innerText =~ 
+        /You have exceeded the number of posts permitted in the time span/ rescue
+        false)
+        raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
 
-      # t=XXX will be our new topic id, i.e.
-      # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
-      begin
-        u = (URI.parse(link) rescue nil)
-        topic = (CGI::parse(u.query)['t'][0] rescue nil)
-        raise PostError.new('unexpected new topic response') unless topic
-      rescue StandardError => err
-        raise PostError.new(err)
+        # general error
+        had_error = (error.last.innerText =~ 
+        /Error: Message Not Posted/ rescue
+        false)
+        raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
       end
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)
-      @forum=forum; @topic=topic; @subject=subject; @message=message
-      true
+
+      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+      return true
     end
-=end
 
     ##
     # Attempt to post to the forum
@@ -114,7 +106,7 @@ class WWW::Impostor
       login
       raise PostError.new("not logged in") unless @loggedin
 
-      uri = posting_page
+      uri = new_reply_page
       uri.query = "TID=#{topic}"
 
       # get the submit form
@@ -142,19 +134,33 @@ class WWW::Impostor
         too_many = (msgs.last.innerText =~ 
         /You have exceeded the number of posts permitted in the time span/ rescue
         false)
-        raise ThrottledError.new("too many posts in too short amount of time") if too_many
+        raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
 
         # general error
-        error = (error.last.innerText =~ 
+        had_error = (error.last.innerText =~ 
         /Error: Message Not Posted/ rescue
         false)
-        raise PostError.new("too many posts in too short amount of time") if error
+        raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
       end
 
-      @forum=forum, @topic=topic, @subject=get_subject(forum,topic), @message=message
+      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
       return true
     end
 
+    ##
+    # Get the new reply page for the application (specific to WWF8.0)
+  
+    def new_reply_page
+      URI.join(app_root, @config[:new_reply_page])
+    end
+
+    ##
+    # Get the new topic page for the application (specific to WWF8.0)
+  
+    def new_topic_page
+      URI.join(app_root, @config[:new_topic_page])
+    end
+  
     ##
     # does the work of logging into WWF 8.0
 

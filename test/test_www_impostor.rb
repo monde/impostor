@@ -36,11 +36,6 @@ class WWW::ImpostorTest < Test::Unit::TestCase
     assert_equal 'http://localhost/foo/bar', impostor.test_helper_login_page.to_s
   end
 
-  def test_posting_page_should_be_clean
-    impostor = fake({:app_root => 'http://localhost/', :posting_page => '/foo/bar'})
-    assert_equal 'http://localhost/foo/bar', impostor.test_helper_posting_page.to_s
-  end
-
   def test_load_topics_should_do_so
     # setup a temp file
     topics_file = Tempfile.new('test_load_topics')

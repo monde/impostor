@@ -22,16 +22,18 @@ module WWW
   #
   #  keys and values to be set in impostor config
   #
-  #  :impostor_type - Class of impostor
-  #  :username      - forum username
-  #  :password      - forum password
-  #  :topics_cache  - cache of forum topics
-  #  :user_agent    - Mechanize browser user-agent
-  #  :cookie_jar    - saved cookies from Mechanize browser
+  #  :impostor_type  - Class of impostor
+  #  :username       - forum username
+  #  :password       - forum password
+  #  :topics_cache   - cache of forum topics
+  #  :user_agent     - Mechanize browser user-agent
+  #  :cookie_jar     - saved cookies from Mechanize browser
   #
-  #  :app_root      - url to forum
-  #  :login_page    - forum login page
-  #  :posting_page  - forum posting page
+  #  :app_root       - url to forum
+  #  :login_page     - forum login page
+  #  :posting_page   - forum posting page (phpBB2 specific)
+  #  :new_reply_page - forum posting page (WWF8.0 specific)
+  #  :new_topic_page - forum posting page (WWF8.0 specific)
 
   class Impostor
 
@@ -221,13 +223,6 @@ module WWW
       URI.join(app_root, @config[:login_page])
     end
 
-    ##
-    # Get the posting page for the application
-  
-    def posting_page
-      URI.join(app_root, @config[:posting_page])
-    end
-  
     ##
     # Get the username for the application
   

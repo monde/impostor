@@ -16,7 +16,8 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     @good_index = 'http://localhost/wwf80/'
     @good_login = 'http://localhost/wwf80/login_user.asp'
     @good_reply_form = 'http://localhost/wwf80/new_reply_form.asp'
-    @good_posting = 'http://localhost/wwf80/new_post.asp'
+    @good_topic_form = 'http://localhost/wwf80/new_topic_form.asp'
+    @good_posting = 'http://localhost/wwf80/new_post.asp?PN='
     @good_viewtopic = 'http://localhost/wwf80/forum_posts.asp'
   end
 
@@ -174,7 +175,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
   def test_too_many_posts_for_post_should_raise_exception
     setup_good_fake_web
 
-    FakeWeb.register_uri(@good_posting + '?PN=', :method => :post, 
+    FakeWeb.register_uri(@good_posting, :method => :post, 
       :response => response(load_page('wwf80-too-many-posts.html')))
 
     im = fake(config)
@@ -200,7 +201,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert im.post
   end
 
-=begin
   def test_new_topic_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
@@ -291,48 +291,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     end
   end
 
-  def test_unexpected_text_for_new_topic_should_raise_exception
-    setup_good_fake_web :new_topic
-
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response("junk",200))
-
-    im = fake(config)
-
-    # bad submit response should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
-    end
-  end
-
-  def test_unexpected_viewtopic_for_new_topic_should_raise_exception
-    setup_good_fake_web :new_topic
-
-    FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
-                         :response => response("junk",200))
-
-    im = fake(config)
-
-    # bad submit response should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
-    end
-  end
-
-  def test_malformed_viewtopic_response_for_new_topic_should_raise_exception
-    setup_good_fake_web :new_topic
-
-    FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
-                        :response => response(load_page('wwf80-get-viewtopic-for-new-topic-malformed-response.html')))
-
-    im = fake(config)
-
-    # bad submit response should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
-    end
-  end
-
   def test_new_topic_should_work
     setup_good_fake_web :new_topic
 
@@ -346,7 +304,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
       assert_equal "hello ruby", im.message
     end
   end
-=end
 
   private
 
@@ -370,15 +327,15 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     when :reply
       FakeWeb.register_uri(@good_reply_form + '?TID=2', :method => :get, 
                          :response => response(load_page('wwf80-new_reply_form.html')))
-      FakeWeb.register_uri(@good_posting + '?PN=', :method => :post, 
+      FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response(load_page('wwf80-post-reply-good-response.html')))
     when :new_topic
-      FakeWeb.register_uri(@good_reply_form + '?mode=newtopic&f=2', :method => :get, 
+      FakeWeb.register_uri(@good_topic_form + '?FID=2', :method => :get, 
                          :response => response(load_page('wwf80-get-new_topic-form-good-response.html')))
       FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response(load_page('wwf80-post-new_topic-good-response.html')))
-      FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
-                         :response => response(load_page('wwf80-get-viewtopic-for-new-topic-good-response.html')))
+      #FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
+      #                   :response => response(load_page('wwf80-get-viewtopic-for-new-topic-good-response.html')))
     else
       raise "unknown type parameter"
     end
@@ -394,7 +351,8 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     cookie_jar = File.join(Dir.tmpdir, 'www_impostor_wwf80_test.yml')
     c = {:app_root => @good_index,
       :login_page => 'login_user.asp', 
-      :posting_page => 'new_reply_form.asp', 
+      :new_reply_page => 'new_reply_form.asp', 
+      :new_topic_page => 'new_topic_form.asp', 
       :user_agent => 'Windows IE 7', 
       :username => 'tester',
       :password => 'test'}.merge(config)

@@ -133,7 +133,7 @@ class WWW::Impostor
       mes = page.search("//span[@class='gen']").last
       posted = mes.innerText =~ /Your message has been entered successfully./ rescue false
       if posted
-        @forum=forum, @topic=topic, @subject=get_subject(forum,topic), @message=message
+        @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
         return true
       end
 
@@ -146,6 +146,13 @@ class WWW::Impostor
       false
     end
 
+    ##
+    # Get the posting page for the application (specific to phpBB2)
+  
+    def posting_page
+      URI.join(app_root, @config[:posting_page])
+    end
+  
     ##
     # does the work of logging into phpbb
 
