@@ -18,7 +18,7 @@ class WWW::Impostor
 
     def initialize(config={})
       super(config)
-      @agent = WWW::Mechanize.new { |a| a.log = Logger.new("/tmp/impostor.log") }
+      @agent = WWW::Mechanize.new
       @agent.user_agent_alias = user_agent
       # jar is a yaml file
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
@@ -205,13 +205,12 @@ class WWW::Impostor
     # returns the login form and its button from the login page
 
     def login_form_and_button(page)
-      form = page.forms
-      form = page.forms.first if page.forms
+      form = page.forms.with.name('frmLogin').first
       raise LoginError.new("unknown login page format") unless form
       
-      button = page.forms.first.buttons.with.name('Submit').first
-      form['name'] = username
-      form['password'] = password
+      button = form.buttons.with.name('Submit').first
+      form.name = username
+      form.password = password
 
       return form, button
     end

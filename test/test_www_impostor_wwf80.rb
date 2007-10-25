@@ -334,8 +334,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
                          :response => response(load_page('wwf80-get-new_topic-form-good-response.html')))
       FakeWeb.register_uri(@good_posting, :method => :post, 
                          :response => response(load_page('wwf80-post-new_topic-good-response.html')))
-      #FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
-      #                   :response => response(load_page('wwf80-get-viewtopic-for-new-topic-good-response.html')))
     else
       raise "unknown type parameter"
     end
