@@ -3,7 +3,6 @@ require 'hpricot'
 require 'mechanize'
 require 'logger'
 require 'cgi'
-require 'pp'
 
 ##
 # Web Wiz Forums version 8.0 of the Impostor

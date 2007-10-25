@@ -2,7 +2,6 @@ require 'rubygems'
 require 'hpricot'
 require 'mechanize'
 require 'cgi'
-require 'pp'
 
 ##
 # phpBB version of the Impostor
