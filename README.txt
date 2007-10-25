@@ -4,7 +4,7 @@ impostor
 
 == DESCRIPTION:
   
-imPOSTor posts messages to non-RESTful forums and blogs
+imPOSTor posts messages to forums
 
 == FEATURES/PROBLEMS:
 
@@ -12,30 +12,32 @@ imPOSTor posts messages to non-RESTful forums and blogs
  
 Makes automatic posts to the following forum applications:
 
-* Web Wiz Forums (WWF) 7.9 [pending]
-* Web Wiz Forums (WWF) 8.0 [pending]
-* PHP Bullitin Board (phpBB) 1.4 (1.4.4) [pending]
+* Web Wiz Forums (WWF) 7.9
+* Web Wiz Forums (WWF) 8.0
+* PHP Bullitin Board (phpBB) 1.4 (1.4.4)   [TODO]
 * PHP Bullitin Board (phpBB) 2.0 (2.0.22)
-* PHP Bullitin Board (phpBB) 3.0 (3.0 RC2) [pending]
+* PHP Bullitin Board (phpBB) 3.0           [TODO]
+* Rails Beast                              [TODO]
 
 == SYNOPSIS:
 
 # post and create concrete impostor
 config = YAML::load_file('conf/example.com-phpbb.yml')
 post = WWW::Impostor::Phpbb2.new(config)
-message = %s{hello world is to application
+message = %q{hello world is to application
 programmers as tea pots are to graphics programmers}
-# your application store forum and topic ids
+# your application stores forum and topic ids
 post.post(forum=5,topic=10,message)
 post.logout
 
 # make a new_topic and create impostor from factory
 # config must have :impostor_type set to the impostor class
-config = YAML::load_file('conf/example.com-phpbb.yml')
+config = YAML::load_file('conf/example.com-wwf80.yml')
 post = WWW::Impostor.create(config)
+subject = "about programmers..."
 message = %s{hello world is to application
 programmers as tea pots are to graphics programmers}
-post.new_topic(forum=5,topic=10,subject="super awesome!",message)
+post.new_topic(forum=7,subject,message)
 post.logout
 
 == REQUIREMENTS:
