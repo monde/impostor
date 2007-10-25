@@ -17,7 +17,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @good_login = 'http://localhost/wwf79/login_user.asp'
     @good_reply_form = 'http://localhost/wwf79/forum_posts.asp'
     @good_topic_form = 'http://localhost/wwf79/post_message_form.asp'
-    @good_posting = 'http://localhost/wwf79/new_post.asp?PN='
+    @good_posting = 'http://localhost/wwf79/post_message.asp?PN='
     @good_viewtopic = 'http://localhost/wwf79/forum_posts.asp'
   end
 
@@ -76,7 +76,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     im.logout
   end
 
-=begin
   def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
@@ -173,7 +172,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-  def test_too_many_posts_for_post_should_raise_exception
+  def test_too_many_posts_for_post_should_raise_throttle_error
     setup_good_fake_web
 
     FakeWeb.register_uri(@good_posting, :method => :post, 
@@ -267,7 +266,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   def test_getting_bad_posting_for_new_topic_page_should_raise_exception
     setup_good_fake_web
 
-    FakeWeb.register_uri(@good_reply_form + 'mode=newtopic&f=2', :method => :get, 
+    FakeWeb.register_uri(@good_topic_form + '?FID=2', :method => :get, 
                          :response => response("not found",404))
 
     im = fake(config)
@@ -292,6 +291,20 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+  def test_too_many_posts_for_new_topic_should_raise_throttle_error
+    setup_good_fake_web :new_topic
+
+    FakeWeb.register_uri(@good_posting, :method => :post, 
+      :response => response(load_page('wwf79-too-many-topics.html')))
+
+    im = fake(config)
+
+    # bad submit response should throw an exception
+    assert_raises(WWW::Impostor::ThrottledError) do
+      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+    end
+  end
+
   def test_new_topic_should_work
     setup_good_fake_web :new_topic
 
@@ -301,11 +314,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_nothing_raised(WWW::Impostor::ImpostorError) do
       assert im.new_topic(f=2,s="hello world",m="hello ruby")
       assert_equal 2, im.forum
+      assert_equal 345, im.topic
       assert_equal "hello world", im.subject
       assert_equal "hello ruby", im.message
     end
   end
-=end
 
   private
 
@@ -328,14 +341,14 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     case type
     when :reply
       FakeWeb.register_uri(@good_reply_form + '?TID=2', :method => :get, 
-                         :response => response(load_page('wwf79-new_reply_form.html')))
+                         :response => response(load_page('wwf79-forum_posts.html')))
       FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response(load_page('wwf79-post-reply-good-response.html')))
+                         :response => response(load_page('wwf79-good-post-forum_posts.html')))
     when :new_topic
       FakeWeb.register_uri(@good_topic_form + '?FID=2', :method => :get, 
-                         :response => response(load_page('wwf79-get-new_topic-form-good-response.html')))
+                         :response => response(load_page('wwf79-new-topic-post_message_form.html')))
       FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response(load_page('wwf79-post-new_topic-good-response.html')))
+                         :response => response(load_page('wwf79-new-topic-forum_posts-response.html')))
     else
       raise "unknown type parameter"
     end

@@ -355,6 +355,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_nothing_raised(WWW::Impostor::ImpostorError) do
       assert im.new_topic(f=2,s="hello world",m="hello ruby")
       assert_equal 2, im.forum
+      assert_equal 29, im.topic
       assert_equal "hello world", im.subject
       assert_equal "hello ruby", im.message
     end

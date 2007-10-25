@@ -266,7 +266,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
   def test_getting_bad_posting_for_new_topic_page_should_raise_exception
     setup_good_fake_web
 
-    FakeWeb.register_uri(@good_reply_form + 'mode=newtopic&f=2', :method => :get, 
+    FakeWeb.register_uri(@good_topic_form + '?FID=2', :method => :get, 
                          :response => response("not found",404))
 
     im = fake(config)
@@ -300,6 +300,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_nothing_raised(WWW::Impostor::ImpostorError) do
       assert im.new_topic(f=2,s="hello world",m="hello ruby")
       assert_equal 2, im.forum
+      assert_equal 152, im.topic
       assert_equal "hello world", im.subject
       assert_equal "hello ruby", im.message
     end

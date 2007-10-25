@@ -3,7 +3,7 @@
 
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>Post New Topic</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>OMLB Forums: another test topic</title>
 
 <meta name="generator" content="Web Wiz Forums"><!--//
 /* *******************************************************
@@ -11,131 +11,149 @@ Application: Web Wiz Forums ver. 8.05a
 Info: http://www.webwizforums.com
 Copyright: 2001-2006 Web Wiz. All rights reserved
 ******************************************************* */
-//--><!-- Check the from is filled in correctly before submitting -->
+//-->
 
 
 
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="http://omlb.com/forum/RSS_post_feed.asp?TID=5082">
 
 <script language="JavaScript">
+function chgOrder(Show){
 
-//Function to check form is filled in correctly before submitting
-function CheckForm () {
-	
-	var errorMsg = "";
+   	strShow = escape(Show.options[Show.selectedIndex].value);
+
+   	if (Show != '') self.location.href = 'forum_posts.asp?TID=5082&PD=' + strShow + '';
+	return true;
+}
+
+function CheckForm() {
+	var errorMsg = '';
 	var formArea = document.getElementById('frmMessageForm');
-	
+
 	//For Gecko Madis API (RTE)
 	if (formArea.message.value.indexOf('<br>') > -1 && formArea.message.value.length==5) formArea.message.value = '';
-		
-	//Check for a subject
-	if (formArea.subject.value==""){
-		errorMsg += "\n\tSubject \t\t- Enter a Subject for your new Topic";
-	}
-	
+
+
 	//Check for message
-	if (formArea.message.value==""){
-		errorMsg += "\n\tMessage Box \t\t- Enter a Message to Submit";
+	if (formArea.message.value==''){
+		errorMsg += '\n\tMessage Box \t\t- Enter a Message to Submit';
 	}
-	
+
 	//If there is aproblem with the form then display an error
-	if (errorMsg != ""){
-		msg = "_______________________________________________________________\n\n";
-		msg += "The form has not been submitted because there are problem(s) with the form.\n";
-		msg += "Please correct the problem(s) and re-submit the form.\n";
-		msg += "_______________________________________________________________\n\n";
-		msg += "The following field(s) need to be corrected: -\n";
-		
-		errorMsg += alert(msg + errorMsg + "\n\n");
+	if (errorMsg != ''){
+		msg = '_______________________________________________________________\n\n';
+		msg += 'The form has not been submitted because there are problem(s) with the form.\n';
+		msg += 'Please correct the problem(s) and re-submit the form.\n';
+		msg += '_______________________________________________________________\n\n';
+		msg += 'The following field(s) need to be corrected: -\n';
+
+		errorMsg += alert(msg + errorMsg + '\n\n');
 		return false;
 	}
-	
+
 	return true;
 }
 </script>
-<link href="wwf80-post-new_topic-good-response_files/default_style.css" rel="stylesheet" type="text/css">
-<script language="javascript" src="wwf80-post-new_topic-good-response_files/default_javascript.js" type="text/javascript"></script><style type="text/css">@import url(http://hoodwink.d/themes/1/hoodwinkd.css);</style><style type="text/css"></style></head><body>
+<link href="wwf80-new-topic-forum_posts.asp_files/default_style.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="wwf80-new-topic-forum_posts.asp_files/default_javascript.js" type="text/javascript"></script><style type="text/css">@import url(http://hoodwink.d/themes/1/hoodwinkd.css);</style><style type="text/css"></style></head><body>
 <table class="basicTable" align="center" cellpadding="3" cellspacing="0">
  <tbody><tr> 
-  <td rowspan="2"><a href="http://www.omlb.com/html/olmb.htm" accesskey="1"><img src="wwf80-post-new_topic-good-response_files/logo.gif" border="0"></a></td>
-  <td align="center">&nbsp;&nbsp;<a href="http://omlb.com/forum/active_topics.asp" class="nav" accesskey="2"><img src="wwf80-post-new_topic-good-response_files/active_topics.gif" alt="Active Topics" align="absmiddle" border="0">Active Topics</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/members.asp" class="nav"><img src="wwf80-post-new_topic-good-response_files/members_list.gif" alt="Display List of Forum Members" align="absmiddle" border="0">Memberlist</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/calendar.asp" class="nav"><img src="wwf80-post-new_topic-good-response_files/calendar.gif" alt="Calendar" align="absmiddle" border="0">Calendar</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/search_form.asp?FID=37" class="nav" accesskey="4"><img src="wwf80-post-new_topic-good-response_files/search.gif" alt="Search The Forum" align="absmiddle" border="0">Search</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/help.asp" class="nav" accesskey="5"><img src="wwf80-post-new_topic-good-response_files/help_icon.gif" alt="Help" align="absmiddle" border="0">Help</a></td>
+  <td rowspan="2"><a href="http://www.omlb.com/html/olmb.htm" accesskey="1"><img src="wwf80-new-topic-forum_posts.asp_files/logo.gif" border="0"></a></td>
+  <td align="center">&nbsp;&nbsp;<a href="http://omlb.com/forum/pre_approved_topics.asp" class="nav"><img src="wwf80-new-topic-forum_posts.asp_files/hidden_topics.gif" alt="Hidden Topics" align="absmiddle" border="0">Hidden Topics</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/active_topics.asp" class="nav" accesskey="2"><img src="wwf80-new-topic-forum_posts.asp_files/active_topics.gif" alt="Active Topics" align="absmiddle" border="0">Active Topics</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/members.asp" class="nav"><img src="wwf80-new-topic-forum_posts.asp_files/members_list.gif" alt="Display List of Forum Members" align="absmiddle" border="0">Memberlist</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/calendar.asp" class="nav"><img src="wwf80-new-topic-forum_posts.asp_files/calendar.gif" alt="Calendar" align="absmiddle" border="0">Calendar</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/search_form.asp?FID=37" class="nav" accesskey="4"><img src="wwf80-new-topic-forum_posts.asp_files/search.gif" alt="Search The Forum" align="absmiddle" border="0">Search</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/help.asp" class="nav" accesskey="5"><img src="wwf80-new-topic-forum_posts.asp_files/help_icon.gif" alt="Help" align="absmiddle" border="0">Help</a></td>
  </tr>
  <tr>
-  <td align="center"><a href="http://omlb.com/forum/pm_welcome.asp" class="nav"><img src="wwf80-post-new_topic-good-response_files/read_private_message_icon.gif" alt="Read" message="" align="absmiddle" border="0">Private Messenger</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/member_control_panel.asp" class="nav"><img src="wwf80-post-new_topic-good-response_files/admin_icon.gif" alt="Member Control Panel Menu" align="absmiddle" border="0">Settings</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/log_off_user.asp" class="nav"><img src="wwf80-post-new_topic-good-response_files/log_off_icon.gif" alt="Logout" align="absmiddle" border="0">Logout [tester]</a></td>
+  <td align="center"><a href="http://omlb.com/forum/pm_welcome.asp" class="nav"><img src="wwf80-new-topic-forum_posts.asp_files/read_private_message_icon.gif" alt="Read" message="" align="absmiddle" border="0">Private Messenger</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/member_control_panel.asp" class="nav"><img src="wwf80-new-topic-forum_posts.asp_files/admin_icon.gif" alt="Member Control Panel Menu" align="absmiddle" border="0">Settings</a>&nbsp;&nbsp;<a href="http://omlb.com/forum/log_off_user.asp" class="nav"><img src="wwf80-new-topic-forum_posts.asp_files/log_off_icon.gif" alt="Logout" align="absmiddle" border="0">Logout [tester]</a></td>
  </tr>
 </tbody></table>
  <div style="margin: 5px;" align="center"></div>
+<a name="top"></a>
 <table class="basicTable" align="center" cellpadding="3" cellspacing="0">
- <tbody>
+ <tbody><tr>
+  <td class="heading">Cellphoto bot</td>
+</tr>
  <tr>
-  <td class="heading" align="left">Post New Topic</td>
+  <td><strong><img src="wwf80-new-topic-forum_posts.asp_files/open_folder_icon.gif" align="absmiddle" border="0">&nbsp;<a href="http://omlb.com/forum/default.asp"><strong>OMLB Forums</strong></a> : <a href="http://omlb.com/forum/default.asp?C=2"><strong>The Shit Pit </strong></a> : <a href="http://omlb.com/forum/forum_topics.asp?FID=37"><strong>Cellphoto bot</strong></a></strong></td>
+  <td align="right" nowrap="nowrap" width="5%"><a href="javascript:winOpener('pop_up_topic_admin.asp?TID=5082','admin',1,1,480,265)"><img src="wwf80-new-topic-forum_posts.asp_files/admin.gif" alt="Topic Admin" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/RSS_post_feed.asp?TID=5082" target="_blank"><img src="wwf80-new-topic-forum_posts.asp_files/rss.png" title="RSS Feed: another test topic" align="absmiddle" border="0"></a>&nbsp;</td>
  </tr>
- <tr> 
- <td align="left"><strong><img src="wwf80-post-new_topic-good-response_files/open_folder_icon.gif" align="absmiddle" border="0">&nbsp;<a href="http://omlb.com/forum/default.asp"><strong>OMLB Forums</strong></a> : <a href="http://omlb.com/forum/default.asp?C=2"><strong>The Shit Pit </strong></a> : <a href="http://omlb.com/forum/forum_topics.asp?FID=37"><strong>Cellphoto bot</strong></a> :  Post New Topic<br></strong></td>
-  </tr>
- </tbody>
-</table><br>
-<table class="tableBorder" align="center" cellpadding="3" cellspacing="1">
+</tbody></table>
+<table class="basicTable" align="center" cellpadding="3" cellspacing="0">
+ <tbody><tr>
+  <td width="70%"> <img src="wwf80-new-topic-forum_posts.asp_files/topic_icon.gif" alt="Message Icon" align="absmiddle" border="0"> <span class="lgText">Topic: another test topic</span></td>
+  <td align="right" nowrap="nowrap"><a href="http://omlb.com/forum/new_reply_form.asp?TID=5082&amp;PN=1&amp;TR=1"><img src="wwf80-new-topic-forum_posts.asp_files/post_reply.gif" alt="Post Reply" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/new_topic_form.asp?FID=37"><img src="wwf80-new-topic-forum_posts.asp_files/new_post.gif" alt="Post New Topic" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/new_poll_form.asp?FID=37"><img src="wwf80-new-topic-forum_posts.asp_files/new_poll.gif" alt="Create New Poll" align="absmiddle" border="0"></a></td>
+ </tr>
+ <tr>
+  <td>
+   <select name="PD" id="PD" onchange="chgOrder(this)">
+    <option value="1" selected="selected">Oldest Post First</option>
+    <option value="0">Newest Post First</option>
+   </select>
+  </td>
+  <td align="right"></td>
+ </tr>
+</tbody></table>
+<table class="tableBorder" style="table-layout: fixed;" align="center" cellpadding="3" cellspacing="1">
  <tbody><tr class="tableLedger">
-  <td align="left">Edit Post</td>
+  <td style="width: 140px;" align="center">Author</td>
+  <td align="center">Message</td>
+ </tr>
+ <tr>
+  <td rowspan="5" class="msgEvenTableSide" valign="top">
+   <a name="103143"></a>
+   <a href="http://omlb.com/forum/member_profile.asp?PF=203&amp;FID=37">tester</a>
+   <br>Cellphotobot
+   <br><img src="wwf80-new-topic-forum_posts.asp_files/1up.gif" alt="Cellphotobot">
+   <br><img src="wwf80-new-topic-forum_posts.asp_files/2007-04-20_153013_dm-bird.png" alt="Avatar" class="avatar" onerror="this.src='avatars/blank_avatar.jpg';">
+   <br>rad bainbridge dude
+   <br><br>Joined: June&nbsp;21&nbsp;2005
+   <br>Location: United States
+   <br>Online Status: Online
+   <br>Posts: 4480
+   <br>
+  </td>
+  <td class="msgEvenTableRow" valign="top"><span style="float: right;"><a href="http://omlb.com/forum/new_reply_form.asp?M=Q&amp;PID=103143&amp;PN=1&amp;TR=1"><img src="wwf80-new-topic-forum_posts.asp_files/quote_icon.gif" alt="Quote&nbsp;tester" align="absmiddle" border="0"></a>&nbsp;<a href="http://omlb.com/forum/new_reply_form.asp?PID=103143&amp;PN=1&amp;TR=1"><img src="wwf80-new-topic-forum_posts.asp_files/reply.gif" alt="Reply" align="absmiddle" border="0"></a></span><a href="http://omlb.com/forum/forum_posts.asp?TID=5082&amp;PID=103143#103143" alt="Direct Link To This Post"><img src="wwf80-new-topic-forum_posts.asp_files/bullet.gif" alt="bullet" align="absmiddle" border="0"></a> <strong>Topic: another test topic</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;Posted: Today at 9:49pm</td>
+ </tr>
+ <tr class="msgEvenTableRow">
+  <td class="msgLineDevider" height="150" valign="top">
+   <!-- Start Member Post -->
+   <div class="msgBody" style="overflow: auto; float: left;">
+   some words here
+
+   </div>
+   <!-- End Member Post -->
+  </td>
+ </tr>
+ <tr class="msgEvenTableRow">
+  <td class="msgLineDevider" style="border-top-width: 0px;">
+   <!-- Start Signature -->
+    <div class="msgSignature" style="overflow: auto; float: left;">
+     "... I was getting laid too much because of my membership (in Bellingham Linux Users Group) so i quit." - coldpeelers
+    </div>
+   <!-- End Signature "'' -->
+  </td>
+ </tr>
+ <tr class="msgEvenTableRow">
+  <td class="msgLineDevider" style="border-top-width: 0px;" align="center"><div align="center"></div>
+  </td>
+ </tr>
+ <tr class="msgEvenTableRow">
+  <td nowrap="nowrap">
+   <span style="float: right;"><img src="wwf80-new-topic-forum_posts.asp_files/ip.gif" alt="IP" align="absmiddle" border="0"> IP: <a href="javascript:winOpener('pop_up_IP_blocking.asp?IP=65.102.174.9','ip',1,1,425,400)" class="smLink">65.102.174.9</a></span> <a href="http://omlb.com/forum/edit_post_form.asp?PID=103143&amp;PN=1"><img src="wwf80-new-topic-forum_posts.asp_files/edit_post_icon.gif" alt="Edit Post" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/delete_post.asp?PID=103143&amp;PN=1" onclick="return confirm('Are you sure you want to delete this post?')"><img src="wwf80-new-topic-forum_posts.asp_files/delete_sm.gif" alt="Delete Post" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/hide_post.asp?PID=103143" onclick="return confirm('Are you sure you want to hide this post?')"><img src="wwf80-new-topic-forum_posts.asp_files/hide_icon.gif" alt="Hide Post" align="absmiddle" border="0"></a> <a href="javascript:winOpener('move_post_form.asp?PID=103143','move',1,1,460,255)"><img src="wwf80-new-topic-forum_posts.asp_files/move_icon.gif" alt="Move Post" align="absmiddle" border="0"></a></td> 
+ </tr>
+ <tr class="postSeparatorTableRow">
+  <td colspan="2"></td>
+ </tr>
+</tbody></table><br>
+<form method="post" name="frmMessageForm" id="frmMessageForm" action="new_post.asp" onsubmit="return CheckForm();" onreset="return clearForm();">
+<table class="tableBorder" align="center" cellpadding="2" cellspacing="1">
+ <tbody><tr class="tableLedger">
+  <td>Quick Reply</td>
  </tr>
  <tr class="tableRow">
-  <td align="left">
-   
-<form method="post" name="frmMessageForm" id="frmMessageForm" action="new_post.asp?PN=" onsubmit="return CheckForm();" onreset="return clearForm();">
- <table align="center" cellpadding="2" cellspacing="0">
-  <tbody><tr>
-   <td align="right">Subject:</td>
-   <td align="left" width="70%">
-    <input name="subject" id="subject" size="30" maxlength="50" type="text">
-   </td>
-  </tr>
-  <tr>
-   <td align="right" width="15%">Message Icon:</td>
-   <td align="left" width="70%">
-    <select name="icon" id="icon" onchange="(T_icon.src = icon.options[icon.selectedIndex].value)">
-     <option value="forum_images/topic_icon.gif" selected="selected">None Selected</option>
-     <option value="smileys/smiley20.gif">Thumbs Up</option>
-     <option value="smileys/smiley21.gif">Thumbs Down</option>
-     <option value="smileys/smiley25.gif">Question</option>
-     <option value="smileys/smiley37.gif">Exclamation</option>
-     <option value="smileys/smiley38.gif">Lamp</option>
-     <option value="smileys/smiley34.gif">Nuke</option>
-     <option value="smileys/smiley1.gif">Smile</option>
-     <option value="smileys/smiley4.gif">Big smile</option>
-     <option value="smileys/smiley2.gif">Wink</option>
-     <option value="smileys/smiley19.gif">Cry</option>
-     <option value="smileys/smiley36.gif">LOL</option>
-     <option value="smileys/smiley5.gif">Confused</option>
-     <option value="smileys/smiley7.gif">Angry</option>
-     <option value="smileys/smiley6.gif">Unhappy</option>
-     <option value="smileys/smiley32.gif">Clap</option>
-    </select>
-    &nbsp;&nbsp;<img src="wwf80-post-new_topic-good-response_files/topic_icon.gif" id="T_icon" alt="" message="" icon="" align="middle" border="0">
-   </td>
-  </tr>
-  <tr>
-   <td align="right" valign="top" width="15%"><br><br><br>Message:
-   <table align="center" border="0" cellpadding="4" cellspacing="0">
-    <tbody><tr><td class="smText" colspan="3" align="center"><br><br>Emoticons</td></tr><tr>
-    <td><img src="wwf80-post-new_topic-good-response_files/075.gif" title="wack" onclick="AddEmoticon(this)" id="smileys/075.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_gay.gif" title="Gay" onclick="AddEmoticon(this)" id="smileys/a_gay.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_nacho.gif" title="Nacho" onclick="AddEmoticon(this)" id="smileys/a_nacho.gif" style="cursor: pointer;" align="absmiddle" border="0"></td></tr><tr>
-    <td><img src="wwf80-post-new_topic-good-response_files/1up.gif" title="1up" onclick="AddEmoticon(this)" id="smileys/1up.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_bratwurst.gif" title="Bratwurst" onclick="AddEmoticon(this)" id="smileys/a_bratwurst.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_snakeheads.gif" title="Snakeheads" onclick="AddEmoticon(this)" id="smileys/a_snakeheads.gif" style="cursor: pointer;" align="absmiddle" border="0"></td></tr><tr>
-    <td><img src="wwf80-post-new_topic-good-response_files/025.gif" title="smoke" onclick="AddEmoticon(this)" id="smileys/025.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_Lighter.gif" title="Lighter" onclick="AddEmoticon(this)" id="smileys/a_Lighter.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/devilfinger.gif" title="DevilHrns" onclick="AddEmoticon(this)" id="smileys/devilfinger.gif" style="cursor: pointer;" align="absmiddle" border="0"></td></tr><tr>
-    <td><img src="wwf80-post-new_topic-good-response_files/fantasyfootball.gif" title="FantasyFootball" onclick="AddEmoticon(this)" id="smileys/fantasyfootball.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/fuck%2520you.gif" title="FuckU" onclick="AddEmoticon(this)" id="smileys/fuck you.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/Sk8.gif" title="Skate" onclick="AddEmoticon(this)" id="smileys/Sk8.gif" style="cursor: pointer;" align="absmiddle" border="0"></td></tr><tr>
-    <td><img src="wwf80-post-new_topic-good-response_files/skate.gif" title="Skate2" onclick="AddEmoticon(this)" id="smileys/skate.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_Jager.gif" title="Jager" onclick="AddEmoticon(this)" id="smileys/a_Jager.gif" style="cursor: pointer;" align="absmiddle" border="0"></td>
-    <td><img src="wwf80-post-new_topic-good-response_files/a_Lighter.gif" title="Lighter" onclick="AddEmoticon(this)" id="smileys/a_Lighter.gif" style="cursor: pointer;" align="absmiddle" border="0"></td></tr>
-    <tr><td colspan="3" align="center"><a href="javascript:winOpener('RTE_popup_emoticons.asp','emot',0,0,450,340)" class="smLink">more...</a></td></tr>
-   </tbody></table>
-  </td>
-   <td valign="top" width="70%">
+  <td>
+   <table align="center" cellpadding="2" cellspacing="0">
+    <tbody><tr class="tableRow">
+     <td align="right" valign="top" width="15%"><br>Message:
+     </td><td valign="top" width="85%">
 
 <!--//
 /* *******************************************************
@@ -144,74 +162,132 @@ Info: http://www.richtexteditor.org
 Copyright: 2001-2006 Web Wiz. All rights reserved
 ******************************************************* */
 //-->
-    <script language="JavaScript" src="wwf80-post-new_topic-good-response_files/RTE_javascript_common.html" type="text/javascript"></script>
-    <script language="JavaScript" src="wwf80-post-new_topic-good-response_files/RTE_javascript_gecko.html" type="text/javascript"></script>
-    <script language="JavaScript" src="wwf80-post-new_topic-good-response_files/RTE_javascript.html" type="text/javascript"></script>
-    <script language="javascript">
-       WebWizRTEtoolbar('frmMessageForm');
-       document.write ('<iframe id="WebWizRTE" src="RTE_textarea.asp?mode=new&POID=0&ID=1541" width="490" height="250" style="border: #A5ACB2 1px solid" onLoad="initialiseWebWizRTE();"></iframe>');
-    </script><iframe id="colourPalette" src="wwf80-post-new_topic-good-response_files/RTE_iframe_colour_palette.html" style="visibility: hidden; position: absolute; left: 0px; top: 0px;" frameborder="0" height="165" scrolling="no" width="260"></iframe>
-<iframe id="fontSelect" src="wwf80-post-new_topic-good-response_files/RTE_iframe_select_font.html" style="border: 1px solid rgb(0, 0, 0); visibility: hidden; position: absolute; left: 0px; top: 0px;" frameborder="0" height="140" scrolling="no" width="130"></iframe>
-<iframe id="textSize" src="wwf80-post-new_topic-good-response_files/RTE_iframe_select_size.html" style="border: 1px solid rgb(0, 0, 0); visibility: hidden; position: absolute; left: 0px; top: 0px;" frameborder="0" height="235" scrolling="no" width="66"></iframe>
+
+     <script language="JavaScript" src="wwf80-new-topic-forum_posts.asp_files/RTE_javascript_common.html" type="text/javascript"></script>
+     <script language="JavaScript" src="wwf80-new-topic-forum_posts.asp_files/RTE_javascript.html" type="text/javascript"></script>
+     <script language="javascript">
+      WebWizRTEtoolbar('frmMessageForm');
+      document.write ('<iframe id="WebWizRTE" src="RTE_textarea.asp?mode=reply&ID=182" width="490" height="100" style="border: #A5ACB2 1px solid" onLoad="initialiseWebWizRTE();"></iframe>');
+     </script><iframe id="colourPalette" src="wwf80-new-topic-forum_posts.asp_files/RTE_iframe_colour_palette.html" style="visibility: hidden; position: absolute; left: 0px; top: 0px;" frameborder="0" height="165" scrolling="no" width="260"></iframe>
 <table id="toolbar" border="0" cellpadding="1" cellspacing="0" width="490">
  <tbody><tr>
   <td>
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_spell_check.gif" onclick="checkspell()" title="Spell Check" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" id="spellboundSC" align="absmiddle" border="0">
-<span id="ToolBar1">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_cut.gif" onclick="FormatText('cut')" title="Cut" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_copy.gif" onclick="FormatText('copy')" title="Copy" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_paste.gif" onclick="FormatText('paste')" title="Paste" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_word.gif" onclick="winOpener('RTE_popup_word_paste.asp','save',0,1,600,290)" title="Paste From Word" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_hyperlink.gif" onclick="winOpener('RTE_popup_link.asp','link',0,1,490,332)" title="Insert Hyperlink" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">   <img src="wwf80-post-new_topic-good-response_files/post_button_file_upload.gif" onclick="winOpener('RTE_popup_file_atch.asp','files',0,1,775,403)" title="File Upload" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-post-new_topic-good-response_files/post_button_image.gif" onclick="winOpener('RTE_popup_adv_image.asp','insertImg',0,1,775,395)" title="Insert Image" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-post-new_topic-good-response_files/post_button_sp_char.gif" onclick="winOpener('RTE_popup_special_characters.asp','insertTable',0,1,550,295)" title="Special Characters" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-post-new_topic-good-response_files/post_button_smiley.gif" onclick="winOpener('RTE_popup_emoticons.asp','emot',0,1,450,340)" title="Emoticons" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_or_list.gif" onclick="FormatText('InsertOrderedList', '')" title="Ordered List" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-post-new_topic-good-response_files/post_button_list.gif" onclick="FormatText('InsertUnorderedList', '')" title="Unordered List" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-post-new_topic-good-response_files/post_button_outdent.gif" onclick="FormatText('Outdent', '')" title="Outdent" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_indent.gif" onclick="FormatText('indent', '')" title="Indent" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
-</span><br>
-<span id="ToolBar2">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img id="fontname" src="wwf80-post-new_topic-good-response_files/post_button_font.gif" title="Font" onclick="FormatText('fontname', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img id="fontsize" src="wwf80-post-new_topic-good-response_files/post_button_size.gif" title="Size" onclick="FormatText('fontsize', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_bold.gif" title="Bold" onclick="FormatText('bold', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_italic.gif" title="Italic" onclick="FormatText('italic', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_underline.gif" title="Underline" onclick="FormatText('underline', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_strike.gif" title="Strike Through" onclick="FormatText('strikethrough', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_left_just.gif" onclick="FormatText('justifyleft', '')" title="Left Justify" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_centre.gif" onclick="FormatText('justifycenter', '')" title="Centre Justify" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-post-new_topic-good-response_files/post_button_right_just.gif" onclick="FormatText('justifyright', '')" title="Right Justify" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle">
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img id="forecolor" src="wwf80-post-new_topic-good-response_files/post_button_colour_pallete.gif" title="Text Colour" onclick="FormatText('forecolor', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
-</span>
-<img src="wwf80-post-new_topic-good-response_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-post-new_topic-good-response_files/post_button_about.gif" onclick="winOpener('RTE_popup_about.asp','about',0,0,400,187)" title="About Rich Text Editor" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
+<img src="wwf80-new-topic-forum_posts.asp_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_spell_check.gif" onclick="checkspell()" title="Spell Check" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" id="spellboundSC" align="absmiddle" border="0">
+<img src="wwf80-new-topic-forum_posts.asp_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_hyperlink.gif" onclick="winOpener('RTE_popup_link.asp','link',0,1,490,332)" title="Insert Hyperlink" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_smiley.gif" onclick="winOpener('RTE_popup_emoticons.asp','emot',0,1,450,340)" title="Emoticons" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
+<img src="wwf80-new-topic-forum_posts.asp_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_bold.gif" title="Bold" onclick="FormatText('bold', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_italic.gif" title="Italic" onclick="FormatText('italic', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_underline.gif" title="Underline" onclick="FormatText('underline', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle">
+<img src="wwf80-new-topic-forum_posts.asp_files/toolbar_separator.gif" align="absmiddle"><img id="forecolor" src="wwf80-new-topic-forum_posts.asp_files/post_button_colour_pallete.gif" title="Text Colour" onclick="FormatText('forecolor', '')" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
+<img src="wwf80-new-topic-forum_posts.asp_files/toolbar_separator.gif" align="absmiddle"><img src="wwf80-new-topic-forum_posts.asp_files/post_button_about.gif" onclick="winOpener('RTE_popup_about.asp','about',0,0,400,187)" title="About Rich Text Editor" class="WebWizRTEbutton" onmouseover="overIcon(this)" onmouseout="outIcon(this)" align="absmiddle" border="0">
   </td>
  </tr>
 </tbody></table>
-<iframe id="WebWizRTE" src="wwf80-post-new_topic-good-response_files/RTE_textarea.html" style="border: 1px solid rgb(165, 172, 178);" onload="initialiseWebWizRTE();" height="250" width="490"></iframe>
-    <noscript><strong><br /><br />JavaScript must be enabled on your web browser in order to use this Rich Text Editor!</strong></noscript>
-    <input name="message" id="message" value="" type="hidden">
-    <input name="browser" id="browser" value="RTE" type="hidden">
+<iframe id="WebWizRTE" src="wwf80-new-topic-forum_posts.asp_files/RTE_textarea.html" style="border: 1px solid rgb(165, 172, 178);" onload="initialiseWebWizRTE();" height="100" width="490"></iframe>
+     <noscript><strong><br /><br />JavaScript must be enabled on your web browser in order to use this Rich Text Editor!</strong></noscript>
+     <input name="message" id="message" value="" type="hidden">
+     <input name="browser" id="browser" value="RTE" type="hidden">
+     </td>
+    </tr>
+    <tr class="tableRow">
+     <td align="right" width="92">&nbsp;</td>
+     <td class="text" valign="bottom" width="508">&nbsp;<input name="forumCodes" id="forumCodes" value="True" checked="checked" type="checkbox">Enable <a href="javascript:winOpener('forum_codes.asp','codes',1,1,550,400)">Forum Codes</a> to format post
+     </td></tr>
+    <tr class="tableRow">
+    <td align="right" height="7" width="92">&nbsp;</td>
+    <td class="text" height="7" valign="bottom" width="508">
+      &nbsp;<input name="signature" value="True" checked="checked" type="checkbox">Show Signature&nbsp;
+    </td>
+    </tr>
+     <tr class="tableRow">
+     <td>
+      <input name="mode" id="mode" value="reply" type="hidden">
+      <input name="FID" id="FID" value="37" type="hidden">
+      <input name="TID" id="TID" value="152" type="hidden">
+      <input name="PN" id="PN" value="1" type="hidden">
+      <input name="ThreadPos" id="ThreadPos" value="2" type="hidden">
+      <input name="formID" id="formID" value="" type="hidden">
+      <input name="pre" id="pre" value="" type="hidden">&nbsp;
+     </td>
+     <td width="70%">
+       <input id="Submit" name="Submit" value="Post Reply" onclick="document.getElementById('message').value=document.getElementById('WebWizRTE').contentWindow.document.body.innerHTML;" type="submit">
+       <input name="Preview" value="Preview Post" onclick="document.getElementById('pre').value=document.getElementById('WebWizRTE').contentWindow.document.body.innerHTML; OpenPreviewWindow(document.frmMessageForm);" type="button">
+       <input name="Reset" value="Clear Form" type="reset">
+      </td>
+     </tr>
+    </tbody></table>
    </td>
   </tr>
-  <tr>
-   <td align="right">&nbsp;</td>
-   <td align="left" valign="bottom">&nbsp;<input name="forumCodes" value="True" checked="checked" type="checkbox">Enable <a href="javascript:winOpener('forum_codes.asp','codes',1,1,550,400)">Forum Codes</a> to format post</td>
-  </tr>
-  <tr>
-   <td align="right">&nbsp;</td>
-   <td align="left" valign="bottom">
-    &nbsp;<input name="signature" id="signature" value="True" checked="checked" type="checkbox">Show Signature&nbsp;
-   </td>
-  </tr>
+ </tbody></table>
+</form><table class="basicTable" align="center" cellpadding="3" cellspacing="0">
+ <tbody><tr>
+  <td colspan="2" align="right" nowrap="nowrap"><a href="http://omlb.com/forum/new_reply_form.asp?TID=5082&amp;PN=1&amp;TR=1"><img src="wwf80-new-topic-forum_posts.asp_files/post_reply.gif" alt="Post Reply" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/new_topic_form.asp?FID=37"><img src="wwf80-new-topic-forum_posts.asp_files/new_post.gif" alt="Post New Topic" align="absmiddle" border="0"></a> <a href="http://omlb.com/forum/new_poll_form.asp?FID=37"><img src="wwf80-new-topic-forum_posts.asp_files/new_poll.gif" alt="Create New Poll" align="absmiddle" border="0"></a></td>
+ </tr>
  <tr>
   <td>
-    <input name="mode" id="mode" value="new" type="hidden">
-    <input name="FID" id="FID" value="37" type="hidden">
-    <input name="TID" id="TID" value="0" type="hidden">
-    <input name="PID" id="PID" value="0" type="hidden">
-    <input name="PN" id="PN" value="1" type="hidden">
-    <input name="uploads" id="uploads" value="" type="hidden">
-    <input name="pre" id="pre" value="" type="hidden">
+   <table class="tableBorder" style="width: 100px;" cellpadding="6" cellspacing="1">
+    <tbody><tr class="tableRow">
+      <td align="center" nowrap="nowrap"><img src="wwf80-new-topic-forum_posts.asp_files/print_version.gif" alt="Printable version" align="absmiddle" border="0"> <a href="http://omlb.com/forum/printer_friendly_posts.asp?TID=5082" target="_blank" class="smLink">Printable version</a>
+      </td>
+     </tr>
+    </tbody></table>
+    <br>
+  	Forum Jump
+   <select onchange="linkURL(this)" name="SelectJumpForum">
+    <option value="" disabled="disabled" selected="selected">-- Select Forum --</option>
+     <optgroup label="Forum(s)">
+     </optgroup><optgroup label="&nbsp;&nbsp;The Shit Pit ">
+      <option value="forum_topics.asp?FID=28">&nbsp; General info</option>
+      <option value="forum_topics.asp?FID=30">&nbsp;Daily Clicks</option>
+      <option value="forum_topics.asp?FID=38">&nbsp;Cellphotobot rewind</option>
+      <option value="forum_topics.asp?FID=37">&nbsp;Cellphoto bot</option>
+      <option value="forum_topics.asp?FID=38">&nbsp;Cellphotobot rewind</option>
+      <option value="forum_topics.asp?FID=37">&nbsp;Cellphoto bot</option>
+      <option value="forum_topics.asp?FID=2">&nbsp;The Hookup</option>
+      <option value="forum_topics.asp?FID=3">&nbsp;General Bullshit</option>
+      <option value="forum_topics.asp?FID=4">&nbsp;One Chord Wonders</option>
+      <option value="forum_topics.asp?FID=26">&nbsp;Shit Peddling</option>
+      <option value="forum_topics.asp?FID=34">&nbsp;Keep it Swappy!</option>
+      <option value="forum_topics.asp?FID=29">&nbsp; Old Cellphotobot</option>
+     </optgroup>
+     <optgroup label="&nbsp;&nbsp;Skate 2 Hell">
+      <option value="forum_topics.asp?FID=8">&nbsp;Skate Sessions</option>
+      <option value="forum_topics.asp?FID=20">&nbsp;Backyard Ramp Party</option>
+     </optgroup>
+     <optgroup label="&nbsp;&nbsp;Skate Park Reviews and Info">
+      <option value="forum_topics.asp?FID=16">&nbsp;Oregon Rules</option>
+      <option value="forum_topics.asp?FID=17">&nbsp;Other</option>
+      <option value="forum_topics.asp?FID=14">&nbsp;Seattle Area</option>
+      <option value="forum_topics.asp?FID=15">&nbsp;Other WA Parks</option>
+      <option value="forum_topics.asp?FID=9">&nbsp;EASTSIDE PARKS</option>
+     </optgroup>
+     <optgroup label="&nbsp;&nbsp;Other Old Man Fun">
+      <option value="forum_topics.asp?FID=23">&nbsp;Miscellaneous Geriatrics </option>
+      <option value="forum_topics.asp?FID=25">&nbsp;Game On!</option>
+      <option value="forum_topics.asp?FID=31">&nbsp;Fish On!</option>
+      <option value="forum_topics.asp?FID=22">&nbsp;OMLB MotoX</option>
+     </optgroup>
+     <optgroup label="&nbsp;&nbsp;OMLB Site and Stuff ">
+      <option value="forum_topics.asp?FID=35">&nbsp;CellphotobotTest</option>
+      <option value="forum_topics.asp?FID=19">&nbsp;Site Shite</option>
+      <option value="forum_topics.asp?FID=18">&nbsp;T-shirts, Stickers and other Paraphernalia</option>
+      <option value="forum_topics.asp?FID=35">&nbsp;CellphotobotTest</option>
+      <option value="forum_topics.asp?FID=5">&nbsp;New Forum</option>
+      <option value="forum_topics.asp?FID=10">&nbsp;Tips, Tricks,  &amp; How to...</option>
+     </optgroup>
+     <optgroup label="&nbsp;&nbsp;Snowboarding is for Pussies  ">
+      <option value="forum_topics.asp?FID=11">&nbsp;Face Plant!</option>
+      <option value="forum_topics.asp?FID=1">&nbsp;Snow Sessions</option>
+      <option value="forum_topics.asp?FID=39">&nbsp;&nbsp;-&nbsp;Sled Stoke</option>
+      <option value="forum_topics.asp?FID=6">&nbsp;CATastrophy!</option>
+      <option value="forum_topics.asp?FID=7">&nbsp;Masters Division</option>
+     </optgroup>
+     <optgroup label="&nbsp;&nbsp;100 Post Club!">
+      <option value="forum_topics.asp?FID=13">&nbsp;Congratulations</option>
+     </optgroup>
+    
+   </select>
   </td>
-  <td align="left" width="70%">
-   <input id="Submit" name="Submit" value="Post New Topic" onclick="document.getElementById('message').value=document.getElementById('WebWizRTE').contentWindow.document.body.innerHTML;" type="submit">
-   <input name="Preview" id="Preview" value="Preview Post" onclick="document.getElementById('pre').value=document.getElementById('WebWizRTE').contentWindow.document.body.innerHTML; OpenPreviewWindow(document.frmMessageForm);" type="button">
-   <input name="Reset" id="Reset" value="Clear Form" type="reset">
-  </td>
+  <td class="smText" align="right" nowrap="nowrap">You <strong>can</strong> post new topics in this forum<br>You <strong>can</strong> reply to topics in this forum<br>You <strong>can</strong> delete your posts in this forum<br>You <strong>can</strong> edit your posts in this forum<br>You <strong>can</strong> create polls in this forum<br>You <strong>can</strong> vote in polls in this forum<br></td>
  </tr>
 </tbody></table>
-</form>
-  </td>
- </tr>
-</tbody></table><br>
 <br>
-<div align="center"><span class="text" style="font-size: 10px;">Bulletin Board Software by <a href="http://www.webwizforums.com/" target="_blank" style="font-size: 10px;">Web Wiz Forums</a> version 8.05a</span><br><span class="text" style="font-size: 10px;">Copyright ©2001-2006 <a href="http://www.webwizguide.info/" target="_blank" style="font-size: 10px;">Web Wiz Guide</a></span><span class="smText"><br><br>This page was generated in 0.094 seconds.</span>
-</div>
-<!-- footer -->
+<div align="center"><span class="text" style="font-size: 10px;">Bulletin Board Software by <a href="http://www.webwizforums.com/" target="_blank" style="font-size: 10px;">Web Wiz Forums</a> version 8.05a</span><br><span class="text" style="font-size: 10px;">Copyright ©2001-2006 <a href="http://www.webwizguide.info/" target="_blank" style="font-size: 10px;">Web Wiz Guide</a></span><span class="smText"><br><br>This page was generated in 0.094 seconds.</span></div><!-- footer -->
 </body></html>

@@ -42,7 +42,6 @@ class WWW::Impostor
       @loggedin = false
     end
 
-=begin
     def new_topic(forum=@forum, subject=@subject, message=@message)
       raise PostError.new("forum not set") unless forum
       raise PostError.new("topic name not given") unless subject
@@ -60,7 +59,7 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('frmMessageForm')
+      form = page.form('frmAddMessage')
 
       # set up the form and submit it
       button = form.buttons.with.name('Submit').first
@@ -72,22 +71,21 @@ class WWW::Impostor
         raise PostError.new(err)
       end
 
-      error = page.search("//table[@class='errorTable']")
+      error = page.body =~ /Message Not Posted/
       if error
-        msgs = error.search("//td")
 
         # throttled
-        too_many = (msgs.last.innerText =~ 
-        /You have exceeded the number of posts permitted in the time span/ rescue
-        false)
-        raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
+        throttled = "You have exceeded the number of posts permitted in the time span"
+        too_many = page.body =~ /#{throttled}/
+        raise ThrottledError.new(throttled) if too_many
 
         # general error
-        had_error = (error.last.innerText =~ 
-        /Error: Message Not Posted/ rescue
-        false)
-        raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
+        raise PostError.new("There was an error making the post")
       end
+
+      # look up the new topic id
+      form = page.form('frmAddMessage')
+      topic = form['TID'].to_i
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)
@@ -116,7 +114,7 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('frmMessageForm')
+      form = page.form('frmAddMessage')
 
       # set up the form and submit it
       button = form.buttons.with.name('Submit').first
@@ -127,27 +125,21 @@ class WWW::Impostor
         raise PostError.new(err)
       end
 
-      error = page.search("//table[@class='errorTable']")
+      error = page.body =~ /Message Not Posted/
       if error
-        msgs = error.search("//td")
 
         # throttled
-        too_many = (msgs.last.innerText =~ 
-        /You have exceeded the number of posts permitted in the time span/ rescue
-        false)
-        raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
+        throttled = "You have exceeded the number of posts permitted in the time span"
+        too_many = page.body =~ /#{throttled}/
+        raise ThrottledError.new(throttled) if too_many
 
         # general error
-        had_error = (error.last.innerText =~ 
-        /Error: Message Not Posted/ rescue
-        false)
-        raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
+        raise PostError.new("There was an error making the post")
       end
 
       @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
       return true
     end
-=end
 
     ##
     # Get the new posts page for the application (specific to WWF7.9)

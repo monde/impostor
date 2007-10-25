@@ -1,0 +1,422 @@
+<html><head><title>Post Alley..: test</title>
+
+
+<meta name="copyright" content="Copyright (C) 2001-2004 Bruce Corkhill"><!-- Web Wiz Forums ver. 7.91 is written and produced by Bruce Corkhill ©2001-2004
+     	If you want your own FREE Forum then goto http://www.webwizforums.com -->
+
+
+
+<script language="JavaScript">
+function CheckForm() {
+	var errorMsg = '';
+	//For Gecko Madis API (RTE)
+	if (document.frmAddMessage.message.value.indexOf('<br>') > -1 && document.frmAddMessage.message.value.length == 8) document.frmAddMessage.message.value = '';
+
+
+	//Check for message
+	if (document.frmAddMessage.message.value==''){
+		errorMsg += '\n\tMessage \t\t- Enter a Message to post';
+	}
+
+	//If there is aproblem with the form then display an error
+	if (errorMsg != ''){
+		msg = '_______________________________________________________________\n\n';
+		msg += 'The form has not been submitted because there are problem(s) with the form.\n';
+		msg += 'Please correct the problem(s) and re-submit the form.\n';
+		msg += '_______________________________________________________________\n\n';
+		msg += 'The following field(s) need to be corrected: -\n';
+
+		errorMsg += alert(msg + errorMsg + '\n\n');
+		return false;
+	}
+
+	//Reset the submition action
+	document.frmAddMessage.action = 'post_message.asp?PN=1'
+	document.frmAddMessage.target = '_self';
+	document.frmAddMessage.Submit.disabled=true;
+	return true;
+}
+</script><script language="javascript" src="wwf79-forum_posts.asp_files/default_javascript.js" type="text/javascript"></script>
+
+<link href="wwf79-forum_posts.asp_files/default_style.css" rel="stylesheet" type="text/css"><style type="text/css">@import url(http://hoodwink.d/themes/1/hoodwinkd.css);</style><style type="text/css"></style></head><body leftmargin="0" topmargin="0" background="" bgcolor="#ffffff" marginheight="0" marginwidth="0" text="#000000"><table align="center" border="0" cellpadding="4" cellspacing="0" width="98%">
+ <tbody><tr> 
+  <td class="text">
+   <a href="http://auggiedawg.com/auggiedawg/forum" target="_self"><img src="wwf79-forum_posts.asp_files/Fuzzy2.jpg" border="0"></a>
+  </td>
+  <td align="center" height="2"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody><tr>
+     <td align="center">&nbsp;&nbsp;<a href="http://auggiedawg.com/forum/active_topics.asp" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/active_topics.gif" alt="Active Topics" align="absmiddle" border="0">Active Topics</a>&nbsp;&nbsp;<a href="http://auggiedawg.com/forum/members.asp" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/members_list.gif" alt="Display List of Forum Members" align="absmiddle" border="0">Memberlist</a>&nbsp;&nbsp;<a href="http://auggiedawg.com/forum/search_form.asp?FID=39" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/search.gif" alt="Search The Forum" align="absmiddle" border="0">Search</a>&nbsp;&nbsp;<a href="http://auggiedawg.com/forum/help.asp" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/help_icon.gif" alt="Help" align="absmiddle" border="0">Help</a><br></td>
+    </tr>
+    <tr>
+     <td align="center"><a href="http://auggiedawg.com/forum/pm_welcome.asp" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/read_private_message_icon.gif" alt="Read" message="" align="absmiddle" border="0">Private Messenger</a>&nbsp;&nbsp;<a href="http://auggiedawg.com/forum/member_control_panel.asp" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/admin_icon.gif" alt="Member Control Panel Menu" align="absmiddle" border="0">Settings</a>&nbsp;&nbsp;<a href="http://auggiedawg.com/forum/log_off_user.asp" target="_self" class="nav"><img src="wwf79-forum_posts.asp_files/log_off_icon.gif" alt="Logout" align="absmiddle" border="0">Logout [tester]</a></td>
+    </tr>
+   </tbody></table>
+  </td>
+ </tr>
+</tbody></table>
+<a name="top"></a>
+<table align="center" border="0" cellpadding="3" cellspacing="0" width="98%"><tbody><tr>
+  <td class="heading" align="left">Phone photos</td>
+</tr>
+ <tr>
+  <td class="bold" align="left" width="95%"><img src="wwf79-forum_posts.asp_files/open_folder_icon.gif" align="absmiddle" border="0">&nbsp;<a href="http://auggiedawg.com/forum/default.asp" target="_self" class="boldLink">Post Alley..</a> : <a href="http://auggiedawg.com/forum/forum_topics.asp?FID=39&amp;PN=1" target="_self" class="boldLink">Phone photos</a>
+</td>
+  <td align="right" width="5%">
+</td>
+ </tr>
+</tbody></table>
+      <table align="center" border="0" cellpadding="4" cellspacing="0" width="98%">
+        <tbody><tr>
+         <td width="70%"><span class="lgText"><img src="wwf79-forum_posts.asp_files/subject_folder.gif" alt="Subject" align="absmiddle"> Topic: test</span>
+	</td>
+<td align="right"><a href="#reply" target="_self"><img src="wwf79-forum_posts.asp_files/post_reply.gif" alt="Post Reply" align="absmiddle" border="0"></a><a href="http://auggiedawg.com/forum/post_message_form.asp?FID=39" target="_self"><img src="wwf79-forum_posts.asp_files/new_post.gif" alt="Post New Topic" align="absmiddle" border="0"></a><a href="http://auggiedawg.com/forum/poll_create_form.asp?FID=39" target="_self"><img src="wwf79-forum_posts.asp_files/new_poll.gif" alt="Create New Poll" align="absmiddle" border="0"></a>
+	</td>
+        </tr>
+      </tbody></table><table align="center" bgcolor="#006699" border="0" cellpadding="1" cellspacing="0" width="98%">
+ <tbody><tr>
+  <td>
+  <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody><tr>
+     <td bgcolor="#ffffff">
+      <table border="0" cellpadding="3" cellspacing="1" width="100%">
+       <tbody><tr>
+        <td class="tHeading" background="wwf79-forum_posts.asp_files/table_bg_image.html" bgcolor="#cccccc" nowrap="nowrap" width="140">Author</td>
+        <td class="tHeading" background="wwf79-forum_posts.asp_files/table_bg_image.html" bgcolor="#cccccc" nowrap="nowrap" width="82%"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody><tr>
+           <td class="tHeading" width="20%">Message</td>
+           <td align="right" nowrap="nowrap" width="80%"><a href="http://auggiedawg.com/forum/get_topic.asp?FID=39&amp;TID=135&amp;DIR=P" target="_self" class="npLink">&lt;&lt; Prev Topic</a> | <a href="http://auggiedawg.com/forum/get_topic.asp?FID=39&amp;TID=135&amp;DIR=N" target="_self" class="npLink">Next Topic&nbsp;&gt;&gt;</a></td>
+          </tr>
+         </tbody></table></td>
+         </tr>
+      <tr>
+        <td class="smText" background="" bgcolor="#efefef" valign="top">
+         <a name="1203"></a>
+         <span class="bold">tester</span><br>Barney<br>
+         <img src="wwf79-forum_posts.asp_files/1_star_rating.gif" alt="Barney"><br><img src="wwf79-forum_posts.asp_files/mike-fs-cellphone-110x110.png" alt="Avatar" onerror="this.src='forum_images/blank.gif', height='0';" height="95" vspace="5" width="95"><br><br>Joined: 17 October 2006<br>Location: United States
+<br>Online Status: Online<br>Posts: 7
+         </td>
+        <td class="text" background="" bgcolor="#efefef" valign="top">
+         <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody><tr>
+           <td class="smText" width="80%">Posted: 01 September 2007 at 1:15am | IP Logged
+		    </td>
+                    <td align="right" nowrap="nowrap" width="20%">
+            		 <a href="http://auggiedawg.com/forum/edit_post.asp?M=Q&amp;PID=1203&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/quote_icon.gif" alt="Quote&nbsp;tester" align="absmiddle" border="0"></a>
+          </td>
+          </tr>
+          <tr>
+           <td colspan="2"><hr></td>
+          </tr>
+         </tbody></table>
+<!-- Message body -->
+test
+
+<!-- Message body ''"" -->
+        </td>
+       </tr>
+       <tr>
+        <td background="" bgcolor="#efefef"><a href="#top" target="_self" class="npLink">Back to Top</a></td>
+        <td class="text" background="" bgcolor="#efefef"><a href="javascript:openWin('pop_up_profile.asp?PF=27&FID=39','profile','toolbar=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=590,height=425')"><img src="wwf79-forum_posts.asp_files/profile_icon.gif" alt="View&nbsp;tester's&nbsp;Profile" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/search_form.asp?KW=tester&amp;SI=AR&amp;FM=39&amp;FID=39&amp;TID=135&amp;PN=1&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/search_sm.gif" alt="Search for other posts by&nbsp;tester" align="absmiddle" border="0"></a>
+         <a href="http://mondragon.cc/" target="_blank"><img src="wwf79-forum_posts.asp_files/home_icon.gif" alt="Visit tester's Homepage" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_new_message_form.asp?name=tester" target="_self"><img src="wwf79-forum_posts.asp_files/pm_icon.gif" alt="Send Private Message" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_buddy_list.asp?name=tester" target="_self"><img src="wwf79-forum_posts.asp_files/add_buddy_sm.gif" alt="Add to Buddy List" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/edit_post.asp?PID=1203&amp;PN=1&amp;TPN=1" target="_self"><img src="wwf79-forum_posts.asp_files/edit_post_icon.gif" alt="Edit Post" align="absmiddle" border="0"></a>
+        </td>
+       </tr>
+       
+       <tr>
+        <td colspan="2" align="center" background="" bgcolor="#d1d7dc"><span style="font-size: 2px;">&nbsp;</span></td>
+      </tr><tr>
+        <td class="smText" background="" bgcolor="#dee3e7" valign="top">
+         <a name="1204"></a>
+         <span class="bold">tester</span><br>Barney<br>
+         <img src="wwf79-forum_posts.asp_files/1_star_rating.gif" alt="Barney"><br><img src="wwf79-forum_posts.asp_files/mike-fs-cellphone-110x110.png" alt="Avatar" onerror="this.src='forum_images/blank.gif', height='0';" height="95" vspace="5" width="95"><br><br>Joined: 17 October 2006<br>Location: United States
+<br>Online Status: Online<br>Posts: 7
+         </td>
+        <td class="text" background="" bgcolor="#dee3e7" valign="top">
+         <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody><tr>
+           <td class="smText" width="80%">Posted: 01 September 2007 at 1:16am | IP Logged
+		    </td>
+                    <td align="right" nowrap="nowrap" width="20%">
+            		 <a href="http://auggiedawg.com/forum/edit_post.asp?M=Q&amp;PID=1204&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/quote_icon.gif" alt="Quote&nbsp;tester" align="absmiddle" border="0"></a>
+          </td>
+          </tr>
+          <tr>
+           <td colspan="2"><hr></td>
+          </tr>
+         </tbody></table>
+<!-- Message body -->
+test again
+
+<!-- Message body ''"" -->
+        </td>
+       </tr>
+       <tr>
+        <td background="" bgcolor="#dee3e7"><a href="#top" target="_self" class="npLink">Back to Top</a></td>
+        <td class="text" background="" bgcolor="#dee3e7"><a href="javascript:openWin('pop_up_profile.asp?PF=27&FID=39','profile','toolbar=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=590,height=425')"><img src="wwf79-forum_posts.asp_files/profile_icon.gif" alt="View&nbsp;tester's&nbsp;Profile" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/search_form.asp?KW=tester&amp;SI=AR&amp;FM=39&amp;FID=39&amp;TID=135&amp;PN=1&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/search_sm.gif" alt="Search for other posts by&nbsp;tester" align="absmiddle" border="0"></a>
+         <a href="http://mondragon.cc/" target="_blank"><img src="wwf79-forum_posts.asp_files/home_icon.gif" alt="Visit tester's Homepage" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_new_message_form.asp?name=tester" target="_self"><img src="wwf79-forum_posts.asp_files/pm_icon.gif" alt="Send Private Message" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_buddy_list.asp?name=tester" target="_self"><img src="wwf79-forum_posts.asp_files/add_buddy_sm.gif" alt="Add to Buddy List" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/edit_post.asp?PID=1204&amp;PN=1&amp;TPN=1" target="_self"><img src="wwf79-forum_posts.asp_files/edit_post_icon.gif" alt="Edit Post" align="absmiddle" border="0"></a>
+        </td>
+       </tr>
+       
+       <tr>
+        <td colspan="2" align="center" background="" bgcolor="#d1d7dc"><span style="font-size: 2px;">&nbsp;</span></td>
+      </tr><tr>
+        <td class="smText" background="" bgcolor="#efefef" valign="top">
+         <a name="1205"></a>
+         <span class="bold">tester</span><br>Barney<br>
+         <img src="wwf79-forum_posts.asp_files/1_star_rating.gif" alt="Barney"><br><img src="wwf79-forum_posts.asp_files/mike-fs-cellphone-110x110.png" alt="Avatar" onerror="this.src='forum_images/blank.gif', height='0';" height="95" vspace="5" width="95"><br><br>Joined: 17 October 2006<br>Location: United States
+<br>Online Status: Online<br>Posts: 7
+         </td>
+        <td class="text" background="" bgcolor="#efefef" valign="top">
+         <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody><tr>
+           <td class="smText" width="80%">Posted: 01 September 2007 at 1:34am | IP Logged
+		    </td>
+                    <td align="right" nowrap="nowrap" width="20%">
+            		 <a href="http://auggiedawg.com/forum/edit_post.asp?M=Q&amp;PID=1205&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/quote_icon.gif" alt="Quote&nbsp;tester" align="absmiddle" border="0"></a>
+          </td>
+          </tr>
+          <tr>
+           <td colspan="2"><hr></td>
+          </tr>
+         </tbody></table>
+<!-- Message body -->
+one move
+
+<!-- Message body ''"" -->
+        </td>
+       </tr>
+       <tr>
+        <td background="" bgcolor="#efefef"><a href="#top" target="_self" class="npLink">Back to Top</a></td>
+        <td class="text" background="" bgcolor="#efefef"><a href="javascript:openWin('pop_up_profile.asp?PF=27&FID=39','profile','toolbar=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=590,height=425')"><img src="wwf79-forum_posts.asp_files/profile_icon.gif" alt="View&nbsp;tester's&nbsp;Profile" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/search_form.asp?KW=tester&amp;SI=AR&amp;FM=39&amp;FID=39&amp;TID=135&amp;PN=1&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/search_sm.gif" alt="Search for other posts by&nbsp;tester" align="absmiddle" border="0"></a>
+         <a href="http://mondragon.cc/" target="_blank"><img src="wwf79-forum_posts.asp_files/home_icon.gif" alt="Visit tester's Homepage" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_new_message_form.asp?name=tester" target="_self"><img src="wwf79-forum_posts.asp_files/pm_icon.gif" alt="Send Private Message" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_buddy_list.asp?name=tester" target="_self"><img src="wwf79-forum_posts.asp_files/add_buddy_sm.gif" alt="Add to Buddy List" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/edit_post.asp?PID=1205&amp;PN=1&amp;TPN=1" target="_self"><img src="wwf79-forum_posts.asp_files/edit_post_icon.gif" alt="Edit Post" align="absmiddle" border="0"></a>
+        </td>
+       </tr>
+       
+       <tr>
+        <td colspan="2" align="center" background="" bgcolor="#d1d7dc"><span style="font-size: 2px;">&nbsp;</span></td>
+      </tr><tr>
+        <td class="smText" background="" bgcolor="#dee3e7" valign="top">
+         <a name="1206"></a>
+         <span class="bold">winkelman</span><br>Sucking at life.<br>
+         <img src="wwf79-forum_posts.asp_files/3_star_rating.gif" alt="Sucking at life."><br><img src="wwf79-forum_posts.asp_files/2007-05-02_091943_2_todd_stairs_1.jpg" alt="Avatar" onerror="this.src='forum_images/blank.gif', height='0';" height="95" vspace="5" width="95"><br><br>Joined: 18 October 2005<br>Location: Germany
+<br>Online Status: Offline<br>Posts: 153
+         </td>
+        <td class="text" background="" bgcolor="#dee3e7" valign="top">
+         <table border="0" cellpadding="0" cellspacing="0" width="100%">
+          <tbody><tr>
+           <td class="smText" width="80%">Posted: 08 September 2007 at 10:56am | IP Logged
+		    </td>
+                    <td align="right" nowrap="nowrap" width="20%">
+            		 <a href="http://auggiedawg.com/forum/edit_post.asp?M=Q&amp;PID=1206&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/quote_icon.gif" alt="Quote&nbsp;winkelman" align="absmiddle" border="0"></a>
+          </td>
+          </tr>
+          <tr>
+           <td colspan="2"><hr></td>
+          </tr>
+         </tbody></table>
+<!-- Message body -->
+hey! someone posts on here.<br>
+<br>
+<img src="wwf79-forum_posts.asp_files/smiley1.gif" border="0"><br>
+
+<!-- Signature --><br><br>__________________<br>it's high time you get as safe as possible.<!-- Signature -->
+<!-- Message body ''"" -->
+        </td>
+       </tr>
+       <tr>
+        <td background="" bgcolor="#dee3e7"><a href="#top" target="_self" class="npLink">Back to Top</a></td>
+        <td class="text" background="" bgcolor="#dee3e7"><a href="javascript:openWin('pop_up_profile.asp?PF=24&FID=39','profile','toolbar=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=590,height=425')"><img src="wwf79-forum_posts.asp_files/profile_icon.gif" alt="View&nbsp;winkelman's&nbsp;Profile" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/search_form.asp?KW=winkelman&amp;SI=AR&amp;FM=39&amp;FID=39&amp;TID=135&amp;PN=1&amp;TPN=1"><img src="wwf79-forum_posts.asp_files/search_sm.gif" alt="Search for other posts by&nbsp;winkelman" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_new_message_form.asp?name=winkelman" target="_self"><img src="wwf79-forum_posts.asp_files/pm_icon.gif" alt="Send Private Message" align="absmiddle" border="0"></a>
+         <a href="http://auggiedawg.com/forum/pm_buddy_list.asp?name=winkelman" target="_self"><img src="wwf79-forum_posts.asp_files/add_buddy_sm.gif" alt="Add to Buddy List" align="absmiddle" border="0"></a>
+        </td>
+       </tr>
+       
+       <tr>
+        <td colspan="2" align="center" background="" bgcolor="#d1d7dc"><span style="font-size: 2px;">&nbsp;</span></td>     </tr>
+    </tbody></table></td>
+   </tr>
+  </tbody></table>
+ </td></tr>
+</tbody></table>
+<br>
+<div align="center"><a name="reply"></a>
+	<span class="heading">Post Reply</span><br>
+<script language="JavaScript" src="wwf79-forum_posts.asp_files/RTE_message_form_js.html" type="text/javascript"></script>
+<form method="post" name="frmAddMessage" action="post_message.asp?PN=" onsubmit="return CheckForm();" onreset="return ResetForm();">
+ <table align="center" bgcolor="#006699" border="0" cellpadding="1" cellspacing="0" height="230" width="610">
+  <tbody><tr>
+   <td>
+    <table align="center" background="" bgcolor="#efefef" border="0" cellpadding="0" cellspacing="0" height="201" width="100%">
+     <tbody><tr>
+      <td>
+       <table align="center" border="0" cellpadding="2" cellspacing="0" height="233" width="100%">
+        <tbody><tr>
+         <td colspan="2" class="text" align="left" height="30">*Indicates required fields</td>
+        </tr>	<tr>
+         <td align="right" valign="bottom" width="15%">&nbsp;</td>
+         <td valign="bottom" width="70%">
+          <table border="0" cellpadding="0" cellspacing="0" width="100%">
+           <tbody><tr>
+            <td>
+             <table border="0" cellpadding="2" cellspacing="0" width="100%">
+              <tbody><tr>
+               <td>
+             <span id="ToolBar1">
+             <select id="selectFont" name="selectFont" onchange="FormatText('fontname', selectFont.options[selectFont.selectedIndex].value); document.frmAddMessage.selectFont.options[0].selected = true;">
+              <option value="0" selected="selected">-- Font Type --</option>
+              <option value="Arial, Helvetica, sans-serif">Arial</option>
+              <option value="Times New Roman, Times, serif">Times</option>
+              <option value="Courier New, Courier, mono">Courier New</option>
+              <option value="Verdana, Arial, Helvetica, sans-serif">Verdana</option>
+             </select>
+             <select id="selectFontSize" name="selectFontSize" onchange="FormatText('fontsize', selectFontSize.options[selectFontSize.selectedIndex].value); document.frmAddMessage.selectFontSize.options[0].selected = true;">
+              <option value="0" selected="selected">-- Font Size --</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+             </select>
+             <img src="wwf79-forum_posts.asp_files/post_button_bold.gif" title="Bold" onclick="FormatText('bold', '')" style="cursor: pointer;" align="absmiddle">
+             <img src="wwf79-forum_posts.asp_files/post_button_italic.gif" title="Italic" onclick="FormatText('italic', '')" style="cursor: pointer;" align="absmiddle"> 
+             <img src="wwf79-forum_posts.asp_files/post_button_underline.gif" title="Underline" onclick="FormatText('underline', '')" style="cursor: pointer;" align="absmiddle">&nbsp; 
+             <img id="forecolor" src="wwf79-forum_posts.asp_files/post_button_colour_pallete.gif" title="Text Colour" onclick="FormatText('forecolor', '')" style="cursor: pointer;" align="absmiddle" border="0">
+                <a href="javascript:openWin('upload_images.asp?MSG=RTE&FID=39','images','toolbar=0,location=0,status=0,menubar=0,scrollbars=0,resizable=0,width=400,height=150')"><img src="wwf79-forum_posts.asp_files/post_button_image_upload.gif" alt="Image Upload" align="absmiddle" border="0"></a>
+                <a href="javascript:openWin('upload_files.asp?MSG=RTE&FID=39','files','toolbar=0,location=0,status=0,menubar=0,scrollbars=0,resizable=0,width=400,height=150')"><img src="wwf79-forum_posts.asp_files/post_button_file_upload.gif" alt="File Upload" align="absmiddle" border="0"></a>              </span>               </td>
+              </tr>
+              <tr>
+               <td>
+             <span id="ToolBar2">
+             <img src="wwf79-forum_posts.asp_files/post_button_undo.gif" onclick="FormatText('undo')" style="cursor: pointer;" title="Undo" align="absmiddle">
+             <img src="wwf79-forum_posts.asp_files/post_button_redo.gif" onclick="FormatText('redo')" style="cursor: pointer;" title="Redo" align="absmiddle">&nbsp;
+             <img src="wwf79-forum_posts.asp_files/post_button_left_just.gif" onclick="FormatText('JustifyLeft', '')" style="cursor: pointer;" title="Left Justify" align="absmiddle">
+             <img src="wwf79-forum_posts.asp_files/post_button_centre.gif" onclick="FormatText('JustifyCenter', '')" style="cursor: pointer;" title="Centre Justify" align="absmiddle" border="0">
+             <img src="wwf79-forum_posts.asp_files/post_button_right_just.gif" onclick="FormatText('JustifyRight', '')" style="cursor: pointer;" title="Right Justify" align="absmiddle">
+             <img src="wwf79-forum_posts.asp_files/post_button_or_list.gif" onclick="FormatText('InsertOrderedList', '')" style="cursor: pointer;" title="Ordered List" align="absmiddle" border="0">
+             <img src="wwf79-forum_posts.asp_files/post_button_list.gif" onclick="FormatText('InsertUnorderedList', '')" style="cursor: pointer;" title="Unordered List" align="absmiddle" border="0">&nbsp;
+             <img src="wwf79-forum_posts.asp_files/post_button_outdent.gif" onclick="FormatText('Outdent', '')" style="cursor: pointer;" title="Outdent" align="absmiddle">
+             <img src="wwf79-forum_posts.asp_files/post_button_indent.gif" onclick="FormatText('indent', '')" style="cursor: pointer;" title="Indent" align="absmiddle" border="0">&nbsp;
+             <img src="wwf79-forum_posts.asp_files/post_button_hyperlink.gif" onclick="FormatText('createLink')" style="cursor: pointer;" title="Add Hyperlink" align="absmiddle" border="0">
+	     <img src="wwf79-forum_posts.asp_files/post_button_image.gif" title="Add Image" onclick="AddImage()" style="cursor: pointer;" align="absmiddle" border="0">
+	     </span>
+             &nbsp;<a href="javascript:openWin('RTE_about.asp','about','toolbar=0,location=0,status=0,menubar=0,scrollbars=0,resizable=0,width=400,height=200')"><img src="wwf79-forum_posts.asp_files/post_button_about.gif" title="About Rich Text Editor" style="cursor: pointer;" align="absmiddle" border="0"></a>
+		  <iframe id="colourPalette" src="wwf79-forum_posts.asp_files/RTE_colour_palette.html" style="visibility: hidden; position: absolute; left: 0px; top: 0px;" frameborder="0" height="165" scrolling="no" width="260"></iframe>
+	       </td>
+	      </tr>
+             </tbody></table>
+            </td>
+           </tr>
+          </tbody></table>
+         </td>
+        </tr>
+        <tr>
+         <td class="text" align="right" height="61" valign="top" width="15%">Message*:
+         <table align="center" border="0" cellpadding="4" cellspacing="0">
+          <tbody><tr><td class="smText" colspan="3" align="center"><br>Emoticons</td></tr><tr>
+		<td><img src="wwf79-forum_posts.asp_files/smiley1.gif" alt="Smile" onclick="AddSmileyIcon('smileys/smiley1.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley17.gif" alt="Tongue" onclick="AddSmileyIcon('smileys/smiley17.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley2.gif" alt="Wink" onclick="AddSmileyIcon('smileys/smiley2.gif')" style="cursor: pointer;" border="0"></td></tr><tr>
+		<td><img src="wwf79-forum_posts.asp_files/smiley19.gif" alt="Cry" onclick="AddSmileyIcon('smileys/smiley19.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley4.gif" alt="Big smile" onclick="AddSmileyIcon('smileys/smiley4.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley36.gif" alt="LOL" onclick="AddSmileyIcon('smileys/smiley36.gif')" style="cursor: pointer;" border="0"></td></tr><tr>
+		<td><img src="wwf79-forum_posts.asp_files/smiley11.gif" alt="Dead" onclick="AddSmileyIcon('smileys/smiley11.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley9.gif" alt="Embarrassed" onclick="AddSmileyIcon('smileys/smiley9.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley5.gif" alt="Confused" onclick="AddSmileyIcon('smileys/smiley5.gif')" style="cursor: pointer;" border="0"></td></tr><tr>
+		<td><img src="wwf79-forum_posts.asp_files/smiley32.gif" alt="Clap" onclick="AddSmileyIcon('smileys/smiley32.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley7.gif" alt="Angry" onclick="AddSmileyIcon('smileys/smiley7.gif')" style="cursor: pointer;" border="0"></td>
+		<td><img src="wwf79-forum_posts.asp_files/smiley18.gif" alt="Ouch" onclick="AddSmileyIcon('smileys/smiley18.gif')" style="cursor: pointer;" border="0"></td></tr>
+         <tr><td colspan="3" align="center"><a href="javascript:openWin('RTE_emoticons_smilies.asp','emot','toolbar=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=400,height=400')" class="smLink">more...</a></td></tr>
+         </tbody></table></td>         <td height="61" valign="top" width="70%">
+          <script language="javascript">
+		  //Create an iframe
+		  document.write ('<iframe id="message" src="RTE_textbox.asp?mode=reply&POID=1206&ID=616" width="490" height="200" onMouseOver="hideColourPallete()"></iframe>')
+          </script><iframe id="message" src="wwf79-forum_posts.asp_files/RTE_textbox.html" onmouseover="hideColourPallete()" height="200" width="490"></iframe>
+          <!-- Display a message for RTE users with JavaScript turned off -->
+          <noscript><span class="bold"><br /><br />JavaScript must be enabled on your web browser for you to post a message in the forum!</span></noscript></td>
+        </tr>
+        <tr>
+	 <td align="right" width="92">&nbsp;</td>
+	 <td class="text" valign="bottom" width="508">&nbsp;<input name="forumCodes" value="True" checked="checked" type="checkbox">Enable <a href="javascript:openWin('forum_codes.asp','codes','toolbar=0,location=0,status=0,menubar=0,scrollbars=1,resizable=1,width=550,height=400')">Forum Codes</a> to format post
+	 </td></tr>
+        <tr><td>
+         <input name="message" value="" type="hidden">
+	<input name="mode" value="reply" type="hidden">
+	<input name="FID" value="39" type="hidden">
+	<input name="TID" value="135" type="hidden">
+	<input name="PID" value="1206" type="hidden">
+	<input name="TPN" value="1" type="hidden">
+		<input name="ThreadPos" value="5" type="hidden">
+	<input name="browser" value="RTE" type="hidden">
+	<input name="sessionID" value="1062909860" type="hidden">&nbsp;
+    </td>
+    <td align="left" height="2" width="70%">
+	<p>
+          <input name="Submit" value="Post Reply" onclick="document.frmAddMessage.message.value = document.getElementById('message').contentWindow.document.body.innerHTML;" tabindex="30" type="submit">
+          <input name="Preview" value="Preview Post" onclick="document.frmAddMessage.message.value = document.getElementById('message').contentWindow.document.body.innerHTML; OpenPreviewWindow('post_preview.asp', document.frmAddMessage);" type="button">
+          <input name="Reset" value="Clear Form" type="reset">
+         </p>
+        </td>
+        </tr>
+       </tbody></table>
+      </td>
+     </tr>
+    </tbody></table>
+   </td>
+  </tr>
+ </tbody></table>
+</form>
+	  <table border="0" cellpadding="3" cellspacing="0" width="98%">
+            <tbody><tr><form></form></tr>
+             <tr>
+              <td>&nbsp;
+             </td>
+              <td align="right"><a href="http://auggiedawg.com/forum/post_message_form.asp?FID=39" target="_self"><img src="wwf79-forum_posts.asp_files/new_post.gif" alt="Post New Topic" align="absmiddle" border="0"></a><a href="http://auggiedawg.com/forum/poll_create_form.asp?FID=39" target="_self"><img src="wwf79-forum_posts.asp_files/new_poll.gif" alt="Create New Poll" align="absmiddle" border="0"></a>
+		</td>
+	    </tr>
+         </tbody></table>
+ <table border="0" cellpadding="1" cellspacing="0" width="98%">
+  <tbody><tr>
+   <td width="30%">
+    <table border="0" cellpadding="2" cellspacing="0" width="380">
+     <tbody><tr>
+      <td>
+      <table align="center" bgcolor="#006699" border="0" cellpadding="1" cellspacing="0" width="300">
+       <tbody><tr>
+        <td>
+         <table align="center" background="" bgcolor="#efefef" border="0" cellpadding="4" cellspacing="0" width="100%">
+          <tbody><tr>
+           <td align="center"> <a href="javascript:openWin('printer_friendly_posts.asp?TID=135','printer_friendly','toolbar=0,location=0,status=0,menubar=1,scrollbars=1,resizable=1,width=640,height=390')"><img src="wwf79-forum_posts.asp_files/print_version.gif" alt="Printable version" align="absmiddle" border="0"></a>
+           <a href="javascript:openWin('printer_friendly_posts.asp?FID=39&TID=135','printer_friendly','toolbar=0,location=0,status=0,menubar=1,scrollbars=1,resizable=1,width=640,height=390')" class="smLink">Printable version</a>	 </td>
+        </tr>
+       </tbody></table>
+      </td></tr>
+     </tbody></table><br><form>
+	<span class="text">Forum Jump</span>
+	 <select onchange="ForumJump(this)" name="SelectJumpForum">
+           <option value="" selected="selected">-- Select Forum --</option>
+		<option value="">the winkelshed</option>
+		<option value="forum_topics.asp?FID=39">&nbsp;&nbsp;-&nbsp;Phone photos</option>
+		<option value="forum_topics.asp?FID=40">&nbsp;&nbsp;-&nbsp;Are you serious?</option>
+		<option value="">another skate forum?</option>
+		<option value="forum_topics.asp?FID=41">&nbsp;&nbsp;-&nbsp;Sessions, parties and events.</option>
+	</select></form></td>
+    </tr></tbody></table></td>
+   <td class="smText" align="right" nowrap="nowrap" width="70%">You <span style="font-weight: bold;">can</span> post new topics in this forum<br>You <span style="font-weight: bold;">can</span> reply to topics in this forum<br>You <span style="font-weight: bold;">can</span> delete your posts in this forum<br>You <span style="font-weight: bold;">can</span> edit your posts in this forum<br>You <span style="font-weight: bold;">can</span> create polls in this forum<br>You <span style="font-weight: bold;">can</span> vote in polls in this forum<br></td>
+  </tr>
+ </tbody></table>
+  <br><span class="text" style="font-size: 10px;">Powered by <a href="http://www.webwizforums.com/" target="_blank" style="font-size: 10px;">Web Wiz Forums</a> version 7.91</span><br><span class="text" style="font-size: 10px;">Copyright ©2001-2004 <a href="http://www.webwizguide.info/" target="_blank" style="font-size: 10px;">Web Wiz Guide</a></span></div><!-- footer -->
+</body></html>

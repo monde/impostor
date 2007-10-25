@@ -88,6 +88,10 @@ class WWW::Impostor
         raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
       end
 
+      # look up the new topic id
+      form = page.form('frmMessageForm')
+      topic = form['TID'].to_i
+
       # save new topic id and topic name
       add_subject(forum, topic, subject)
 

@@ -89,6 +89,7 @@ class WWW::Impostor
         u = (URI.parse(link) rescue nil)
         topic = (CGI::parse(u.query)['t'][0] rescue nil)
         raise PostError.new('unexpected new topic response') unless topic
+        topic = topic.to_i
       rescue StandardError => err
         raise PostError.new(err)
       end
