@@ -212,8 +212,8 @@ class WWW::Impostor
       raise LoginError.new("unknown login page format") unless form
       
       button = form.buttons.with.name('Submit').first
-      form.name = username
-      form.password = password
+      form['name'] = username
+      form['password'] = password
 
       return form, button
     end
