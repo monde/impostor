@@ -99,9 +99,9 @@ module WWW
     # Instantiate a specific impostor based on its symbol name
 
     def self.create(config={})
-      config = config
       type = config[:impostor_type]
-      clz = type.is_a?(Class) ? type.new : eval(config[:impostor_type] + ".new")
+      clz = type.is_a?(Class) ? type : eval(config[:impostor_type])
+      clz.new(config)
     end
   
     ##
