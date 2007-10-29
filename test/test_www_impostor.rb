@@ -12,12 +12,14 @@ class WWW::ImpostorTest < Test::Unit::TestCase
   end
 
   def test_create_should_return_an_instance
+    im = WWW::Impostor.create({:impostor_type => "WWW::Impostor::Fake"})
+    assert_equal WWW::Impostor::Fake, im.class 
     im = WWW::Impostor.create({:impostor_type => WWW::Impostor::Fake})
     assert_equal WWW::Impostor::Fake, im.class 
   end
 
   def test_add_subject_should_work
-    im = WWW::Impostor.create({:impostor_type => WWW::Impostor::Fake})
+    im = WWW::Impostor.create({:impostor_type => "WWW::Impostor::Fake"})
     im.add_subject(f=10,t=10,s="hello world")
     assert_equal s, im.get_subject(f,t)
     im.add_subject(f=10,t=11,s="hello world2")

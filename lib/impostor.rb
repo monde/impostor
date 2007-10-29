@@ -100,8 +100,8 @@ module WWW
 
     def self.create(config={})
       config = config
-      clz = config[:impostor_type]
-      clz.new(config)
+      type = config[:impostor_type]
+      clz = type.is_a?(Class) ? type.new : eval(config[:impostor_type] + ".new")
     end
   
     ##
