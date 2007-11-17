@@ -62,6 +62,9 @@ class WWW::Impostor
       button = form.buttons.with.name('post').first
       form.subject = subject
       form.message = message
+      form['disable_html'] = nil
+      form['disable_bbcode'] = 'on'
+      form['disable_smilies'] = 'on'
       begin
         page = @agent.submit(form, button)
       rescue StandardError => err
@@ -122,8 +125,13 @@ class WWW::Impostor
       form = page.form('post')
 
       # set up the form and submit it
-      button = form.buttons.with.name('post').first
+      button = form.buttons.with.name('post').first rescue nil
+      raise PostError.new("post form not found") unless button
+
       form.message = message
+      form['disable_html'] = nil
+      form['disable_bbcode'] = 'on'
+      form['disable_smilies'] = 'on'
       begin
         page = @agent.submit(form, button)
       rescue StandardError => err
