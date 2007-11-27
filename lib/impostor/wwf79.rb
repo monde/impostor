@@ -105,7 +105,7 @@ class WWW::Impostor
       raise PostError.new("not logged in") unless @loggedin
 
       uri = forum_posts_page
-      uri.query = "TID=#{topic}"
+      uri.query = "TID=#{topic}&TPN=10000"
 
       # get the submit form
       begin
