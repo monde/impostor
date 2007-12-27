@@ -2,11 +2,15 @@
 # with fake web
 require File.dirname(__FILE__) + "/helper"
 
-require 'test/unit'
-
 class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
-  include Impostor::TestHelper
+  include TestHelper
 
+  def setup
+    @app_root = 'http://localhost/phpbb2/'
+    @im = WWW::Impostor::Phpbb2.new(config())
+  end
+
+=begin
   def fake(config = {})
     WWW::Impostor::FakePhpbb2.new(config)
   end
@@ -28,28 +32,35 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
         fetch_login_page
     end
   end
+=end
 
   def test_version
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert im.version
+    assert @im.version
   end
 
   def test_fetch_login_page
-    register_good_index
-    register_good_login
-    page = fake(config).test_fetch_login_page 
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      URI.join(@app_root, config[:login_page])
+    ).returns(load_page('phpbb2-login.html'))
+    
+    page = @im.send(:fetch_login_page)
     assert page
   end
 
-  def test_bad_login_page_should_raise_exception
-    FakeWeb.register_uri(@good_login, :method => :get, 
-                         :response => response("not found",404))
 
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
+  def test_bad_login_page_should_raise_exception
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      URI.join(@app_root, config[:login_page])
+    ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
 
     assert_raises(WWW::Impostor::LoginError) do
-      im.login
+      @im.send(:fetch_login_page)
     end
+  end
+
+=begin
+  def test_initialize
+    assert false
   end
 
   def test_bad_login_post_should_raise_exception
@@ -360,6 +371,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       assert_equal "hello ruby", im.message
     end
   end
+=end
 
   private
 
@@ -401,16 +413,17 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     register_good_posting type
   end
 
-  def config(cookies=false, config={})
-    cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
-    c = {:app_root => @good_index,
+  def config(config={})
+    c = {:app_root => @app_root,
       :login_page => 'login.php', 
       :posting_page => 'posting.php', 
       :user_agent => 'Windows IE 7', 
       :username => 'tester',
       :password => 'test'}.merge(config)
 
-    c[:cookie_jar] = cookie_jar if cookies
+    #TODO clean this up
+    #cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
+    #c[:cookie_jar] = cookie_jar if cookies
     c
   end
 

@@ -1,10 +1,13 @@
 $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 
-# we need to load net/http, then our monkey patch of Net::HTTP, then 
-# fake_web in that order
 require 'net/http'
 require 'net/https'
 require 'impostor'
+require 'rubygems'
+gem 'mechanize', '>= 0.6.11'
+require 'mechanize'
+require 'mocha'
+require 'test/unit'
 
 # monkey patch Net::HTTP so un caged requests don't go over the wire
 module Net #:nodoc:
@@ -20,7 +23,7 @@ module Net #:nodoc:
              :port => self.port, :path => query[0]}
       opts[:query] = query[1] if query[1]
       uri = uri_cls.build(opts)
-      raise ArgumentError.new("#{req.method} method to #{uri} not being handled by FakeWeb")
+      raise ArgumentError.new("#{req.method} method to #{uri} not being handled in testing")
     end
 
     def connect
@@ -29,45 +32,13 @@ module Net #:nodoc:
   end
 end
 
-require 'rubygems'
-require 'fake_web'
+module TestHelper
 
-module Impostor
-  module TestHelper
+  ##
+  # helps load pages
 
-    ##
-    # helps load pages
-
-    def load_page(file)
-      IO.readlines("#{File.dirname(__FILE__)}/fixtures/#{file}")
-    end
-
+  def load_page(file)
+    IO.readlines("#{File.dirname(__FILE__)}/fixtures/#{file}")
   end
+
 end
-
-class FakeResponse < Net::HTTPResponse
-  include Net::HTTPHeader
-
-  attr_reader :code
-  attr_accessor :body, :query, :cookies
-
-  def code=(c)
-    @code = c.to_s
-  end
-
-  alias :status :code
-  alias :status= :code=
-
-  def initialize
-    @header = {}
-    @body = ''
-    @code = nil
-    @query = nil
-    @cookies = []
-  end
-
-  def read_body
-    yield body
-  end
-end
-

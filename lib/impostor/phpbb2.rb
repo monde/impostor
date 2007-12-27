@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'hpricot'
+gem 'mechanize', '>= 0.6.11'
 require 'mechanize'
 require 'cgi'
 
