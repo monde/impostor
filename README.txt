@@ -1,5 +1,6 @@
 impostor
     by Mike Mondragon
+    mikemondragon@gmail.com
     http://impostor.rubyforge.org/
 
 == DESCRIPTION:

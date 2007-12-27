@@ -6,8 +6,13 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   include TestHelper
 
   def setup
+    @cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
     @app_root = 'http://localhost/phpbb2/'
     @im = WWW::Impostor::Phpbb2.new(config())
+  end
+
+  def teardown
+    File.delete(@cookie_jar) if File.exist?(@cookie_jar)
   end
 
 =begin
@@ -34,6 +39,20 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 =end
 
+  def test_initialize_with_cookie_jar
+    FileUtils.touch(@cookie_jar)
+
+    WWW::Mechanize::CookieJar.any_instance.expects(:load).once.with(@cookie_jar)
+    im = WWW::Impostor::Phpbb2.new(config())
+    assert im
+  end
+
+  def test_initialize_without_cookie_jar
+    WWW::Mechanize::CookieJar.any_instance.expects(:load).never
+    im = WWW::Impostor::Phpbb2.new(config())
+    assert im
+  end
+
   def test_version
     assert @im.version
   end
@@ -47,7 +66,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert page
   end
 
-
   def test_bad_login_page_should_raise_exception
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
@@ -59,9 +77,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
 =begin
-  def test_initialize
-    assert false
-  end
 
   def test_bad_login_post_should_raise_exception
     register_good_index
@@ -419,11 +434,9 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       :posting_page => 'posting.php', 
       :user_agent => 'Windows IE 7', 
       :username => 'tester',
-      :password => 'test'}.merge(config)
-
-    #TODO clean this up
-    #cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
-    #c[:cookie_jar] = cookie_jar if cookies
+      :password => 'test',
+      :cookie_jar => @cookie_jar
+    }.merge(config)
     c
   end
 
