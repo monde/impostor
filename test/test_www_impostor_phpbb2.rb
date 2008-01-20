@@ -217,22 +217,15 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_posting_not_logged_in_should_raise_exception
-    setup_good_fake_web
-    FakeWeb.register_uri(@good_login, :method => :post, 
-      :response => response(load_page('phpbb2-not-logged-in.html')))
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    # not logged in so posting should throw an exception
+    @im.expects(:login).once.returns(false)
+    @im.instance_variable_set(:@loggedin, false)
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post
+      assert @im.post(2,2,'hello')
     end
   end
 
+=begin
   end
 
   def test_posting_without_topic_set_should_raise_exception
