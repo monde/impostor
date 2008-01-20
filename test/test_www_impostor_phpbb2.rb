@@ -1,6 +1,11 @@
-# test helper loads all the required libraries for testing
-# with fake web
-require File.dirname(__FILE__) + "/helper"
+require File.join(File.dirname(__FILE__), "..", "lib", "impostor")
+require File.join(File.dirname(__FILE__), "..", "lib", "impostor", "phpbb2")
+require File.join(File.dirname(__FILE__), "test_helper")
+
+require 'test/unit'
+require 'rubygems'
+require 'mocha'
+require 'mechanize'
 
 class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   include TestHelper

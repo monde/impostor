@@ -1,6 +1,5 @@
-# test helper loads all the required libraries for testing
-# with fake web
-require File.dirname(__FILE__) + "/helper"
+require File.join(File.dirname(__FILE__), "..", "lib", "impostor")
+require File.join(File.dirname(__FILE__), "test_helper")
 
 require 'tempfile'
 require 'test/unit'

@@ -2,12 +2,6 @@ $:.unshift File.join(File.dirname(__FILE__), "..", "lib")
 
 require 'net/http'
 require 'net/https'
-require 'impostor'
-require 'rubygems'
-gem 'mechanize', '>= 0.6.11'
-require 'mechanize'
-require 'mocha'
-require 'test/unit'
 
 # monkey patch Net::HTTP so un caged requests don't go over the wire
 module Net #:nodoc:
