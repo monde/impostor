@@ -160,10 +160,28 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_logout_does_nothing_if_logged_out
+    @im.instance_variable_set(:@loggedin, false)
     @im.expects(:cookie_jar).never
     @im.expects(:save_topics).never
-    @im.instance_variable_set(:@loggedin, false)
     assert_equal false, @im.logout
+  end
+
+  def test_logout
+    @im.instance_variable_set(:@loggedin, true)
+    cookie_jar = mock()
+    @im.expects(:cookie_jar).times(2).returns(cookie_jar)
+    WWW::Mechanize::CookieJar.any_instance.expects(:save_as).once.with(cookie_jar).returns(nil)
+    @im.expects(:save_topics).once
+    assert_equal true, @im.logout
+    assert_equal nil, @im.instance_variable_get(:@forum)
+    assert_equal nil, @im.instance_variable_get(:@topic)
+    assert_equal nil, @im.instance_variable_get(:@message)
+    assert_equal false, @im.instance_variable_get(:@loggedin)
+  end
+
+  def test_posting_page
+    c = config
+    assert_equal URI.join(c[:app_root], c[:posting_page]), @im.posting_page
   end
 
 =begin
@@ -457,6 +475,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   private
 
+=begin
     def register_good_login
       FakeWeb.register_uri(@good_login, :method => :get, 
                            :response => response(load_page('phpbb2-login.html')))
@@ -494,6 +513,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     register_good_login
     register_good_posting type
   end
+=end
 
   def config(config={})
     c = {:app_root => @app_root,
@@ -507,6 +527,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     c
   end
 
+=begin
   def response(body, code=200)
     res = FakeResponse.new
     res.code = code
@@ -514,5 +535,5 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     res.body = body
     res
   end
-
+=end
 end
