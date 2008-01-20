@@ -62,6 +62,20 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert @im.version
   end
 
+  def test_should_be_logged_in?
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb2-logged-in.html')
+    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    assert_equal true, @im.send(:logged_in?, page)
+  end
+
+  def test_should_not_be_logged_in?
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb2-not-logged-in.html')
+    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    assert_equal false, @im.send(:logged_in?, page)
+  end
+
   def test_fetch_login_page
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
