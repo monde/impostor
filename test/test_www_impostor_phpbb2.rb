@@ -184,57 +184,81 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_equal URI.join(c[:app_root], c[:posting_page]), @im.posting_page
   end
 
-=begin
   def test_posting_without_forum_set_should_raise_exception
-    setup_good_fake_web
-    im = fake(config)
-    im.fake_loggedin = true
-
-    im.forum = nil
-    im.topic = 2
-    im.message = "hello ruby"
-    # topic not set so posting should throw an exception
+    @im.instance_variable_set(:@forum, nil)
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post
+      assert @im.post
     end
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post(f=nil,t=2,m="hello ruby")
+      assert @im.post(f=nil,t=nil,m=nil)
     end
   end
 
   def test_posting_without_topic_set_should_raise_exception
-    setup_good_fake_web
-    im = fake(config)
-    im.fake_loggedin = true
-
-    im.forum = 2
-    im.topic = nil
-    im.message = "hello ruby"
-    # topic not set so posting should throw an exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@topic, nil)
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post
+      assert @im.post
     end
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post(f=2,t=nil,m="hello ruby")
+      assert @im.post(f=2,t=nil,m=nil)
     end
   end
 
   def test_posting_without_message_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@topic, 1)
+    @im.instance_variable_set(:@message, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(f=2,t=2,m=nil)
+    end
+  end
+
+=begin
+  def test_posting_not_logged_in_should_raise_exception
     setup_good_fake_web
+    FakeWeb.register_uri(@good_login, :method => :post, 
+      :response => response(load_page('phpbb2-not-logged-in.html')))
     im = fake(config)
 
     im.forum = 2
     im.topic = 2
-    im.message = nil
-    # message is not set so posting should throw an exception
+    im.message = "hello ruby"
+    # not logged in so posting should throw an exception
     assert_raises(WWW::Impostor::PostError) do
       assert im.post
+    end
+  end
+
+  end
+
+  def test_posting_without_topic_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@topic, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert im.post(f=2,t=nil,m=nil)
+    end
+  end
+
+  def test_posting_without_message_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@topic, 1)
+    @im.instance_variable_set(:@message, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post
     end
     assert_raises(WWW::Impostor::PostError) do
       assert im.post(f=2,t=2,m=nil)
     end
   end
 
+=begin
   def test_posting_not_logged_in_should_raise_exception
     setup_good_fake_web
     FakeWeb.register_uri(@good_login, :method => :post, 
