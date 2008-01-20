@@ -85,6 +85,21 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert page
   end
 
+  def test_login_form_and_button_should_raise_login_error_when_form_is_missing
+    assert_raises(WWW::Impostor::LoginError) do
+      form, button = @im.send(:login_form_and_button, nil)
+    end
+  end
+
+  def test_login_form_and_button_should_return_a_form_and_button
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb2-login.html')
+    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    form, button = @im.send(:login_form_and_button, page)
+    assert_equal true, form.is_a?(WWW::Mechanize::Form)
+    assert_equal true, button.is_a?(WWW::Mechanize::Button)
+  end
+
   def test_bad_login_page_should_raise_exception
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
