@@ -143,6 +143,21 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.login
   end
 
+  def test_login_should_login
+    @im.instance_variable_set(:@loggedin, false)
+    login_page = mock()
+    @im.stubs(:fetch_login_page).returns(login_page)
+    @im.expects(:logged_in?).once.with(login_page).returns(false)
+    form = mock()
+    button = mock()
+    @im.expects(:login_form_and_button).with(login_page).returns([form, button])
+    logged_in_page = mock()
+    @im.expects(:post_login).with(form, button).returns(logged_in_page)
+    @im.expects(:logged_in?).once.with(logged_in_page).returns(true)
+    @im.expects(:load_topics).once.returns(true)
+
+    assert_equal true, @im.login
+  end
 
 =begin
 
