@@ -181,7 +181,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_posting_page
     c = config
-    assert_equal URI.join(c[:app_root], c[:posting_page]), @im.posting_page
+    assert_equal URI.join(@app_root, c[:posting_page]), @im.posting_page
   end
 
   def test_posting_without_forum_set_should_raise_exception
@@ -225,65 +225,20 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
-  end
-
-  def test_posting_without_topic_set_should_raise_exception
-    @im.instance_variable_set(:@forum, 1)
-    @im.instance_variable_set(:@topic, nil)
-    assert_raises(WWW::Impostor::PostError) do
-      assert @im.post
-    end
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.post(f=2,t=nil,m=nil)
-    end
-  end
-
-  def test_posting_without_message_set_should_raise_exception
-    @im.instance_variable_set(:@forum, 1)
-    @im.instance_variable_set(:@topic, 1)
-    @im.instance_variable_set(:@message, nil)
-    assert_raises(WWW::Impostor::PostError) do
-      assert @im.post
-    end
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.post(f=2,t=2,m=nil)
-    end
-  end
-
-=begin
-  def test_posting_not_logged_in_should_raise_exception
-    setup_good_fake_web
-    FakeWeb.register_uri(@good_login, :method => :post, 
-      :response => response(load_page('phpbb2-not-logged-in.html')))
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    # not logged in so posting should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.post
-    end
-  end
-
   def test_getting_bad_posting_for_post_page_should_raise_exception
-    setup_good_fake_web
-
-    FakeWeb.register_uri(@good_posting + '?mode=reply&t=2', :method => :get, 
-                         :response => response("not found",404))
-
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    # bad posting page should throw an exception
+    @im.instance_variable_set(:@loggedin, true)
+    topic = 1
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      posting_page
+    ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post
+      assert @im.post(1,1,'hello')
     end
   end
 
+=begin
   def test_bad_submit_for_post_response_should_raise_exception
     setup_good_fake_web
 
