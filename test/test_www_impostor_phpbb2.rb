@@ -254,6 +254,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+    #body = '<form action="posting.php" method="post" name="post"><textarea name="message"></textarea><input type="submit" name="post"/></form>'
 =begin
   def test_bad_submit_for_post_response_should_raise_exception
     setup_good_fake_web
