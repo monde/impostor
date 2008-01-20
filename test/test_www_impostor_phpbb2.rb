@@ -159,30 +159,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_equal true, @im.login
   end
 
+  def test_logout_does_nothing_if_logged_out
+    @im.expects(:cookie_jar).never
+    @im.expects(:save_topics).never
+    @im.instance_variable_set(:@loggedin, false)
+    assert_equal false, @im.logout
+  end
+
 =begin
-
-  def test_bad_login_post_should_raise_exception
-    register_good_index
-    FakeWeb.register_uri(@good_login, :method => :get, 
-                         :response => response(load_page('phpbb2-login.html')))
-    FakeWeb.register_uri(@good_login, :method => :post, 
-                         :response => response("not found",404))
-
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-
-    assert_raises(WWW::Impostor::LoginError) do
-      im.login
-    end
-  end
-
-  def test_should_login
-    register_good_index
-    register_good_login
-    im = WWW::Impostor::Phpbb2.new(config(cookies=false))
-    assert_equal true, im.login
-    im.logout
-  end
-
   def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
