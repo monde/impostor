@@ -95,6 +95,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+  def test_already_logged_in_should_not_post_login_information_again
+    page = mock()
+    @im.stubs(:fetch_login_page).returns(page)
+    @im.expects(:logged_in?).once.with(page).returns(true)
+    @im.expects(:login_form_and_button).with(page).never
+    @im.login
+  end
+
 =begin
 
   def test_bad_login_post_should_raise_exception
