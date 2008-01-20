@@ -225,7 +225,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_bad_posting_for_post_page_should_raise_exception
+  def test_getting_bad_post_page_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     topic = 1
     posting_page = @im.posting_page
@@ -233,6 +233,22 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
     ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(7,topic,'hello')
+    end
+  end
+
+  def test_getting_bad_post_form_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = '<form action="posting.php" method="post" name="post"></form>'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 1
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      posting_page
+    ).returns(page)
     assert_raises(WWW::Impostor::PostError) do
       assert @im.post(1,1,'hello')
     end
