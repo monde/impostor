@@ -27,6 +27,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     </form>!
   end
 
+  def phpbb2_good_submit_new_topic_form
+    %q!<form action="posting.php" method="post" name="post">
+    <input name="post" type="submit">
+    <input name="subject" type="text">
+    <input name="message" value="" type="hidden">
+    </form>!
+  end
+
   def test_initialize_with_cookie_jar
     FileUtils.touch(@cookie_jar)
 
@@ -168,7 +176,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_equal URI.join(@app_root, c[:posting_page]), @im.posting_page
   end
 
-  def test_posting_without_forum_set_should_raise_exception
+  def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     assert_raises(WWW::Impostor::PostError) do
       assert @im.post
@@ -178,7 +186,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_posting_without_topic_set_should_raise_exception
+  def test_post_without_topic_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
     assert_raises(WWW::Impostor::PostError) do
@@ -189,7 +197,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_posting_without_message_set_should_raise_exception
+  def test_post_without_message_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, 1)
     @im.instance_variable_set(:@message, nil)
@@ -201,7 +209,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_posting_not_logged_in_should_raise_exception
+  def test_post_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
     assert_raises(WWW::Impostor::PostError) do
@@ -209,7 +217,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_bad_post_page_for_post_should_raise_exception
+  def test_bad_post_page_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     topic = 1
     posting_page = @im.posting_page
@@ -222,7 +230,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_bad_post_form_for_post_should_raise_exception
+  def test_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = '<form action="posting.php" method="post" name="post"></form>'
@@ -236,7 +244,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_submitting_bad_post_form_should_raise_exception
+  def test_submitting_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_post_form
@@ -291,7 +299,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_unknown_posting_response_should_return_false
+  def test_getting_unknown_post_response_should_return_false
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_post_form
@@ -377,25 +385,26 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     assert_raises(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=2,s="hello world",m="hello ruby")
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_submitting_bad_post_for_new_topic_form_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
 
 =begin
-  def test_unexpected_text_for_new_topic_should_raise_exception
-    setup_good_fake_web :new_topic
-
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response("junk",200))
-
-    im = fake(config)
-
-    # bad submit response should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
-    end
-  end
-
   def test_unexpected_viewtopic_for_new_topic_should_raise_exception
     setup_good_fake_web :new_topic
 
