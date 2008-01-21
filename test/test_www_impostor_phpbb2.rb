@@ -20,6 +20,18 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     File.delete(@cookie_jar) if File.exist?(@cookie_jar)
   end
 
+  def config(config={})
+    c = {:app_root => @app_root,
+      :login_page => 'login.php', 
+      :posting_page => 'posting.php', 
+      :user_agent => 'Windows IE 7', 
+      :username => 'tester',
+      :password => 'test',
+      :cookie_jar => @cookie_jar
+    }.merge(config)
+    c
+  end
+
   def phpbb2_good_submit_post_form
     %q!<form action="posting.php" method="post" name="post">
     <input name="post" type="submit">
@@ -452,70 +464,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       assert_equal "hello world", im.subject
       assert_equal "hello ruby", im.message
     end
-  end
-=end
-
-  private
-
-=begin
-    def register_good_login
-      FakeWeb.register_uri(@good_login, :method => :get, 
-                           :response => response(load_page('phpbb2-login.html')))
-      FakeWeb.register_uri(@good_login, :method => :post, 
-                           :response => response(load_page('phpbb2-logged-in.html')))
-    end
-
-    def register_good_index
-      FakeWeb.register_uri(@good_index, :method => :get, 
-                        :response => response(load_page('phpbb2-index.html')))
-    end
-
-  def register_good_posting(type = :reply)
-    # different gets and posts for "reply" and "new_topic" mode
-    case type
-    when :reply
-      FakeWeb.register_uri(@good_posting + '?mode=reply&t=2', :method => :get, 
-                         :response => response(load_page('phpbb2-get-new_topic-form-good-response.html')))
-      FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response(load_page('phpbb2-post-reply-good-response.html')))
-    when :new_topic
-      FakeWeb.register_uri(@good_posting + '?mode=newtopic&f=2', :method => :get, 
-                         :response => response(load_page('phpbb2-get-new_topic-form-good-response.html')))
-      FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response(load_page('phpbb2-post-new_topic-good-response.html')))
-      FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
-                         :response => response(load_page('phpbb2-get-viewtopic-for-new-topic-good-response.html')))
-    else
-      raise "unknown type parameter"
-    end
-  end
-
-  def setup_good_fake_web(type = :reply)
-    register_good_index
-    register_good_login
-    register_good_posting type
-  end
-=end
-
-  def config(config={})
-    c = {:app_root => @app_root,
-      :login_page => 'login.php', 
-      :posting_page => 'posting.php', 
-      :user_agent => 'Windows IE 7', 
-      :username => 'tester',
-      :password => 'test',
-      :cookie_jar => @cookie_jar
-    }.merge(config)
-    c
-  end
-
-=begin
-  def response(body, code=200)
-    res = FakeResponse.new
-    res.code = code
-    res['Content-Type'] ||= 'text/html'
-    res.body = body
-    res
   end
 =end
 end
