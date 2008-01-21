@@ -20,6 +20,13 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     File.delete(@cookie_jar) if File.exist?(@cookie_jar)
   end
 
+  def phpbb2_good_submit_post_form
+    %q!<form action="posting.php" method="post" name="post">
+    <input name="post" type="submit">
+    <input name="message" value="" type="hidden">
+    </form>!
+  end
+
 =begin
   def fake(config = {})
     WWW::Impostor::FakePhpbb2.new(config)
@@ -243,40 +250,34 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     response = {'content-type' => 'text/html'}
     body = '<form action="posting.php" method="post" name="post"></form>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 1
+    topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     assert_raises(WWW::Impostor::PostError) do
-      assert @im.post(1,1,'hello')
+      assert @im.post(1,topic,'hello')
     end
   end
 
   def test_submitting_bad_post_form_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = %q!<form action="posting.php" method="post" name="post">
-    <input name="post" type="submit">
-    <input name="message" value="" type="hidden">
-    </form>!
+    body = phpbb2_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 1
+    topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
     assert_raises(WWW::Impostor::PostError) do
-      assert @im.post(1,1,'hello')
+      assert @im.post(1,topic,'hello')
     end
   end
 
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = %q!<form action="posting.php" method="post" name="post">
-    <input name="post" type="submit">
-    <input name="message" value="" type="hidden">
-    </form>!
+    body = phpbb2_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     posting_page = @im.posting_page
@@ -286,7 +287,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    assert_equal true, @im.post(1,2,'hello')
+    assert_equal true, @im.post(1,topic,'hello')
     assert_equal 1, @im.instance_variable_get(:@forum)
     assert_equal topic, @im.instance_variable_get(:@topic)
     assert_equal 'hello', @im.instance_variable_get(:@message)
