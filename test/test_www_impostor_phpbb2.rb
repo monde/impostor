@@ -64,15 +64,15 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-logged-in.html')
-    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    body = load_page('phpbb2-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     assert_equal true, @im.send(:logged_in?, page)
   end
 
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-not-logged-in.html')
-    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    body = load_page('phpbb2-not-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     assert_equal false, @im.send(:logged_in?, page)
   end
 
@@ -93,8 +93,8 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_login_form_and_button_should_return_a_form_and_button
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-login.html')
-    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    body = load_page('phpbb2-login.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form, button = @im.send(:login_form_and_button, page)
     assert_equal true, form.is_a?(WWW::Mechanize::Form)
     assert_equal true, button.is_a?(WWW::Mechanize::Button)
@@ -102,8 +102,8 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-logged-in.html')
-    page = WWW::Mechanize::Page.new(uri=nil, response, body.join, code=nil, mech=nil)
+    body = load_page('phpbb2-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form = mock()
     button = mock()
     WWW::Mechanize.any_instance.expects(:submit).once.with(form, button).returns(page)
@@ -270,6 +270,28 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+  def test_should_post
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = %q!<form action="posting.php" method="post" name="post">
+    <input name="post" type="submit">
+    <input name="message" value="" type="hidden">
+    </form>!
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    body = load_page('phpbb2-post-reply-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    assert_equal true, @im.post(1,2,'hello')
+    assert_equal 1, @im.instance_variable_get(:@forum)
+    assert_equal topic, @im.instance_variable_get(:@topic)
+    assert_equal 'hello', @im.instance_variable_get(:@message)
+  end
+
 =begin
   def test_too_many_posts_for_post_should_raise_exception
     setup_good_fake_web
@@ -301,18 +323,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     im.topic = 2
     im.message = "hello ruby"
     assert_equal false, im.post
-  end
-
-  def test_should_post
-    setup_good_fake_web
-
-    im = fake(config)
-    im.fake_loggedin = true
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "#{Time.now} Hello there #{Time.now}"
-    assert im.post
   end
 
   def test_new_topic_without_forum_set_should_raise_exception
