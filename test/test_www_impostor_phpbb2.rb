@@ -77,12 +77,12 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_fetch_login_page
+    page = load_page('phpbb2-login.html').join
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
-    ).returns(load_page('phpbb2-login.html'))
+    ).returns(page)
     
-    page = @im.send(:fetch_login_page)
-    assert page
+    assert_equal page, @im.send(:fetch_login_page)
   end
 
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
