@@ -315,21 +315,27 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_getting_unknown_posting_response_should_return_false
-    setup_good_fake_web
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    body = 'junk'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response("junk response",200))
-
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    assert_equal false, im.post
+    assert_equal false, @im.post(1,topic,'hello')
+    assert_equal nil, @im.instance_variable_get(:@forum)
+    assert_equal nil, @im.instance_variable_get(:@topic)
+    assert_equal nil, @im.instance_variable_get(:@subject)
+    assert_equal nil, @im.instance_variable_get(:@message)
   end
 
+=begin
   def test_new_topic_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
