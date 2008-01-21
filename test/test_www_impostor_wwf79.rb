@@ -3,64 +3,55 @@ require File.join(File.dirname(__FILE__), "..", "lib", "impostor", "wwf79")
 require File.join(File.dirname(__FILE__), "test_helper")
 
 require 'test/unit'
+require 'rubygems'
+require 'mocha'
+require 'mechanize'
 
 class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   include TestHelper
 
   def setup
-    @cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
+    @cookie_jar = File.join(Dir.tmpdir, 'www_impostor_wwf79_test.yml')
     @app_root = 'http://localhost/wwf79/'
-    @im = WWW::Impostor::Phpbb2.new(config())
+    @im = WWW::Impostor::Wwf79.new(config())
   end
 
   def teardown
     File.delete(@cookie_jar) if File.exist?(@cookie_jar)
   end
 
-  def config(cookies=false, config={})
-    cookie_jar = File.join(Dir.tmpdir, 'www_impostor_wwf79_test.yml')
+  def config(config={})
     c = {:app_root => @app_root,
       :login_page => 'login_user.asp', 
       :forum_posts_page => 'forum_posts.asp', 
       :post_message_page => 'post_message_form.asp', 
       :user_agent => 'Windows IE 7', 
       :username => 'tester',
-      :password => 'test'}.merge(config)
-
-    c[:cookie_jar] = cookie_jar if cookies
+      :password => 'test',
+      :cookie_jar => @cookie_jar
+      }.merge(config)
     c
   end
 
-=begin
-  def fake(config = {})
-    WWW::Impostor::FakeWwf79.new(config)
+  def test_initialize_with_cookie_jar
+    FileUtils.touch(@cookie_jar)
+
+    WWW::Mechanize::CookieJar.any_instance.expects(:load).once.with(@cookie_jar)
+    im = WWW::Impostor::Wwf79.new(config())
+    assert im
   end
 
-  def setup
-    FakeWeb.clean_registry()
-    @good_index = 'http://localhost/wwf79/'
-    @good_login = 'http://localhost/wwf79/login_user.asp'
-    @good_reply_form = 'http://localhost/wwf79/forum_posts.asp'
-    @good_topic_form = 'http://localhost/wwf79/post_message_form.asp'
-    @good_posting = 'http://localhost/wwf79/post_message.asp?PN='
-    @good_viewtopic = 'http://localhost/wwf79/forum_posts.asp'
-  end
-
-  class WWW::Impostor::FakeWwf79 < WWW::Impostor::Wwf79
-    def fake_loggedin=(loggedin)
-      @loggedin = loggedin
-    end
-
-    def test_fetch_login_page
-        fetch_login_page
-    end
+  def test_initialize_without_cookie_jar
+    WWW::Mechanize::CookieJar.any_instance.expects(:load).never
+    im = WWW::Impostor::Wwf79.new(config())
+    assert im
   end
 
   def test_version
-    im = WWW::Impostor::Wwf79.new(config(cookies=false))
-    assert im.version
+    assert @im.version
   end
 
+=begin
   def test_fetch_login_page
     register_good_index
     register_good_login
