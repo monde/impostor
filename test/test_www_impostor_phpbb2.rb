@@ -404,21 +404,22 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_unexpected_viewtopic_for_new_topic_should_raise_exception
-    setup_good_fake_web :new_topic
-
-    FakeWeb.register_uri(@good_viewtopic + '?p=60', :method => :get, 
-                         :response => response("junk",200))
-
-    im = fake(config)
-
-    # bad submit response should throw an exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
 
+=begin
   def test_malformed_viewtopic_response_for_new_topic_should_raise_exception
     setup_good_fake_web :new_topic
 
