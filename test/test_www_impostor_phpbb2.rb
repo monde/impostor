@@ -473,20 +473,30 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_new_topic_should_work
-    setup_good_fake_web :new_topic
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    subject = "hello world"
+    message = "hello ruby"
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    body = load_page('phpbb2-post-new_topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
+    body = load_page('phpbb2-get-viewtopic-for-new-topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
 
-    im = fake(config)
-
-    # bad submit response should throw an exception
-    assert_nothing_raised(WWW::Impostor::ImpostorError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
-      assert_equal 2, im.forum
-      assert_equal 29, im.topic
-      assert_equal "hello world", im.subject
-      assert_equal "hello ruby", im.message
-    end
+    @im.expects(:add_subject).once.with(forum,29,subject)
+    assert_equal true, @im.new_topic(f=forum,s=subject,m=message)
+    assert_equal forum, @im.instance_variable_get(:@forum)
+    assert_equal 29, @im.instance_variable_get(:@topic)
+    assert_equal subject, @im.instance_variable_get(:@subject)
+    assert_equal message, @im.instance_variable_get(:@message)
   end
-=end
 end
