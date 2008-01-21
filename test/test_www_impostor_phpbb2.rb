@@ -356,19 +356,19 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_new_topic_without_message_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, 'test')
     @im.instance_variable_set(:@message, nil)
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic
+      assert @im.new_topic
     end
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=1,s="hello world",m=nil)
+      assert @im.new_topic(f=1,s="hello world",m=nil)
     end
   end
 
+=begin
   def test_new_topic_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
