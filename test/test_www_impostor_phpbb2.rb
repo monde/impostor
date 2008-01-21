@@ -182,6 +182,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_equal true, @im.logout
     assert_equal nil, @im.instance_variable_get(:@forum)
     assert_equal nil, @im.instance_variable_get(:@topic)
+    assert_equal nil, @im.instance_variable_get(:@subject)
     assert_equal nil, @im.instance_variable_get(:@message)
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
@@ -286,30 +287,34 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     body = load_page('phpbb2-post-reply-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    subject = "test #{Time.now.to_s}"
+    @im.expects(:get_subject).once.returns(subject)
 
     assert_equal true, @im.post(1,topic,'hello')
     assert_equal 1, @im.instance_variable_get(:@forum)
     assert_equal topic, @im.instance_variable_get(:@topic)
+    assert_equal subject, @im.instance_variable_get(:@subject)
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
 =begin
   def test_too_many_posts_for_post_should_raise_exception
-    setup_good_fake_web
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    body = load_page('phpbb2-post-reply-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    posting = 'http://localhost/phpbb2/posting.php'
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-      :response => response(load_page('phpbb2-too-many-posts.html')))
-
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    # bad posting page should throw an exception
-    assert_raises(WWW::Impostor::ThrottledError) do
-      assert im.post
-    end
+    assert_equal false, @im.post(1,topic,'hello')
+    assert_equal 1, @im.instance_variable_get(:@forum)
+    assert_equal topic, @im.instance_variable_get(:@topic)
+    assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
   def test_getting_unknown_posting_response_should_return_false
