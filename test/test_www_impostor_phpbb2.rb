@@ -368,16 +368,16 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_new_topic_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
 
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+      assert @im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
 
+=begin
   def test_getting_bad_posting_for_new_topic_page_should_raise_exception
     setup_good_fake_web
 
