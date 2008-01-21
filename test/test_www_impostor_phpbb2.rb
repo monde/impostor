@@ -297,7 +297,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
-=begin
   def test_too_many_posts_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -307,16 +306,16 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    body = load_page('phpbb2-post-reply-good-response.html').join
+    body = load_page('phpbb2-post-reply-throttled-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    assert_equal false, @im.post(1,topic,'hello')
-    assert_equal 1, @im.instance_variable_get(:@forum)
-    assert_equal topic, @im.instance_variable_get(:@topic)
-    assert_equal 'hello', @im.instance_variable_get(:@message)
+    assert_raises(WWW::Impostor::ThrottledError) do
+      @im.post(1,topic,'hello')
+    end
   end
 
+=begin
   def test_getting_unknown_posting_response_should_return_false
     setup_good_fake_web
 
