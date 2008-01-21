@@ -222,7 +222,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_bad_post_form_should_raise_exception
+  def test_getting_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = '<form action="posting.php" method="post" name="post"></form>'
@@ -367,21 +367,21 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
-  def test_bad_submit_response_for_new_topic_should_raise_exception
-    setup_good_fake_web :new_topic
-
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response("not found",404))
-
-    im = fake(config)
-
-    # bad submit response should throw an exception
+  def test_getting_bad_post_form_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = '<form action="posting.php" method="post" name="post"></form>'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+      assert @im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
 
+=begin
   def test_unexpected_text_for_new_topic_should_raise_exception
     setup_good_fake_web :new_topic
 

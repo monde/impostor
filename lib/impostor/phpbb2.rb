@@ -58,10 +58,12 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('post')
+
+      form = page.form('post') rescue nil
+      button = form.buttons.with.name('post').first rescue nil
+      raise PostError.new("post form not found") unless button && form
 
       # set up the form and submit it
-      button = form.buttons.with.name('post').first
       form.subject = subject
       form.message = message
       form['disable_html'] = nil
@@ -124,12 +126,12 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('post')
+      form = page.form('post') rescue nil
+
+      button = form.buttons.with.name('post').first rescue nil
+      raise PostError.new("post form not found") unless button && form
 
       # set up the form and submit it
-      button = form.buttons.with.name('post').first rescue nil
-      raise PostError.new("post form not found") unless button
-
       form.message = message
       form['disable_html'] = nil
       form['disable_bbcode'] = 'on'
