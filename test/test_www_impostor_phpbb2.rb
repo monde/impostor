@@ -209,14 +209,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-  def test_getting_bad_post_page_should_raise_exception
+  def test_getting_bad_post_page_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     topic = 1
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
-    ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
+    ).raises(StandardError.new('test_getting_bad_post_page_for_post_should_raise_exception'))
     assert_raises(WWW::Impostor::PostError) do
       assert @im.post(7,topic,'hello')
     end
@@ -353,21 +353,21 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
-  def test_getting_bad_posting_for_new_topic_page_should_raise_exception
-    setup_good_fake_web
+  def test_getting_bad_post_page_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      posting_page
+    ).raises(StandardError.new('test_getting_bad_post_page_for_new_topic_should_raise_exception'))
 
-    FakeWeb.register_uri(@good_posting + 'mode=newtopic&f=2', :method => :get, 
-                         :response => response("not found",404))
-
-    im = fake(config)
-
-    # bad posting page should throw an exception
     assert_raises(WWW::Impostor::PostError) do
-      assert im.new_topic(f=2,s="hello world",m="hello ruby")
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
 
+=begin
   def test_bad_submit_response_for_new_topic_should_raise_exception
     setup_good_fake_web :new_topic
 
