@@ -5,8 +5,33 @@ require File.join(File.dirname(__FILE__), "test_helper")
 require 'test/unit'
 
 class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
-  include Impostor::TestHelper
+  include TestHelper
 
+  def setup
+    @cookie_jar = File.join(Dir.tmpdir, 'www_impostor_phpbb_test.yml')
+    @app_root = 'http://localhost/wwf79/'
+    @im = WWW::Impostor::Phpbb2.new(config())
+  end
+
+  def teardown
+    File.delete(@cookie_jar) if File.exist?(@cookie_jar)
+  end
+
+  def config(cookies=false, config={})
+    cookie_jar = File.join(Dir.tmpdir, 'www_impostor_wwf79_test.yml')
+    c = {:app_root => @app_root,
+      :login_page => 'login_user.asp', 
+      :forum_posts_page => 'forum_posts.asp', 
+      :post_message_page => 'post_message_form.asp', 
+      :user_agent => 'Windows IE 7', 
+      :username => 'tester',
+      :password => 'test'}.merge(config)
+
+    c[:cookie_jar] = cookie_jar if cookies
+    c
+  end
+
+=begin
   def fake(config = {})
     WWW::Impostor::FakeWwf79.new(config)
   end
@@ -360,20 +385,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     register_good_posting type
   end
 
-  def config(cookies=false, config={})
-    cookie_jar = File.join(Dir.tmpdir, 'www_impostor_wwf79_test.yml')
-    c = {:app_root => @good_index,
-      :login_page => 'login_user.asp', 
-      :forum_posts_page => 'forum_posts.asp', 
-      :post_message_page => 'post_message_form.asp', 
-      :user_agent => 'Windows IE 7', 
-      :username => 'tester',
-      :password => 'test'}.merge(config)
-
-    c[:cookie_jar] = cookie_jar if cookies
-    c
-  end
-
   def response(body, code=200)
     res = FakeResponse.new
     res.code = code
@@ -381,4 +392,5 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     res.body = body
     res
   end
+=end
 end
