@@ -345,7 +345,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_new_topic_without_subject_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, nil)
@@ -357,6 +356,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
   end
 
+=begin
   def test_new_topic_without_message_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, 'test')
