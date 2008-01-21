@@ -27,30 +27,6 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     </form>!
   end
 
-=begin
-  def fake(config = {})
-    WWW::Impostor::FakePhpbb2.new(config)
-  end
-
-  def setup
-    FakeWeb.clean_registry()
-    @good_index = 'http://localhost/phpbb2/'
-    @good_login = 'http://localhost/phpbb2/login.php'
-    @good_posting = 'http://localhost/phpbb2/posting.php'
-    @good_viewtopic = 'http://localhost/phpbb2/viewtopic.php'
-  end
-
-  class WWW::Impostor::FakePhpbb2 < WWW::Impostor::Phpbb2
-    def fake_loggedin=(loggedin)
-      @loggedin = loggedin
-    end
-
-    def test_fetch_login_page
-        fetch_login_page
-    end
-  end
-=end
-
   def test_initialize_with_cookie_jar
     FileUtils.touch(@cookie_jar)
 
