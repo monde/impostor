@@ -246,30 +246,31 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     topic = 1
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(
-      posting_page
-    ).returns(page)
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     assert_raises(WWW::Impostor::PostError) do
       assert @im.post(1,1,'hello')
     end
   end
 
-    #body = '<form action="posting.php" method="post" name="post"><textarea name="message"></textarea><input type="submit" name="post"/></form>'
-=begin
-  def test_bad_submit_for_post_response_should_raise_exception
-    setup_good_fake_web
-
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response("not found",404))
-
-    im = fake(config)
-
-    # bad submit should throw an exception
+  def test_submitting_bad_post_form_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = %q!<form action="posting.php" method="post" name="post">
+    <input name="post" type="submit">
+    <input name="message" value="" type="hidden">
+    </form>!
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 1
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
     assert_raises(WWW::Impostor::PostError) do
-      assert im.post(f=2,t=2,m="hello ruby")
+      assert @im.post(1,1,'hello')
     end
   end
 
+=begin
   def test_too_many_posts_for_post_should_raise_exception
     setup_good_fake_web
 
