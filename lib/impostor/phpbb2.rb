@@ -91,14 +91,10 @@ class WWW::Impostor
 
       # t=XXX will be our new topic id, i.e.
       # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
-      begin
-        u = (URI.parse(link) rescue nil)
-        topic = (CGI::parse(u.query)['t'][0] rescue nil)
-        raise PostError.new('unexpected new topic response') unless topic
-        topic = topic.to_i
-      rescue StandardError => err
-        raise PostError.new(err)
-      end
+      u = (URI.parse(link) rescue nil)
+      topic = (CGI::parse(u.query)['t'][0] rescue nil)
+      topic = topic.to_i
+      raise PostError.new('unexpected new topic response') unless topic > 0
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)

@@ -444,7 +444,30 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
     follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns('junk')
+    body = 'junk'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_malformed_viewtopic_response_prev_url_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    body = load_page('phpbb2-post-new_topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
+    body = '<html><head><link rel="prev" href="http://localhost/phpBB2/viewtopic.php?junk" title="View previous topic"></head><body></body></html>'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
     assert_raises(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
