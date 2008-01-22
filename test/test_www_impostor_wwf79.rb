@@ -271,9 +271,10 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     forum_posts_page = @im.forum_posts_page
     forum_posts_page.query = "TID=#{topic}&TPN=10000"
     WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
+    assert_equal "post form not found", err.original_exception.message
   end
 
   def test_submitting_bad_post_form_for_post_should_raise_exception
@@ -306,9 +307,10 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    assert_raise(WWW::Impostor::ThrottledError) do
+    err = assert_raise(WWW::Impostor::ThrottledError) do
       @im.post(1,topic,'hello')
     end
+    assert_equal "You have exceeded the number of posts permitted in the time span", err.original_exception.message
   end
 
   def test_getting_unknown_post_response_should_return_false
