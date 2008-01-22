@@ -58,16 +58,15 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal true, @im.send(:logged_in?, page)
   end
 
-=begin
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-not-logged-in.html').join
+    body = load_page('wwf79-not-logged-in.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     assert_equal false, @im.send(:logged_in?, page)
   end
 
   def test_fetch_login_page
-    page = load_page('phpbb2-login.html').join
+    page = load_page('wwf79-login.html').join
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
     ).returns(page)
@@ -75,6 +74,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal page, @im.send(:fetch_login_page)
   end
 
+=begin
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
     assert_raises(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
