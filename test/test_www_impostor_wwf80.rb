@@ -41,7 +41,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
   end
 
   def wwf80_good_submit_new_topic_form
-    %q!<form action="post_message.asp?PN=" method="post" name="frmAddMessage">
+    %q!<form action="new_post.asp?PN=" method="post" name="frmMessageForm">
     <input name="subject" type="text">
     <input name="message" value="" type="hidden">
     <input name="Submit" type="submit">
@@ -419,7 +419,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
-=begin
   def test_getting_bad_post_form_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -452,6 +451,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_too_many_posts_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}

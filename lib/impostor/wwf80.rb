@@ -59,10 +59,11 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('frmMessageForm')
+      form = page.form('frmMessageForm') rescue nil
+      button = form.buttons.with.name('Submit').first rescue nil
+      raise PostError.new("post form not found") unless button && form
 
       # set up the form and submit it
-      button = form.buttons.with.name('Submit').first
       form.subject = subject
       form.message = message
       begin
