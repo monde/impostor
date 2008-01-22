@@ -39,6 +39,7 @@ class WWW::Impostor
       @message = nil
 
       @loggedin = false
+      true
     end
 
     def new_topic(forum=@forum, subject=@subject, message=@message)

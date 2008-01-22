@@ -175,7 +175,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal false, @im.logout
   end
 
-=begin
   def test_logout
     @im.instance_variable_set(:@loggedin, true)
     cookie_jar = mock()
@@ -190,6 +189,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
 
+=begin
   def test_forum_posts_page
     c = config
     assert_equal URI.join(@app_root, c[:forum_posts_page]), @im.forum_posts_page
