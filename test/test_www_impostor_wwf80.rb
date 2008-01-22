@@ -189,12 +189,12 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
 
-=begin
-  def test_forum_posts_page
+  def test_new_reply_page
     c = config
-    assert_equal URI.join(@app_root, c[:forum_posts_page]), @im.forum_posts_page
+    assert_equal URI.join(@app_root, c[:new_reply_page]), @im.new_reply_page
   end
 
+=begin
   def test_post_message_page
     c = config
     assert_equal URI.join(@app_root, c[:post_message_page]), @im.post_message_page
