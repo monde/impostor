@@ -35,8 +35,16 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
 
   def wwf79_good_submit_post_form
     %q!<form action="post_message.asp?PN=" method="post" name="frmAddMessage">
-    <input name="Submit" type="submit">
     <input name="message" value="" type="hidden">
+    <input name="Submit" type="submit">
+    </form>!
+  end
+
+  def wwf79_good_submit_new_topic_form
+    %q!<form action="post_message.asp?PN=" method="post" name="frmAddMessage">
+    <input name="subject" type="text">
+    <input name="message" value="" type="hidden">
+    <input name="Submit" type="submit">
     </form>!
   end
 
@@ -397,22 +405,22 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_submitting_bad_post_for_new_topic_form_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = phpbb2_good_submit_new_topic_form
+    body = wwf79_good_submit_new_topic_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
     assert_raises(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
 
+=begin
   def test_unexpected_viewtopic_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
