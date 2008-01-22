@@ -169,7 +169,57 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
 
+  def test_forum_posts_page
+    c = config
+    assert_equal URI.join(@app_root, c[:forum_posts_page]), @im.forum_posts_page
+  end
+
 =begin
+
+  def test_post_without_forum_set_should_raise_exception
+    @im.instance_variable_set(:@forum, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(f=nil,t=nil,m=nil)
+    end
+  end
+
+  def test_post_without_topic_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@topic, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(f=2,t=nil,m=nil)
+    end
+  end
+
+  def test_post_without_message_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@topic, 1)
+    @im.instance_variable_set(:@message, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(f=2,t=2,m=nil)
+    end
+  end
+
+  def test_post_not_logged_in_should_raise_exception
+    @im.expects(:login).once.returns(false)
+    @im.instance_variable_set(:@loggedin, false)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(2,2,'hello')
+    end
+  end
+
+
+
+
   def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
