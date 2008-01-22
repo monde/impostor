@@ -82,12 +82,12 @@ class WWW::Impostor
       # the topic id that was created for the topic name that we created
       a = (page.search("//meta[@http-equiv='refresh']").attr('content') rescue nil)
       a = (/url=(.*)/.match(a)[1] rescue nil)
-      raise PostError.new('unexpected new topic response') unless a
+      raise PostError.new('unexpected new topic response from refresh') unless a
 
       a = URI.join(app_root, a)
       page = @agent.get(a)
       link = (page.search("//link[@rel='prev']").first['href'] rescue nil)
-      raise PostError.new('unexpected new topic response') unless link
+      raise PostError.new('unexpected new topic response from link prev') unless link
 
       # t=XXX will be our new topic id, i.e.
       # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"

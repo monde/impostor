@@ -456,9 +456,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal "unexpected new topic response from refresh", err.original_exception.message
   end
 
   def test_malformed_viewtopic_response_for_new_topic_should_raise_exception
@@ -477,9 +478,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     body = 'junk'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal "unexpected new topic response from link prev", err.original_exception.message
   end
 
   def test_malformed_viewtopic_response_prev_url_for_new_topic_should_raise_exception
