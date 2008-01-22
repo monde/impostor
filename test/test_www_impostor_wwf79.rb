@@ -360,7 +360,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_new_topic_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
@@ -370,9 +369,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-
-
-
+=begin
   def test_new_topic_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
