@@ -80,16 +80,16 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_login_form_and_button_should_return_a_form_and_button
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-login.html').join
+    body = load_page('wwf79-login.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form, button = @im.send(:login_form_and_button, page)
     assert_equal true, form.is_a?(WWW::Mechanize::Form)
     assert_equal true, button.is_a?(WWW::Mechanize::Button)
   end
 
+=begin
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb2-logged-in.html').join
