@@ -89,7 +89,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
-    assert_raises(WWW::Impostor::LoginError) do
+    assert_raise(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
     end
   end
@@ -116,7 +116,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_post_login_should_raise_login_error
     WWW::Mechanize::CookieJar.any_instance.expects(:submit).never.raises(StandardError, 'from test')
-    assert_raises(WWW::Impostor::LoginError) do
+    assert_raise(WWW::Impostor::LoginError) do
       page = @im.send(:post_login, nil, nil)
     end
   end
@@ -126,7 +126,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       URI.join(@app_root, config[:login_page])
     ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
 
-    assert_raises(WWW::Impostor::LoginError) do
+    assert_raise(WWW::Impostor::LoginError) do
       @im.send(:fetch_login_page)
     end
   end
@@ -190,10 +190,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post
     end
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(f=nil,t=nil,m=nil)
     end
   end
@@ -201,10 +201,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_post_without_topic_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post
     end
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(f=2,t=nil,m=nil)
     end
   end
@@ -213,10 +213,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, 1)
     @im.instance_variable_set(:@message, nil)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post
     end
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(f=2,t=2,m=nil)
     end
   end
@@ -224,7 +224,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_post_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(2,2,'hello')
     end
   end
@@ -237,7 +237,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
     ).raises(StandardError.new('test_getting_bad_post_page_for_post_should_raise_exception'))
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(7,topic,'hello')
     end
   end
@@ -251,7 +251,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
   end
@@ -266,7 +266,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
   end
@@ -306,7 +306,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    assert_raises(WWW::Impostor::ThrottledError) do
+    assert_raise(WWW::Impostor::ThrottledError) do
       @im.post(1,topic,'hello')
     end
   end
@@ -333,10 +333,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_new_topic_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic
     end
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=nil,s="hello world",m="hello world")
     end
   end
@@ -344,10 +344,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_new_topic_without_subject_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, nil)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic
     end
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=1,s=nil,m="hello world")
     end
   end
@@ -356,10 +356,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, 'test')
     @im.instance_variable_set(:@message, nil)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic
     end
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=1,s="hello world",m=nil)
     end
   end
@@ -368,7 +368,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
 
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=2,s="hello world",m="hello ruby")
     end
   end
@@ -382,7 +382,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       posting_page
     ).raises(StandardError.new('test_getting_bad_post_page_for_new_topic_should_raise_exception'))
 
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
@@ -396,7 +396,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
@@ -411,7 +411,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
@@ -426,7 +426,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
@@ -447,7 +447,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     body = 'junk'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
@@ -468,7 +468,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     body = '<html><head><link rel="prev" href="http://localhost/phpBB2/viewtopic.php?junk" title="View previous topic"></head><body></body></html>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
-    assert_raises(WWW::Impostor::PostError) do
+    assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
