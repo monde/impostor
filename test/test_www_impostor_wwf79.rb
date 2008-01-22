@@ -149,7 +149,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.stubs(:fetch_login_page).returns(page)
     @im.expects(:logged_in?).once.with(page).returns(true)
     @im.expects(:login_form_and_button).with(page).never
-    @im.login
+    assert_equal true, @im.login
   end
 
   def test_login_should_login

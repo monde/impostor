@@ -143,16 +143,16 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal true, @im.login
   end
 
-=begin
   def test_already_logged_in_should_not_post_login_information_again
     @im.instance_variable_set(:@loggedin, false)
     page = mock()
     @im.stubs(:fetch_login_page).returns(page)
     @im.expects(:logged_in?).once.with(page).returns(true)
     @im.expects(:login_form_and_button).with(page).never
-    @im.login
+    assert_equal true, @im.login
   end
 
+=begin
   def test_login_should_login
     @im.instance_variable_set(:@loggedin, false)
     login_page = mock()
