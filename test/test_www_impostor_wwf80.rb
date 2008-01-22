@@ -194,10 +194,9 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal URI.join(@app_root, c[:new_reply_page]), @im.new_reply_page
   end
 
-=begin
-  def test_post_message_page
+  def test_new_topic_page
     c = config
-    assert_equal URI.join(@app_root, c[:post_message_page]), @im.post_message_page
+    assert_equal URI.join(@app_root, c[:new_topic_page]), @im.new_topic_page
   end
 
   def test_post_without_forum_set_should_raise_exception
@@ -212,6 +211,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "forum not set", err.original_exception.message
   end
 
+=begin
   def test_post_without_topic_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
