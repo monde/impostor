@@ -354,7 +354,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
-=begin
   def test_new_topic_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
@@ -367,6 +366,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "forum not set", err.original_exception.message
   end
 
+=begin
   def test_new_topic_without_subject_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, nil)
