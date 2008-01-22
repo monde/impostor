@@ -332,7 +332,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_match /Error: Message Not Posted/, err.original_exception.message
   end
 
-=begin
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -340,7 +339,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     new_reply_page = @im.new_reply_page
-    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    new_reply_page.query = "TID=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     body = load_page('wwf80-good-post-forum_posts.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
@@ -355,6 +354,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
+=begin
   def test_new_topic_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
