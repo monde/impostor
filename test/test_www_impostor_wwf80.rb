@@ -105,7 +105,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal true, button.is_a?(WWW::Mechanize::Button)
   end
 
-=begin
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-logged-in.html').join
@@ -117,6 +116,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal page, @im.send(:post_login, form, button)
   end
 
+=begin
   def test_post_login_should_raise_login_error
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
