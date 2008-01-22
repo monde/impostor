@@ -421,10 +421,12 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
-    assert_raise(WWW::Impostor::PostError) do
+    errmsg = "from test #{Time.now.to_s}"
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_unexpected_viewtopic_for_new_topic_should_raise_exception
