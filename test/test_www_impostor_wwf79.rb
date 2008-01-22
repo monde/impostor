@@ -202,11 +202,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post
+      @im.post
     end
     assert_equal "forum not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(f=nil,t=nil,m=nil)
+      @im.post(f=nil,t=nil,m=nil)
     end
     assert_equal "forum not set", err.original_exception.message
   end
@@ -215,11 +215,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post
+      @im.post
     end
     assert_equal "topic not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(f=2,t=nil,m=nil)
+      @im.post(f=2,t=nil,m=nil)
     end
     assert_equal "topic not set", err.original_exception.message
   end
@@ -229,11 +229,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.instance_variable_set(:@topic, 1)
     @im.instance_variable_set(:@message, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post
+      @im.post
     end
     assert_equal "message not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(f=2,t=2,m=nil)
+      @im.post(f=2,t=2,m=nil)
     end
     assert_equal "message not set", err.original_exception.message
   end
@@ -242,7 +242,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(2,2,'hello')
+      @im.post(2,2,'hello')
     end
     assert_equal "not logged in", err.original_exception.message
   end
@@ -257,7 +257,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
       forum_posts_page
     ).raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(7,topic,'hello')
+      @im.post(7,topic,'hello')
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -272,7 +272,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     forum_posts_page.query = "TID=#{topic}&TPN=10000"
     WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(1,topic,'hello')
+      @im.post(1,topic,'hello')
     end
     assert_equal "post form not found", err.original_exception.message
   end
@@ -289,7 +289,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(1,topic,'hello')
+      @im.post(1,topic,'hello')
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -313,7 +313,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal "You have exceeded the number of posts permitted in the time span", err.original_exception.message
   end
 
-  def test_getting_unknown_post_response_should_return_false
+  def test_getting_unknown_post_response_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = wwf79_good_submit_post_form
@@ -357,11 +357,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   def test_new_topic_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic
+      @im.new_topic
     end
     assert_equal "forum not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=nil,s="hello world",m="hello world")
+      @im.new_topic(f=nil,s="hello world",m="hello world")
     end
     assert_equal "forum not set", err.original_exception.message
   end
@@ -370,11 +370,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic
+      @im.new_topic
     end
     assert_equal "topic name not given", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=1,s=nil,m="hello world")
+      @im.new_topic(f=1,s=nil,m="hello world")
     end
     assert_equal "topic name not given", err.original_exception.message
   end
@@ -384,11 +384,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.instance_variable_set(:@subject, 'test')
     @im.instance_variable_set(:@message, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic
+      @im.new_topic
     end
     assert_equal "message not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=1,s="hello world",m=nil)
+      @im.new_topic(f=1,s="hello world",m=nil)
     end
     assert_equal "message not set", err.original_exception.message
   end
@@ -398,7 +398,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, false)
 
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=2,s="hello world",m="hello ruby")
+      @im.new_topic(f=2,s="hello world",m="hello ruby")
     end
     assert_equal "not logged in", err.original_exception.message
   end
@@ -414,7 +414,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     ).raises(StandardError, errmsg)
 
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -429,7 +429,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     post_message_page.query = "FID=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal "post form not found", err.original_exception.message
   end
@@ -446,8 +446,48 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal errmsg, err.original_exception.message
   end
+
+  def test_too_many_posts_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
+    body = load_page('wwf79-too-many-topics.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    err = assert_raise(WWW::Impostor::ThrottledError) do
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+    assert_equal "You have exceeded the number of posts permitted in the time span", err.original_exception.message
+  end
+
+=begin
+  def test_getting_unknown_new_topic_response_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    body = load_page('wwf79-general-posting-error.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    err = assert_raise(WWW::Impostor::PostError) do
+      @im.post(1,topic,'hello')
+    end
+    assert_equal "There was an error making the post", err.original_exception.message
+  end
+=end
 end
