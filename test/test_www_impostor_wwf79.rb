@@ -89,10 +89,9 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal true, button.is_a?(WWW::Mechanize::Button)
   end
 
-=begin
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
-    body = load_page('phpbb2-logged-in.html').join
+    body = load_page('wwf79-logged-in.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form = mock()
     button = mock()
@@ -101,6 +100,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal page, @im.send(:post_login, form, button)
   end
 
+=begin
   def test_post_login_should_raise_login_error
     WWW::Mechanize::CookieJar.any_instance.expects(:submit).never.raises(StandardError, 'from test')
     assert_raises(WWW::Impostor::LoginError) do
