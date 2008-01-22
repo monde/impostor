@@ -379,7 +379,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "topic name not given", err.original_exception.message
   end
 
-=begin
   def test_new_topic_without_message_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, 'test')
@@ -394,6 +393,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "message not set", err.original_exception.message
   end
 
+=begin
   def test_new_topic_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
