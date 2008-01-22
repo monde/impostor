@@ -155,7 +155,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal false, @im.logout
   end
 
-=begin
   def test_logout
     @im.instance_variable_set(:@loggedin, true)
     cookie_jar = mock()
@@ -170,6 +169,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
 
+=begin
   def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
