@@ -33,6 +33,13 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     c
   end
 
+  def wwf79_good_submit_post_form
+    %q!<form action="post_message.asp?PN=" method="post" name="frmAddMessage">
+    <input name="Submit" type="submit">
+    <input name="message" value="" type="hidden">
+    </form>!
+  end
+
   def test_initialize_with_cookie_jar
     FileUtils.touch(@cookie_jar)
 
@@ -247,25 +254,26 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_submitting_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = phpbb2_good_submit_post_form
+    body = wwf79_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
     assert_raises(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
   end
 
+=begin
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_post_form
     body = phpbb2_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
