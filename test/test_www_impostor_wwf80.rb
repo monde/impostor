@@ -96,7 +96,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "unknown login page format", err.original_exception.message
   end
 
-=begin
   def test_login_form_and_button_should_return_a_form_and_button
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-login.html').join
@@ -106,6 +105,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal true, button.is_a?(WWW::Mechanize::Button)
   end
 
+=begin
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-logged-in.html').join
