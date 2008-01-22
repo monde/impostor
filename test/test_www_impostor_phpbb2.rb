@@ -195,12 +195,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
 
   def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post
     end
+    assert_equal "forum not set", err.original_exception.message
     assert_raise(WWW::Impostor::PostError) do
       assert @im.post(f=nil,t=nil,m=nil)
     end
+    assert_equal "forum not set", err.original_exception.message
   end
 
   def test_post_without_topic_set_should_raise_exception
