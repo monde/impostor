@@ -90,8 +90,7 @@ class WWW::Impostor
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)
-
-      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+      @forum=forum; @topic=topic; @subject=subject; @message=message
       return true
     end
 

@@ -509,4 +509,26 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal "unexpected new topic ID", err.original_exception.message
   end
 
+  def test_new_topic_should_work
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    subject = "hello world"
+    message = "hello ruby"
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
+    body = load_page('wwf79-new-topic-forum_posts-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    @im.expects(:add_subject).once.with(forum,357,subject)
+    assert_equal true, @im.new_topic(f=forum,s=subject,m=message)
+    assert_equal forum, @im.instance_variable_get(:@forum)
+    assert_equal 357, @im.instance_variable_get(:@topic)
+    assert_equal subject, @im.instance_variable_get(:@subject)
+    assert_equal message, @im.instance_variable_get(:@message)
+  end
 end
