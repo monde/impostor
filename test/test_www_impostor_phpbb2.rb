@@ -235,9 +235,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_post_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(2,2,'hello')
     end
+    assert_equal "not logged in", err.original_exception.message
   end
 
   def test_bad_post_page_for_post_should_raise_exception
