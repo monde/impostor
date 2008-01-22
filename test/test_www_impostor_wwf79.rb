@@ -414,10 +414,12 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     post_message_page = @im.post_message_page
     post_message_page.query = "FID=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
-    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
-    assert_raise(WWW::Impostor::PostError) do
+    errmsg = "from test #{Time.now.to_s}"
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
 =begin
