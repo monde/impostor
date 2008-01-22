@@ -117,20 +117,24 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   end
 
   def test_post_login_should_raise_login_error
-    WWW::Mechanize::CookieJar.any_instance.expects(:submit).never.raises(StandardError, 'from test')
-    assert_raise(WWW::Impostor::LoginError) do
+    errmsg = "from test #{Time.now.to_s}"
+    WWW::Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::LoginError) do
       page = @im.send(:post_login, nil, nil)
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_bad_login_page_should_raise_exception
+    errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
-    ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
+    ).raises(StandardError, errmsg)
 
-    assert_raise(WWW::Impostor::LoginError) do
+    err = assert_raise(WWW::Impostor::LoginError) do
       @im.send(:fetch_login_page)
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_already_logged_in_should_not_post_login_information_again_instance_varialbe
@@ -241,12 +245,14 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     topic = 2
     forum_posts_page = @im.forum_posts_page
     forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       forum_posts_page
-    ).raises(StandardError.new('test_getting_bad_post_page_for_post_should_raise_exception'))
-    assert_raise(WWW::Impostor::PostError) do
+    ).raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(7,topic,'hello')
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_bad_post_form_for_post_should_raise_exception
@@ -272,10 +278,12 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     forum_posts_page = @im.forum_posts_page
     forum_posts_page.query = "TID=#{topic}&TPN=10000"
     WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
-    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
-    assert_raise(WWW::Impostor::PostError) do
+    errmsg = "from test #{Time.now.to_s}"
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_too_many_posts_for_post_should_raise_exception
@@ -383,13 +391,15 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     forum = 2
     post_message_page = @im.post_message_page
     post_message_page.query = "FID=#{forum}"
+    errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       post_message_page
-    ).raises(StandardError.new('test_getting_bad_post_page_for_new_topic_should_raise_exception'))
+    ).raises(StandardError, errmsg)
 
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_getting_bad_post_form_for_new_topic_should_raise_exception
