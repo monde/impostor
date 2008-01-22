@@ -90,9 +90,10 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   end
 
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
-    assert_raise(WWW::Impostor::LoginError) do
+    err = assert_raise(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
     end
+    assert_equal "unknown login page format", err.original_exception.message
   end
 
   def test_login_form_and_button_should_return_a_form_and_button
