@@ -73,7 +73,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal true, @im.send(:logged_in?, page)
   end
 
-=begin
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-not-logged-in.html').join
@@ -90,6 +89,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal page, @im.send(:fetch_login_page)
   end
 
+=begin
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
     err = assert_raise(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
