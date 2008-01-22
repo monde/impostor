@@ -247,15 +247,14 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "not logged in", err.original_exception.message
   end
 
-=begin
   def test_bad_post_page_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    new_reply_page = @im.new_reply_page
+    new_reply_page.query = "TID=#{topic}"
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
-      forum_posts_page
+      new_reply_page
     ).raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.post(7,topic,'hello')
@@ -263,15 +262,16 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = '<form action="post_message.asp?PN=" method="post" name="frmAddMessage"></form>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
-    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    new_reply_page = @im.new_reply_page
+    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.post(1,topic,'hello')
     end
@@ -284,9 +284,9 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     body = wwf80_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
-    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    new_reply_page = @im.new_reply_page
+    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
@@ -301,9 +301,9 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     body = wwf80_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
-    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    new_reply_page = @im.new_reply_page
+    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     body = load_page('wwf80-too-many-posts.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
@@ -320,9 +320,9 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     body = wwf80_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
-    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    new_reply_page = @im.new_reply_page
+    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     body = load_page('wwf80-general-posting-error.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
@@ -339,9 +339,9 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     body = wwf80_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
-    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    new_reply_page = @im.new_reply_page
+    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     body = load_page('wwf80-good-post-forum_posts.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
