@@ -364,12 +364,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_new_topic_without_subject_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@subject, nil)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic
     end
-    assert_raise(WWW::Impostor::PostError) do
+    assert_equal "topic name not given", err.original_exception.message
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=1,s=nil,m="hello world")
     end
+    assert_equal "topic name not given", err.original_exception.message
   end
 
   def test_new_topic_without_message_set_should_raise_exception
