@@ -262,7 +262,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
-=begin
   def test_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -270,7 +269,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     new_reply_page = @im.new_reply_page
-    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    new_reply_page.query = "TID=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.post(1,topic,'hello')
@@ -278,6 +277,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "post form not found", err.original_exception.message
   end
 
+=begin
   def test_submitting_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}

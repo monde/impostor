@@ -119,10 +119,11 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('frmMessageForm')
+      form = page.form('frmAddMessage') rescue nil
+      button = form.buttons.with.name('Submit').first rescue nil
+      raise PostError.new("post form not found") unless button && form
 
       # set up the form and submit it
-      button = form.buttons.with.name('Submit').first
       form.message = message
       begin
         page = @agent.submit(form, button)
