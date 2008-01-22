@@ -489,23 +489,4 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal "There was an error creating the topic", err.original_exception.message
   end
 
-=begin
-    @im.instance_variable_set(:@loggedin, true)
-    response = {'content-type' => 'text/html'}
-    body = wwf79_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 2
-    forum_posts_page = @im.forum_posts_page
-    forum_posts_page.query = "TID=#{topic}&TPN=10000"
-    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
-    body = load_page('wwf79-general-posting-error.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-
-    err = assert_raise(WWW::Impostor::PostError) do
-      @im.post(1,topic,'hello')
-    end
-    assert_equal "There was an error making the post", err.original_exception.message
-  end
-=end
 end
