@@ -269,18 +269,16 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
-
   def test_too_many_posts_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = phpbb2_good_submit_post_form
+    body = wwf79_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    body = load_page('phpbb2-post-reply-throttled-response.html').join
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    body = load_page('wwf79-too-many-posts.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
@@ -289,6 +287,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+=begin
   def test_getting_unknown_post_response_should_return_false
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
