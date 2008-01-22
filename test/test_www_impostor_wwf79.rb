@@ -360,7 +360,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
       assert @im.new_topic
     end
     assert_equal "forum not set", err.original_exception.message
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=nil,s="hello world",m="hello world")
     end
     assert_equal "forum not set", err.original_exception.message
