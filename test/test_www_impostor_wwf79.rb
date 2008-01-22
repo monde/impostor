@@ -51,6 +51,105 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert @im.version
   end
 
+  def test_should_be_logged_in?
+    response = {'content-type' => 'text/html'}
+    body = load_page('wwf79-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    assert_equal true, @im.send(:logged_in?, page)
+  end
+
+=begin
+  def test_should_not_be_logged_in?
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb2-not-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    assert_equal false, @im.send(:logged_in?, page)
+  end
+
+  def test_fetch_login_page
+    page = load_page('phpbb2-login.html').join
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      URI.join(@app_root, config[:login_page])
+    ).returns(page)
+    
+    assert_equal page, @im.send(:fetch_login_page)
+  end
+
+  def test_login_form_and_button_should_raise_login_error_when_form_is_missing
+    assert_raises(WWW::Impostor::LoginError) do
+      form, button = @im.send(:login_form_and_button, nil)
+    end
+  end
+
+  def test_login_form_and_button_should_return_a_form_and_button
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb2-login.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    form, button = @im.send(:login_form_and_button, page)
+    assert_equal true, form.is_a?(WWW::Mechanize::Form)
+    assert_equal true, button.is_a?(WWW::Mechanize::Button)
+  end
+
+  def test_post_login_should_return_page
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb2-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    form = mock()
+    button = mock()
+    WWW::Mechanize.any_instance.expects(:submit).once.with(form, button).returns(page)
+
+    assert_equal page, @im.send(:post_login, form, button)
+  end
+
+  def test_post_login_should_raise_login_error
+    WWW::Mechanize::CookieJar.any_instance.expects(:submit).never.raises(StandardError, 'from test')
+    assert_raises(WWW::Impostor::LoginError) do
+      page = @im.send(:post_login, nil, nil)
+    end
+  end
+
+  def test_bad_login_page_should_raise_exception
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      URI.join(@app_root, config[:login_page])
+    ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
+
+    assert_raises(WWW::Impostor::LoginError) do
+      @im.send(:fetch_login_page)
+    end
+  end
+
+  def test_already_logged_in_should_not_post_login_information_again_instance_varialbe
+    @im.instance_variable_set(:@loggedin, true)
+    @im.expects(:fetch_login_page).never
+    assert_equal true, @im.login
+  end
+
+  def test_already_logged_in_should_not_post_login_information_again
+    @im.instance_variable_set(:@loggedin, false)
+    page = mock()
+    @im.stubs(:fetch_login_page).returns(page)
+    @im.expects(:logged_in?).once.with(page).returns(true)
+    @im.expects(:login_form_and_button).with(page).never
+    @im.login
+  end
+
+  def test_login_should_login
+    @im.instance_variable_set(:@loggedin, false)
+    login_page = mock()
+    @im.stubs(:fetch_login_page).returns(login_page)
+    @im.expects(:logged_in?).once.with(login_page).returns(false)
+    form = mock()
+    button = mock()
+    @im.expects(:login_form_and_button).with(login_page).returns([form, button])
+    logged_in_page = mock()
+    @im.expects(:post_login).with(form, button).returns(logged_in_page)
+    @im.expects(:logged_in?).once.with(logged_in_page).returns(true)
+    @im.expects(:load_topics).once.returns(true)
+
+    assert_equal true, @im.login
+  end
+=end
+
 =begin
   def test_fetch_login_page
     register_good_index
