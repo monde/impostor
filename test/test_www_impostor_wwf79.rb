@@ -397,9 +397,10 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
 
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=2,s="hello world",m="hello ruby")
     end
+    assert_equal "not logged in", err.original_exception.message
   end
 
   def test_getting_bad_post_page_for_new_topic_should_raise_exception
