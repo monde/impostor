@@ -287,6 +287,24 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+  def test_getting_unknown_post_response_should_return_false
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    body = load_page('wwf79-general-posting-error.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    assert_raises(WWW::Impostor::PostError) do
+      @im.post(1,topic,'hello')
+    end
+  end
+
 =begin
   def test_getting_unknown_post_response_should_return_false
     @im.instance_variable_set(:@loggedin, true)
