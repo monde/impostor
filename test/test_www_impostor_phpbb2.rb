@@ -323,9 +323,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    assert_raise(WWW::Impostor::ThrottledError) do
+    err = assert_raise(WWW::Impostor::ThrottledError) do
       @im.post(1,topic,'hello')
     end
+    assert_equal "too many posts in too short amount of time", err.original_exception.message
   end
 
   def test_getting_unknown_post_response_should_return_false
