@@ -116,7 +116,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal page, @im.send(:post_login, form, button)
   end
 
-=begin
   def test_post_login_should_raise_login_error
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
@@ -126,6 +125,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_bad_login_page_should_raise_exception
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
