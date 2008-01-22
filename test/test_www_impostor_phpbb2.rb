@@ -265,9 +265,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
+    assert_equal "post form not found", err.original_exception.message
   end
 
   def test_submitting_bad_post_form_for_post_should_raise_exception
