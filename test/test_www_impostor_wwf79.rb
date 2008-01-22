@@ -470,8 +470,26 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal "You have exceeded the number of posts permitted in the time span", err.original_exception.message
   end
 
-=begin
   def test_getting_unknown_new_topic_response_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
+    body = load_page('wwf79-general-new-topic-error.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    err = assert_raise(WWW::Impostor::PostError) do
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+    assert_equal "There was an error creating the topic", err.original_exception.message
+  end
+
+=begin
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = wwf79_good_submit_post_form

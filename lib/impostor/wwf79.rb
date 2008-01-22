@@ -80,7 +80,7 @@ class WWW::Impostor
         raise ThrottledError.new(throttled) if too_many
 
         # general error
-        raise PostError.new("There was an error making the post")
+        raise PostError.new("There was an error creating the topic")
       end
 
       # look up the new topic id
