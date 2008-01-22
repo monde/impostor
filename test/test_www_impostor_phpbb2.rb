@@ -125,13 +125,15 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_bad_login_page_should_raise_exception
+    errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
-    ).raises(StandardError.new('test_bad_login_page_should_raise_exception'))
+    ).raises(StandardError, errmsg)
 
-    assert_raise(WWW::Impostor::LoginError) do
+    err = assert_raise(WWW::Impostor::LoginError) do
       @im.send(:fetch_login_page)
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_already_logged_in_should_not_post_login_information_again_instance_varialbe
