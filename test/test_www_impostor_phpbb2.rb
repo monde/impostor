@@ -387,13 +387,15 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
+    errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
-    ).raises(StandardError.new('test_getting_bad_post_page_for_new_topic_should_raise_exception'))
+    ).raises(StandardError, errmsg)
 
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_getting_bad_post_form_for_new_topic_should_raise_exception
