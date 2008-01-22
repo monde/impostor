@@ -62,11 +62,11 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert im
   end
 
-=begin
   def test_version
     assert @im.version
   end
 
+=begin
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-logged-in.html').join
