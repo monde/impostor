@@ -489,4 +489,24 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal "There was an error creating the topic", err.original_exception.message
   end
 
+  def test_malformed_form_with_topicid_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
+
+    body = 'junk'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    err = assert_raise(WWW::Impostor::PostError) do
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+    assert_equal "unexpected new topic ID", err.original_exception.message
+  end
+
 end
