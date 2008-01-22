@@ -94,7 +94,7 @@ class WWW::Impostor
       u = (URI.parse(link) rescue nil)
       topic = (CGI::parse(u.query)['t'][0] rescue nil)
       topic = topic.to_i
-      raise PostError.new('unexpected new topic response') unless topic > 0
+      raise PostError.new('unexpected new topic ID') unless topic > 0
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)
