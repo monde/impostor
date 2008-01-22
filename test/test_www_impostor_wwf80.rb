@@ -168,7 +168,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal true, @im.login
   end
 
-=begin
   def test_logout_does_nothing_if_logged_out
     @im.instance_variable_set(:@loggedin, false)
     @im.expects(:cookie_jar).never
@@ -176,6 +175,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal false, @im.logout
   end
 
+=begin
   def test_logout
     @im.instance_variable_set(:@loggedin, true)
     cookie_jar = mock()

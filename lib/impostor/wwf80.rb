@@ -29,7 +29,7 @@ class WWW::Impostor
     # clean up the state of the library and log out
 
     def logout
-      return unless @loggedin
+      return false unless @loggedin
 
       @agent.cookie_jar.save_as(cookie_jar) if cookie_jar
       save_topics
