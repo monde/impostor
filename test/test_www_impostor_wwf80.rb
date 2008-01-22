@@ -470,7 +470,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_match /You have exceeded the number of posts permitted in the time span/, err.original_exception.message
   end
 
-=begin
   def test_getting_unknown_new_topic_response_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -480,16 +479,17 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     new_topic_page = @im.new_topic_page
     new_topic_page.query = "FID=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(new_topic_page).returns(page)
-    body = load_page('wwf80-general-new-topic-error.html').join
+    body = load_page('wwf80-general-posting-error.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
-    assert_equal "There was an error creating the topic", err.original_exception.message
+    assert_match /Error: Message Not Posted/, err.original_exception.message
   end
 
+=begin
   def test_malformed_form_with_topicid_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
