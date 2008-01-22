@@ -369,7 +369,145 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+  def test_getting_bad_post_page_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    forum = 2
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      post_message_page
+    ).raises(StandardError.new('test_getting_bad_post_page_for_new_topic_should_raise_exception'))
+
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
 =begin
+  def test_getting_bad_post_form_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = '<form action="posting.php" method="post" name="post"></form>'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_submitting_bad_post_for_new_topic_form_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_unexpected_viewtopic_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_malformed_viewtopic_response_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    body = load_page('phpbb2-post-new_topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
+    body = 'junk'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_malformed_viewtopic_response_prev_url_for_new_topic_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    body = load_page('phpbb2-post-new_topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
+    body = '<html><head><link rel="prev" href="http://localhost/phpBB2/viewtopic.php?junk" title="View previous topic"></head><body></body></html>'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+    end
+  end
+
+  def test_new_topic_should_work
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_new_topic_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    forum = 2
+    subject = "hello world"
+    message = "hello ruby"
+    posting_page = @im.posting_page
+    posting_page.query = "mode=newtopic&f=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    body = load_page('phpbb2-post-new_topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
+    body = load_page('phpbb2-get-viewtopic-for-new-topic-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
+
+    @im.expects(:add_subject).once.with(forum,29,subject)
+    assert_equal true, @im.new_topic(f=forum,s=subject,m=message)
+    assert_equal forum, @im.instance_variable_get(:@forum)
+    assert_equal 29, @im.instance_variable_get(:@topic)
+    assert_equal subject, @im.instance_variable_get(:@subject)
+    assert_equal message, @im.instance_variable_get(:@message)
+  end
+
+
+
+
+
+
+
+
+
+
+
+
   def test_getting_bad_posting_for_new_topic_page_should_raise_exception
     setup_good_fake_web
 
