@@ -149,46 +149,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   end
 
 =begin
-  def test_fetch_login_page
-    register_good_index
-    register_good_login
-    page = fake(config).test_fetch_login_page 
-    assert page
-  end
-
-  def test_bad_login_page_should_raise_exception
-    FakeWeb.register_uri(@good_login, :method => :get, 
-                         :response => response("not found",404))
-
-    im = WWW::Impostor::Wwf79.new(config(cookies=false))
-
-    assert_raises(WWW::Impostor::LoginError) do
-      im.login
-    end
-  end
-
-  def test_bad_login_post_should_raise_exception
-    register_good_index
-    FakeWeb.register_uri(@good_login, :method => :get, 
-                         :response => response(load_page('wwf79-login.html')))
-    FakeWeb.register_uri(@good_login, :method => :post, 
-                         :response => response("not found",404))
-
-    im = WWW::Impostor::Wwf79.new(config(cookies=false))
-
-    assert_raises(WWW::Impostor::LoginError) do
-      im.login
-    end
-  end
-
-  def test_should_login
-    register_good_index
-    register_good_login
-    im = WWW::Impostor::Wwf79.new(config(cookies=false))
-    assert_equal true, im.login
-    im.logout
-  end
-
   def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
