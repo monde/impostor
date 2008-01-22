@@ -18,7 +18,7 @@ Makes automatic posts to the following forum applications:
 * PHP Bullitin Board (phpBB) 1.4 (1.4.4)   [TODO]
 * PHP Bullitin Board (phpBB) 2.0 (2.0.22)
 * PHP Bullitin Board (phpBB) 3.0           [TODO]
-* Rails Beast                              [TODO]
+* Beast                                    [TODO]
 
 == SYNOPSIS:
 
