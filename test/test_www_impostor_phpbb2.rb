@@ -199,7 +199,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       assert @im.post
     end
     assert_equal "forum not set", err.original_exception.message
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(f=nil,t=nil,m=nil)
     end
     assert_equal "forum not set", err.original_exception.message
@@ -500,9 +500,10 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     body = '<html><head><link rel="prev" href="http://localhost/phpBB2/viewtopic.php?junk" title="View previous topic"></head><body></body></html>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal "unexpected new topic ID", err.original_exception.message
   end
 
   def test_new_topic_should_work
