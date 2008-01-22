@@ -238,7 +238,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "message not set", err.original_exception.message
   end
 
-=begin
   def test_post_not_logged_in_should_raise_exception
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
@@ -248,6 +247,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "not logged in", err.original_exception.message
   end
 
+=begin
   def test_bad_post_page_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     topic = 2
