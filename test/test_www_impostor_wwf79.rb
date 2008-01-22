@@ -305,27 +305,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
-  def test_getting_unknown_post_response_should_return_false
-    @im.instance_variable_set(:@loggedin, true)
-    response = {'content-type' => 'text/html'}
-    body = phpbb2_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    body = 'junk'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-
-    assert_equal false, @im.post(1,topic,'hello')
-    assert_equal nil, @im.instance_variable_get(:@forum)
-    assert_equal nil, @im.instance_variable_get(:@topic)
-    assert_equal nil, @im.instance_variable_get(:@subject)
-    assert_equal nil, @im.instance_variable_get(:@message)
-  end
-
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -348,37 +327,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
-
-
-  def test_too_many_posts_for_post_should_raise_throttle_error
-    setup_good_fake_web
-
-    FakeWeb.register_uri(@good_posting, :method => :post, 
-      :response => response(load_page('wwf79-too-many-posts.html')))
-
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    # bad posting page should throw an exception
-    assert_raises(WWW::Impostor::ThrottledError) do
-      assert im.post
-    end
-  end
-
-  def test_should_post
-    setup_good_fake_web
-
-    im = fake(config)
-    im.fake_loggedin = true
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "#{Time.now} Hello there #{Time.now}"
-    assert im.post
-  end
-
+=begin
   def test_new_topic_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
