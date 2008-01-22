@@ -116,10 +116,12 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   end
 
   def test_post_login_should_raise_login_error
-    WWW::Mechanize::CookieJar.any_instance.expects(:submit).never.raises(StandardError, 'from test')
-    assert_raise(WWW::Impostor::LoginError) do
+    errmsg = "from test #{Time.now.to_s}"
+    WWW::Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::LoginError) do
       page = @im.send(:post_login, nil, nil)
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_bad_login_page_should_raise_exception
