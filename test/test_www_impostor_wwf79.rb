@@ -327,7 +327,52 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
+  def test_new_topic_without_forum_set_should_raise_exception
+    @im.instance_variable_set(:@forum, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=nil,s="hello world",m="hello world")
+    end
+  end
+
 =begin
+  def test_new_topic_without_subject_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@subject, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=1,s=nil,m="hello world")
+    end
+  end
+
+  def test_new_topic_without_message_set_should_raise_exception
+    @im.instance_variable_set(:@forum, 1)
+    @im.instance_variable_set(:@subject, 'test')
+    @im.instance_variable_set(:@message, nil)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic
+    end
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=1,s="hello world",m=nil)
+    end
+  end
+
+  def test_new_topic_not_logged_in_should_raise_exception
+    @im.expects(:login).once.returns(false)
+    @im.instance_variable_set(:@loggedin, false)
+
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.new_topic(f=2,s="hello world",m="hello ruby")
+    end
+  end
+
+
+
+
   def test_new_topic_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
