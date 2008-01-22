@@ -208,7 +208,7 @@ class WWW::Impostor
     # returns the login form and its button from the login page
 
     def login_form_and_button(page)
-      form = page.forms.with.name('frmLogin').first
+      form = page.forms.with.name('frmLogin').first rescue nil
       raise LoginError.new("unknown login page format") unless form
       
       button = form.buttons.with.name('Submit').first

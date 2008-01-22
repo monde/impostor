@@ -89,7 +89,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal page, @im.send(:fetch_login_page)
   end
 
-=begin
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
     err = assert_raise(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
@@ -97,6 +96,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "unknown login page format", err.original_exception.message
   end
 
+=begin
   def test_login_form_and_button_should_return_a_form_and_button
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-login.html').join
