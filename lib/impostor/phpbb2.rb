@@ -122,8 +122,8 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('post') rescue nil
 
+      form = page.form('post') rescue nil
       button = form.buttons.with.name('post').first rescue nil
       raise PostError.new("post form not found") unless button && form
 

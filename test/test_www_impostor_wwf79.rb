@@ -222,7 +222,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
 
   def test_bad_post_page_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
-    topic = 1
+    topic = 2
     forum_posts_page = @im.forum_posts_page
     forum_posts_page.query = "TID=#{topic}&TPN=10000"
     WWW::Mechanize.any_instance.expects(:get).once.with(
@@ -232,22 +232,22 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
       assert @im.post(7,topic,'hello')
     end
   end
-=begin
 
   def test_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = '<form action="posting.php" method="post" name="post"></form>'
+    body = '<form action="post_message.asp?PN=" method="post" name="frmAddMessage"></form>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
     assert_raises(WWW::Impostor::PostError) do
       assert @im.post(1,topic,'hello')
     end
   end
 
+=begin
   def test_submitting_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
