@@ -428,9 +428,10 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     post_message_page = @im.post_message_page
     post_message_page.query = "FID=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
+    assert_equal "post form not found", err.original_exception.message
   end
 
   def test_submitting_bad_post_for_new_topic_form_should_raise_exception
