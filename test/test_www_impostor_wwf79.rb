@@ -220,7 +220,122 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+  def test_bad_post_page_for_post_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    topic = 1
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      forum_posts_page
+    ).raises(StandardError.new('test_getting_bad_post_page_for_post_should_raise_exception'))
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(7,topic,'hello')
+    end
+  end
 =begin
+
+  def test_bad_post_form_for_post_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = '<form action="posting.php" method="post" name="post"></form>'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(1,topic,'hello')
+    end
+  end
+
+  def test_submitting_bad_post_form_for_post_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, "from test")
+    assert_raises(WWW::Impostor::PostError) do
+      assert @im.post(1,topic,'hello')
+    end
+  end
+
+  def test_should_post
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    body = load_page('phpbb2-post-reply-good-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    subject = "test #{Time.now.to_s}"
+    @im.expects(:get_subject).once.returns(subject)
+
+    assert_equal true, @im.post(1,topic,'hello')
+    assert_equal 1, @im.instance_variable_get(:@forum)
+    assert_equal topic, @im.instance_variable_get(:@topic)
+    assert_equal subject, @im.instance_variable_get(:@subject)
+    assert_equal 'hello', @im.instance_variable_get(:@message)
+  end
+
+  def test_too_many_posts_for_post_should_raise_exception
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    body = load_page('phpbb2-post-reply-throttled-response.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    assert_raises(WWW::Impostor::ThrottledError) do
+      @im.post(1,topic,'hello')
+    end
+  end
+
+  def test_getting_unknown_post_response_should_return_false
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = phpbb2_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    posting_page = @im.posting_page
+    posting_page.query = "mode=reply&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    body = 'junk'
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+
+    assert_equal false, @im.post(1,topic,'hello')
+    assert_equal nil, @im.instance_variable_get(:@forum)
+    assert_equal nil, @im.instance_variable_get(:@topic)
+    assert_equal nil, @im.instance_variable_get(:@subject)
+    assert_equal nil, @im.instance_variable_get(:@message)
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   def test_getting_bad_posting_for_post_page_should_raise_exception
     setup_good_fake_web
 
