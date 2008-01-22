@@ -66,7 +66,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert @im.version
   end
 
-=begin
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-logged-in.html').join
@@ -74,6 +73,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal true, @im.send(:logged_in?, page)
   end
 
+=begin
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('wwf80-not-logged-in.html').join
