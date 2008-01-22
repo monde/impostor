@@ -383,21 +383,21 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_getting_bad_post_form_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = '<form action="posting.php" method="post" name="post"></form>'
+    body = '<form action="post_message.asp?PN=" method="post" name="frmAddMessage"></form>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    post_message_page = @im.post_message_page
+    post_message_page.query = "FID=#{forum}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(post_message_page).returns(page)
     assert_raises(WWW::Impostor::PostError) do
       assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
   end
 
+=begin
   def test_submitting_bad_post_for_new_topic_form_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
