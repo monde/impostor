@@ -168,7 +168,7 @@ class WWW::Impostor
     # does the work of logging into WWF 8.0
 
     def login
-      return if @loggedin
+      return true if @loggedin
 
       # get the login page
       page = fetch_login_page
