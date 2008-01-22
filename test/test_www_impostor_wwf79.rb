@@ -326,9 +326,10 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       @im.post(1,topic,'hello')
     end
+    assert_equal "There was an error making the post", err.original_exception.message
   end
 
   def test_should_post
