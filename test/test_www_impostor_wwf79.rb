@@ -148,7 +148,28 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal true, @im.login
   end
 
+  def test_logout_does_nothing_if_logged_out
+    @im.instance_variable_set(:@loggedin, false)
+    @im.expects(:cookie_jar).never
+    @im.expects(:save_topics).never
+    assert_equal false, @im.logout
+  end
+
 =begin
+  def test_logout
+    @im.instance_variable_set(:@loggedin, true)
+    cookie_jar = mock()
+    @im.expects(:cookie_jar).times(2).returns(cookie_jar)
+    WWW::Mechanize::CookieJar.any_instance.expects(:save_as).once.with(cookie_jar).returns(nil)
+    @im.expects(:save_topics).once
+    assert_equal true, @im.logout
+    assert_equal nil, @im.instance_variable_get(:@forum)
+    assert_equal nil, @im.instance_variable_get(:@topic)
+    assert_equal nil, @im.instance_variable_get(:@subject)
+    assert_equal nil, @im.instance_variable_get(:@message)
+    assert_equal false, @im.instance_variable_get(:@loggedin)
+  end
+
   def test_posting_without_forum_set_should_raise_exception
     setup_good_fake_web
     im = fake(config)
