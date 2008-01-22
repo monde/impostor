@@ -189,7 +189,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_post_without_topic_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
@@ -201,6 +200,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+=begin
   def test_post_without_message_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, 1)
