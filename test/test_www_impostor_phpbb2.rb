@@ -239,12 +239,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     topic = 1
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
+    errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
-    ).raises(StandardError.new('test_getting_bad_post_page_for_post_should_raise_exception'))
-    assert_raise(WWW::Impostor::PostError) do
+    ).raises(StandardError, errmsg)
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(7,topic,'hello')
     end
+    assert_equal errmsg, err.original_exception.message
   end
 
   def test_bad_post_form_for_post_should_raise_exception
