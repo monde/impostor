@@ -174,6 +174,11 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal URI.join(@app_root, c[:forum_posts_page]), @im.forum_posts_page
   end
 
+  def test_post_message_page
+    c = config
+    assert_equal URI.join(@app_root, c[:post_message_page]), @im.post_message_page
+  end
+
 =begin
 
   def test_post_without_forum_set_should_raise_exception
