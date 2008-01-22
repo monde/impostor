@@ -196,11 +196,11 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post
+      @im.post
     end
     assert_equal "forum not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(f=nil,t=nil,m=nil)
+      @im.post(f=nil,t=nil,m=nil)
     end
     assert_equal "forum not set", err.original_exception.message
   end
@@ -209,11 +209,11 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post
+      @im.post
     end
     assert_equal "topic not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(f=2,t=nil,m=nil)
+      @im.post(f=2,t=nil,m=nil)
     end
     assert_equal "topic not set", err.original_exception.message
   end
@@ -223,11 +223,11 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@topic, 1)
     @im.instance_variable_set(:@message, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post
+      @im.post
     end
     assert_equal "message not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(f=2,t=2,m=nil)
+      @im.post(f=2,t=2,m=nil)
     end
     assert_equal "message not set", err.original_exception.message
   end
@@ -236,7 +236,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.expects(:login).once.returns(false)
     @im.instance_variable_set(:@loggedin, false)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(2,2,'hello')
+      @im.post(2,2,'hello')
     end
     assert_equal "not logged in", err.original_exception.message
   end
@@ -251,7 +251,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
       posting_page
     ).raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(7,topic,'hello')
+      @im.post(7,topic,'hello')
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -266,7 +266,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=reply&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(1,topic,'hello')
+      @im.post(1,topic,'hello')
     end
     assert_equal "post form not found", err.original_exception.message
   end
@@ -283,7 +283,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.post(1,topic,'hello')
+      @im.post(1,topic,'hello')
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -352,11 +352,11 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
   def test_new_topic_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic
+      @im.new_topic
     end
     assert_equal "forum not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=nil,s="hello world",m="hello world")
+      @im.new_topic(f=nil,s="hello world",m="hello world")
     end
     assert_equal "forum not set", err.original_exception.message
   end
@@ -369,7 +369,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     end
     assert_equal "topic name not given", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=1,s=nil,m="hello world")
+      @im.new_topic(f=1,s=nil,m="hello world")
     end
     assert_equal "topic name not given", err.original_exception.message
   end
@@ -379,11 +379,11 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@subject, 'test')
     @im.instance_variable_set(:@message, nil)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic
+      @im.new_topic
     end
     assert_equal "message not set", err.original_exception.message
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=1,s="hello world",m=nil)
+      @im.new_topic(f=1,s="hello world",m=nil)
     end
     assert_equal "message not set", err.original_exception.message
   end
@@ -393,7 +393,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, false)
 
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=2,s="hello world",m="hello ruby")
+      @im.new_topic(f=2,s="hello world",m="hello ruby")
     end
     assert_equal "not logged in", err.original_exception.message
   end
@@ -409,7 +409,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     ).raises(StandardError, errmsg)
 
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -424,7 +424,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     posting_page.query = "mode=newtopic&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal 'post form not found', err.original_exception.message
   end
@@ -441,7 +441,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal errmsg, err.original_exception.message
   end
@@ -457,7 +457,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal "unexpected new topic response from refresh", err.original_exception.message
   end
@@ -479,7 +479,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal "unexpected new topic response from link prev", err.original_exception.message
   end
@@ -501,7 +501,7 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
-      assert @im.new_topic(f=forum,s="hello world",m="hello ruby")
+      @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
     assert_equal "unexpected new topic ID", err.original_exception.message
   end
