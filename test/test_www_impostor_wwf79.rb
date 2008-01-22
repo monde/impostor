@@ -270,28 +270,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
   end
 
 =begin
-  def test_should_post
-    @im.instance_variable_set(:@loggedin, true)
-    response = {'content-type' => 'text/html'}
-    body = wwf79_good_submit_post_form
-    body = phpbb2_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    body = load_page('phpbb2-post-reply-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-    subject = "test #{Time.now.to_s}"
-    @im.expects(:get_subject).once.returns(subject)
-
-    assert_equal true, @im.post(1,topic,'hello')
-    assert_equal 1, @im.instance_variable_get(:@forum)
-    assert_equal topic, @im.instance_variable_get(:@topic)
-    assert_equal subject, @im.instance_variable_get(:@subject)
-    assert_equal 'hello', @im.instance_variable_get(:@message)
-  end
 
   def test_too_many_posts_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
@@ -331,49 +309,29 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal nil, @im.instance_variable_get(:@message)
   end
 
+  def test_should_post
+    @im.instance_variable_set(:@loggedin, true)
+    response = {'content-type' => 'text/html'}
+    body = wwf79_good_submit_post_form
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    topic = 2
+    forum_posts_page = @im.forum_posts_page
+    forum_posts_page.query = "TID=#{topic}&TPN=10000"
+    WWW::Mechanize.any_instance.expects(:get).once.with(forum_posts_page).returns(page)
+    body = load_page('wwf79-good-post-forum_posts.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    subject = "test #{Time.now.to_s}"
+    @im.expects(:get_subject).once.returns(subject)
 
-
-
-
-
-
-
-
-
-
-
-
-
-  def test_getting_bad_posting_for_post_page_should_raise_exception
-    setup_good_fake_web
-
-    FakeWeb.register_uri(@good_reply_form + '?TID=2', :method => :get, 
-                         :response => response("not found",404))
-
-    im = fake(config)
-
-    im.forum = 2
-    im.topic = 2
-    im.message = "hello ruby"
-    # bad posting page should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.post
-    end
+    assert_equal true, @im.post(1,topic,'hello')
+    assert_equal 1, @im.instance_variable_get(:@forum)
+    assert_equal topic, @im.instance_variable_get(:@topic)
+    assert_equal subject, @im.instance_variable_get(:@subject)
+    assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
-  def test_bad_submit_for_post_response_should_raise_exception
-    setup_good_fake_web
 
-    FakeWeb.register_uri(@good_reply_form + '?TID=2', :method => :get, 
-                         :response => response("not found",404))
-
-    im = fake(config)
-
-    # bad submit should throw an exception
-    assert_raises(WWW::Impostor::PostError) do
-      assert im.post(f=2,t=2,m="hello ruby")
-    end
-  end
 
   def test_too_many_posts_for_post_should_raise_throttle_error
     setup_good_fake_web
