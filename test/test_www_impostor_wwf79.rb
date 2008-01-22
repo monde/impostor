@@ -117,13 +117,13 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
-=begin
   def test_already_logged_in_should_not_post_login_information_again_instance_varialbe
     @im.instance_variable_set(:@loggedin, true)
     @im.expects(:fetch_login_page).never
     assert_equal true, @im.login
   end
 
+=begin
   def test_already_logged_in_should_not_post_login_information_again
     @im.instance_variable_set(:@loggedin, false)
     page = mock()

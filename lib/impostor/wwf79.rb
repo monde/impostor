@@ -157,13 +157,13 @@ class WWW::Impostor
     # does the work of logging into WWF 8.0
 
     def login
-      return if @loggedin
+      return true if @loggedin
 
       # get the login page
       page = fetch_login_page
 
       # return if we are already logged in from a cookie state
-      return if logged_in?(page)
+      return true if logged_in?(page)
 
       # setup the form and submit
       form, button = login_form_and_button(page)
