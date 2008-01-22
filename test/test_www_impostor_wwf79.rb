@@ -392,53 +392,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
       assert_equal "hello ruby", im.message
     end
   end
-
-  private
-
-  def register_good_login
-    FakeWeb.register_uri(@good_login, :method => :get, 
-                         :response => response(load_page('wwf79-login.html')))
-    FakeWeb.register_uri(@good_login + '?FID=0', :method => :post, 
-                         :response => response(load_page('wwf79-logged-in.html')))
-    FakeWeb.register_uri(@good_login, :method => :post, 
-                         :response => response(load_page('wwf79-logged-in.html')))
-  end
-
-  def register_good_index
-    FakeWeb.register_uri(@good_index, :method => :get, 
-                      :response => response(load_page('wwf79-index.html')))
-  end
-
-  def register_good_posting(type = :reply)
-    # different gets and posts for "reply" and "new_topic" mode
-    case type
-    when :reply
-      FakeWeb.register_uri(@good_reply_form + '?TID=2', :method => :get, 
-                         :response => response(load_page('wwf79-forum_posts.html')))
-      FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response(load_page('wwf79-good-post-forum_posts.html')))
-    when :new_topic
-      FakeWeb.register_uri(@good_topic_form + '?FID=2', :method => :get, 
-                         :response => response(load_page('wwf79-new-topic-post_message_form.html')))
-      FakeWeb.register_uri(@good_posting, :method => :post, 
-                         :response => response(load_page('wwf79-new-topic-forum_posts-response.html')))
-    else
-      raise "unknown type parameter"
-    end
-  end
-
-  def setup_good_fake_web(type = :reply)
-    register_good_index
-    register_good_login
-    register_good_posting type
-  end
-
-  def response(body, code=200)
-    res = FakeResponse.new
-    res.code = code
-    res['Content-Type'] ||= 'text/html'
-    res.body = body
-    res
-  end
 =end
+
 end
