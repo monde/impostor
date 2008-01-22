@@ -179,8 +179,6 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal URI.join(@app_root, c[:post_message_page]), @im.post_message_page
   end
 
-=begin
-
   def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     assert_raises(WWW::Impostor::PostError) do
@@ -191,6 +189,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     end
   end
 
+=begin
   def test_post_without_topic_set_should_raise_exception
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, nil)
