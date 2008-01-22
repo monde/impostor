@@ -90,8 +90,9 @@ class WWW::Impostor
       end
 
       # look up the new topic id
-      form = page.form('frmMessageForm')
-      topic = form['TID'].to_i
+      form = page.form('frmMessageForm') rescue nil
+      topic = form['TID'].to_i rescue 0
+      raise PostError.new('unexpected new topic ID') if topic < 1
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)

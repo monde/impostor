@@ -489,7 +489,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_match /Error: Message Not Posted/, err.original_exception.message
   end
 
-=begin
   def test_malformed_form_with_topicid_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -510,6 +509,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "unexpected new topic ID", err.original_exception.message
   end
 
+=begin
   def test_new_topic_should_work
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
