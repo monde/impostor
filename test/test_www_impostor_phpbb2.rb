@@ -222,12 +222,14 @@ class WWW::Impostor::Phpbb2Test < Test::Unit::TestCase
     @im.instance_variable_set(:@forum, 1)
     @im.instance_variable_set(:@topic, 1)
     @im.instance_variable_set(:@message, nil)
-    assert_raise(WWW::Impostor::PostError) do
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post
     end
-    assert_raise(WWW::Impostor::PostError) do
+    assert_equal "message not set", err.original_exception.message
+    err = assert_raise(WWW::Impostor::PostError) do
       assert @im.post(f=2,t=2,m=nil)
     end
+    assert_equal "message not set", err.original_exception.message
   end
 
   def test_post_not_logged_in_should_raise_exception
