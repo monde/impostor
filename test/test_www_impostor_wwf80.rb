@@ -341,7 +341,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     new_reply_page = @im.new_reply_page
     new_reply_page.query = "TID=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
-    body = load_page('wwf80-good-post-forum_posts.html').join
+    body = load_page('wwf80-post-reply-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
     subject = "test #{Time.now.to_s}"
