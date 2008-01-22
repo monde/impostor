@@ -74,13 +74,13 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     assert_equal page, @im.send(:fetch_login_page)
   end
 
-=begin
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
     assert_raises(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
     end
   end
 
+=begin
   def test_login_form_and_button_should_return_a_form_and_button
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb2-login.html').join

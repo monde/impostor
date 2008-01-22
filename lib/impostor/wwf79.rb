@@ -19,7 +19,6 @@ class WWW::Impostor
       super(config)
       @agent = WWW::Mechanize.new
       @agent.user_agent_alias = user_agent
-      # jar is a yaml file
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
       @message = nil
       @loggedin = false
@@ -198,7 +197,7 @@ class WWW::Impostor
     # returns the login form and its button from the login page
 
     def login_form_and_button(page)
-      form = page.forms.with.name('frmLogin').first
+      form = page.forms.with.name('frmLogin').first rescue nil
       raise LoginError.new("unknown login page format") unless form
 
       button = WWW::Mechanize::Button.new('Submit', 'Forum Login')
