@@ -509,7 +509,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_equal "unexpected new topic ID", err.original_exception.message
   end
 
-=begin
   def test_new_topic_should_work
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -521,16 +520,15 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     new_topic_page = @im.new_topic_page
     new_topic_page.query = "FID=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(new_topic_page).returns(page)
-    body = load_page('wwf80-new-topic-forum_posts-response.html').join
+    body = load_page('wwf80-post-new_topic-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
-    @im.expects(:add_subject).once.with(forum,357,subject)
+    @im.expects(:add_subject).once.with(forum,152,subject)
     assert_equal true, @im.new_topic(f=forum,s=subject,m=message)
     assert_equal forum, @im.instance_variable_get(:@forum)
-    assert_equal 357, @im.instance_variable_get(:@topic)
+    assert_equal 152, @im.instance_variable_get(:@topic)
     assert_equal subject, @im.instance_variable_get(:@subject)
     assert_equal message, @im.instance_variable_get(:@message)
   end
-=end
 end
