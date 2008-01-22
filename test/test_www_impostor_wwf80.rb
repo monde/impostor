@@ -313,7 +313,6 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     assert_match /You have exceeded the number of posts permitted in the time span/, err.original_exception.message
   end
 
-=begin
   def test_getting_unknown_post_response_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -321,7 +320,7 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     new_reply_page = @im.new_reply_page
-    new_reply_page.query = "TID=#{topic}&TPN=10000"
+    new_reply_page.query = "TID=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(new_reply_page).returns(page)
     body = load_page('wwf80-general-posting-error.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
@@ -330,9 +329,10 @@ class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
     err = assert_raise(WWW::Impostor::PostError) do
       @im.post(1,topic,'hello')
     end
-    assert_equal "There was an error making the post", err.original_exception.message
+    assert_match /Error: Message Not Posted/, err.original_exception.message
   end
 
+=begin
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
