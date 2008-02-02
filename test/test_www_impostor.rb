@@ -1,4 +1,4 @@
-require File.join(File.dirname(__FILE__), "..", "lib", "impostor")
+require File.join(File.dirname(__FILE__), "..", "lib", "www", "impostor")
 require File.join(File.dirname(__FILE__), "test_helper")
 
 require 'tempfile'
@@ -14,14 +14,19 @@ class TestWwwImpostor < Test::Unit::TestCase
   end
 
   def test_create_should_return_an_instance
-    im = WWW::Impostor.create({:impostor_type => "WWW::Impostor::Fake"})
-    assert_equal WWW::Impostor::Fake, im.class 
-    im = WWW::Impostor.create({:impostor_type => WWW::Impostor::Fake})
-    assert_equal WWW::Impostor::Fake, im.class 
+    im = WWW::Impostor.create({:type => :fake})
+    assert_equal WWW::Impostor::Fake, im
+    im = WWW::Impostor.create({:type => WWW::Impostor::Fake})
+    assert_equal WWW::Impostor::Fake, im
+  end
+
+  def test_aliased_new_returns_custom_impostor_instance
+    im = WWW::Impostor.new({:type => :fake})
+    assert_equal WWW::Impostor::Fake, im.class
   end
 
   def test_add_subject_should_work
-    im = WWW::Impostor.create({:impostor_type => "WWW::Impostor::Fake"})
+    im = fake
     im.add_subject(f=10,t=10,s="hello world")
     assert_equal s, im.get_subject(f,t)
     im.add_subject(f=10,t=11,s="hello world2")
@@ -30,7 +35,7 @@ class TestWwwImpostor < Test::Unit::TestCase
 
   def test_config_should_not_be_nil
     assert_nothing_raised(StandardError) do
-      impostor = fake(Hash.new)
+      impostor = fake
       assert impostor.config
     end
   end
@@ -152,6 +157,7 @@ class TestWwwImpostor < Test::Unit::TestCase
   end
 
   def fake(config = {})
-    WWW::Impostor::Fake.new(config)
+    config[:type] = :fake
+    WWW::Impostor.new(config)
   end
 end

@@ -37,6 +37,14 @@ module WWW
 
   class Impostor
 
+    class << self #:nodoc:
+      alias orig_new new
+      def new(conf)
+        klass = WWW::Impostor.create(conf)
+        klass.orig_new(conf)
+      end
+    end
+
     ##
     # Gem version of Impostor
 
@@ -99,9 +107,9 @@ module WWW
     # Instantiate a specific impostor based on its symbol name
 
     def self.create(config={})
-      type = config[:impostor_type]
-      clz = type.is_a?(Class) ? type : eval(config[:impostor_type])
-      clz.new(config)
+      type = config[:type]
+      clz = type.is_a?(Class) ? type : eval("WWW::Impostor::#{type.to_s.capitalize}")
+      clz
     end
   
     ##

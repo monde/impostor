@@ -13,7 +13,7 @@ class TestWwwImpostorWwf79 < Test::Unit::TestCase
   def setup
     @cookie_jar = File.join(Dir.tmpdir, 'www_impostor_wwf79_test.yml')
     @app_root = 'http://localhost/wwf79/'
-    @im = WWW::Impostor::Wwf79.new(config())
+    @im = WWW::Impostor.new(config())
   end
 
   def teardown
@@ -21,7 +21,8 @@ class TestWwwImpostorWwf79 < Test::Unit::TestCase
   end
 
   def config(config={})
-    c = {:app_root => @app_root,
+    c = {:type => :wwf79,
+      :app_root => @app_root,
       :login_page => 'login_user.asp', 
       :forum_posts_page => 'forum_posts.asp', 
       :post_message_page => 'post_message_form.asp', 
@@ -52,13 +53,13 @@ class TestWwwImpostorWwf79 < Test::Unit::TestCase
     FileUtils.touch(@cookie_jar)
 
     WWW::Mechanize::CookieJar.any_instance.expects(:load).once.with(@cookie_jar)
-    im = WWW::Impostor::Wwf79.new(config())
+    im = WWW::Impostor.new(config())
     assert im
   end
 
   def test_initialize_without_cookie_jar
     WWW::Mechanize::CookieJar.any_instance.expects(:load).never
-    im = WWW::Impostor::Wwf79.new(config())
+    im = WWW::Impostor.new(config())
     assert im
   end
 
