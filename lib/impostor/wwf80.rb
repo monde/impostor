@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'hpricot'
+gem 'mechanize', '>= 0.7.0'
 require 'mechanize'
-require 'logger'
 require 'cgi'
 
 ##

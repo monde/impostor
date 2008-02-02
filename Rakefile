@@ -19,6 +19,7 @@ Hoe.new('impostor', WWW::Impostor::VERSION) do |p|
   p.url = p.paragraphs_of('README.txt', 0).first.split(/\n/)[1..-1]
   p.changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
   p.extra_deps << ['hpricot', '>= 0.5.0']
+  p.extra_deps << ['mechanize', '>= 0.7.0']
   p.clean_globs << 'coverage'
 end
 

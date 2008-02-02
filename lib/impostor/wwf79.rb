@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'hpricot'
+gem 'mechanize', '>= 0.7.0'
 require 'mechanize'
-require 'logger'
 require 'cgi'
 
 ##
@@ -203,7 +203,7 @@ class WWW::Impostor
       form = page.forms.with.name('frmLogin').first rescue nil
       raise LoginError.new("unknown login page format") unless form
 
-      button = WWW::Mechanize::Button.new('Submit', 'Forum Login')
+      button = WWW::Mechanize::Form::Button.new('Submit', 'Forum Login')
       form.add_button_to_query(button)
       form['name'] = username
       form['password'] = password

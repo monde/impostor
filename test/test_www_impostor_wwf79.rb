@@ -102,7 +102,7 @@ class WWW::Impostor::Wwf79Test < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form, button = @im.send(:login_form_and_button, page)
     assert_equal true, form.is_a?(WWW::Mechanize::Form)
-    assert_equal true, button.is_a?(WWW::Mechanize::Button)
+    assert_equal true, button.is_a?(WWW::Mechanize::Form::Button)
   end
 
   def test_post_login_should_return_page
