@@ -35,7 +35,7 @@ class TestWwwImpostorWwf80 < Test::Unit::TestCase
   end
 
   def wwf80_good_submit_post_form
-    %q!<form action="post_message.asp?PN=" method="post" name="frmAddMessage">
+    %q!<form action="post_message.asp?PN=" method="post" name="frmMessageForm">
     <input name="message" value="" type="hidden">
     <input name="Submit" type="submit">
     </form>!
