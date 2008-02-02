@@ -10,7 +10,9 @@ module WWW
   #  require 'rubygems'
   #  require 'impostor'
   #  
-  #  # config yaml has entry :type => :phpbb2
+  #  # config yaml has options specefic to wwf79, wwf80, phpbb2, etc.
+  #  # read the impostor docs for options to the kind of forum in use
+  #  # config can be keyed by symbols or strings
   #  post = WWW::Impostor.new(YAML.load_file('config.yml'))
   #  message = %q!hello world is to application
   #  programmers as tea pots are to graphics programmers!
@@ -21,7 +23,7 @@ module WWW
   #  post.new_topic(forum=7,subject,message)
   #  post.logout
   #
-  #  keys and values that must be set in the impostor configuration
+  #  keys and values that can be set in the impostor configuration
   #
   #  :type           - kind of imPOSTor, :phpbb2, :wwf79, :wwf80, etc.
   #  :username       - forum username
@@ -99,24 +101,27 @@ module WWW
     ##
     # Pass in a config hash to initialize
  
-    def initialize(config={})
-      @config = config
+    def initialize(conf={})
+      @config = conf
       load_topics
     end
 
     ##
     # Instantiate a specific impostor based on its symbol name
 
-    def self.create(config={})
-      type = config[:type]
+    def self.create(conf={})
+      type = conf[:type] || conf[:type.to_s]
       clz = type.is_a?(Class) ? type : eval("WWW::Impostor::#{type.to_s.capitalize}")
       clz
     end
   
     ##
-    # Access the current config
+    # Access the current config and key it without regard for symbols or strings
 
-    attr_reader :config
+    def config(*key)
+      return @config if key.empty?
+      @config[key.first.to_sym] || @config[key.first.to_s]
+    end
 
     ##
     # Get/set the application version that impostor is interfacing with
@@ -137,7 +142,7 @@ module WWW
     # Load the topics that the impostor already knows about
 
     def load_topics
-      cache = @config[:topics_cache] ||= ""
+      cache = config[:topics_cache] ||= ""
       if File::exist?(cache)
         @topics = YAML::load_file(cache)
       else
@@ -160,7 +165,7 @@ module WWW
     # Save the topics
 
     def save_topics
-      cache = @config[:topics_cache] ||= ""
+      cache = config[:topics_cache] ||= ""
       if File::exist?(cache) 
         File.open(cache, 'w') do |out|
           YAML.dump(@topics, out)
@@ -213,7 +218,7 @@ module WWW
     # http://example.com/phpbb or http://example.com/forums
   
     def app_root 
-      @config[:app_root]
+      config[:app_root]
     end
 
     protected
@@ -222,39 +227,43 @@ module WWW
     # Get the topics cache
 
     def topics_cache
-      @config[:topics_cache]
+      config[:topics_cache]
     end
   
     ##
     # Get the login page for the application
   
     def login_page
-      URI.join(app_root, @config[:login_page])
+      URI.join(app_root, config[:login_page])
     end
 
     ##
     # Get the username for the application
   
     def username 
-      @config[:username]
+      config[:username]
     end
   
     ##
     # Get the password for the application
   
     def password 
-      @config[:password]
+      config[:password]
     end
 
+    ##
+    # A Mechanize user agent name, see the mechanize documentation
+    # 'Linux Mozilla', 'Mac Safari', 'Windows IE 7', etc.
+
     def user_agent
-      @config[:user_agent]
+      config[:user_agent]
     end
   
     ##
     # is a yaml file for WWW::Mechanize::CookieJar
 
     def cookie_jar
-      @config[:cookie_jar]
+      config[:cookie_jar]
     end
   end
 end

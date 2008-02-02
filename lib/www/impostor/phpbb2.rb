@@ -175,7 +175,7 @@ class WWW::Impostor
     # Get the posting page for the application (specific to phpBB2)
   
     def posting_page
-      URI.join(app_root, @config[:posting_page])
+      URI.join(app_root, config[:posting_page])
     end
   
     ##

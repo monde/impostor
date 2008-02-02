@@ -16,7 +16,9 @@ Makes automatic posts to the following forum applications:
 
 == SYNOPSIS:
 
-# config yaml has entry :type => :phpbb2
+# config yaml has options specefic to wwf79, wwf80, phpbb2, etc.
+# read the impostor docs for options to the kind of forum in use
+# config can be keyed by symbols or strings
 config = YAML::load_file('conf/impostor.yml')
 post = WWW::Impostor.new(config)
 message = %q{hello world is to application
@@ -32,7 +34,6 @@ post.logout
 
 * mechanize
 * hpricot
-* hoe
 
 == INSTALL:
 

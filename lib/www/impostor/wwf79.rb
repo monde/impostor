@@ -164,14 +164,14 @@ class WWW::Impostor
     # Get the new posts page for the application (specific to WWF7.9)
   
     def forum_posts_page
-      URI.join(app_root, @config[:forum_posts_page])
+      URI.join(app_root, config[:forum_posts_page])
     end
 
     ##
     # Get the new topic page for the application (specific to WWF7.9)
   
     def post_message_page
-      URI.join(app_root, @config[:post_message_page])
+      URI.join(app_root, config[:post_message_page])
     end
   
     ##

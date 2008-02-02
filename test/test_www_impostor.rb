@@ -35,8 +35,10 @@ class TestWwwImpostor < Test::Unit::TestCase
 
   def test_config_should_not_be_nil
     assert_nothing_raised(StandardError) do
-      impostor = fake
+      impostor = fake({:key => 'val'})
       assert impostor.config
+      assert_equal 'val', impostor.config('key')
+      assert_equal 'val', impostor.config(:key)
     end
   end
 

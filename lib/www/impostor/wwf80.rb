@@ -174,14 +174,14 @@ class WWW::Impostor
     # Get the new reply page for the application (specific to WWF8.0)
   
     def new_reply_page
-      URI.join(app_root, @config[:new_reply_page])
+      URI.join(app_root, config[:new_reply_page])
     end
 
     ##
     # Get the new topic page for the application (specific to WWF8.0)
   
     def new_topic_page
-      URI.join(app_root, @config[:new_topic_page])
+      URI.join(app_root, config[:new_topic_page])
     end
   
     ##
