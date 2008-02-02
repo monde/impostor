@@ -7,7 +7,10 @@ require 'test/unit'
 class WWW::ImpostorTest < Test::Unit::TestCase
 
   def test_impostor_error
-    assert WWW::Impostor::ImpostorError.new(StandardError.new)
+    message = 'test message'
+    error = WWW::Impostor::ImpostorError.new(StandardError.new(message))
+    assert error
+    assert_equal message, error.original_exception.message
   end
 
   def test_create_should_return_an_instance
