@@ -12,7 +12,10 @@ class Autotest::Impostor < Autotest
       %r%^lib/imposter.rb$% => proc { |_, m|
         ["test/test_www_imposter.rb"]
       },
-      %r%^lib/impostor/(.+).rb$% => proc { |_, m|
+      %r%^lib/www/imposter.rb$% => proc { |_, m|
+        ["test/test_www_imposter.rb"]
+      },
+      %r%^lib/www/impostor/(.+).rb$% => proc { |_, m|
         ["test/test_www_impostor_#{m[1]}.rb"]
       },
       %r%^test/test_.*\.rb$% => proc { |filename, _|
@@ -33,5 +36,14 @@ class Autotest::Impostor < Autotest
     c = s.sub(/test\/test_www_impostor_(.+).rb$/, '\1')
     "WWW::Impostor::#{c.capitalize}Test"
   end
+
+  def path_to_classname(s)
+    sep = File::SEPARATOR
+    f = s.sub(/^test#{sep}/, '').sub(/\.rb$/, '').split(sep)
+    f = f.map { |path| path.split(/_/).map { |seg| seg.capitalize }.join }
+    f = f.map { |path| path =~ /^Test/ ? path : "Test#{path}"  }
+    f.join
+  end
+
 
 end

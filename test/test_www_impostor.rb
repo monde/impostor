@@ -4,7 +4,7 @@ require File.join(File.dirname(__FILE__), "test_helper")
 require 'tempfile'
 require 'test/unit'
 
-class WWW::ImpostorTest < Test::Unit::TestCase
+class TestWwwImpostor < Test::Unit::TestCase
 
   def test_impostor_error
     message = 'test message'

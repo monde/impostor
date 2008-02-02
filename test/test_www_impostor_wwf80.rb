@@ -1,5 +1,5 @@
-require File.join(File.dirname(__FILE__), "..", "lib", "impostor")
-require File.join(File.dirname(__FILE__), "..", "lib", "impostor", "wwf80")
+require File.join(File.dirname(__FILE__), "..", "lib", "www", "impostor")
+require File.join(File.dirname(__FILE__), "..", "lib", "www", "impostor", "wwf80")
 require File.join(File.dirname(__FILE__), "test_helper")
 
 require 'test/unit'
@@ -7,7 +7,7 @@ require 'rubygems'
 require 'mocha'
 require 'mechanize'
 
-class WWW::Impostor::Wwf80Test < Test::Unit::TestCase
+class TestWwwImpostorWwf80 < Test::Unit::TestCase
   include TestHelper
 
   def setup
