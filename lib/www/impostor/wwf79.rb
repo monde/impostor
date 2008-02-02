@@ -5,7 +5,7 @@ require 'mechanize'
 require 'cgi'
 
 ##
-# Web Wiz Forums version 8.0 of the Impostor
+# Web Wiz Forums version 7.9 of the Impostor
 #
 
 class WWW::Impostor
@@ -14,6 +14,21 @@ class WWW::Impostor
 
     ##
     # After initializing the parent a mechanize agent is created
+    #
+    # Additional configuration parameters:
+    #
+    # :forum_posts_page
+    # :post_message_page
+    #
+    # Typical configuration parameters
+    # { :type => :wwf79,
+    # :app_root => 'http://example.com/forum/',
+    # :login_page => 'login_user.asp',
+    # :forum_posts_page => 'forum_posts.asp',
+    # :post_message_page => 'post_message_form.asp'
+    # :user_agent => 'Windows IE 7',
+    # :username => 'myuser',
+    # :password => 'mypasswd' }
 
     def initialize(config={})
       super(config)
@@ -40,6 +55,9 @@ class WWW::Impostor
       @loggedin = false
       true
     end
+
+    ##
+    # create a new topic
 
     def new_topic(forum=@forum, subject=@subject, message=@message)
       raise PostError.new("forum not set") unless forum
@@ -157,7 +175,7 @@ class WWW::Impostor
     end
   
     ##
-    # does the work of logging into WWF 8.0
+    # does the work of logging into WWF 7.9
 
     def login
       return true if @loggedin

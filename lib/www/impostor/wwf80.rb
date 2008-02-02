@@ -14,6 +14,21 @@ class WWW::Impostor
 
     ##
     # After initializing the parent a mechanize agent is created
+    #
+    # Additional configuration parameters:
+    #
+    # :new_reply_page
+    # :new_topic_page
+    #
+    # Typical configuration parameters
+    # { :type => :wwf80,
+    # :app_root => 'http://example.com/forum/',
+    # :login_page => 'login_user.asp',
+    # :new_reply_page => 'new_reply_form.asp',
+    # :new_topic_page => 'new_topic_form.asp',
+    # :user_agent => 'Windows IE 7',
+    # :username => 'myuser',
+    # :password => 'mypasswd' }
 
     def initialize(config={})
       super(config)

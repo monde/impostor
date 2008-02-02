@@ -7,12 +7,26 @@ require 'cgi'
 ##
 # phpBB version of the Impostor
 #
+
 class WWW::Impostor
   
   class Phpbb2 < WWW::Impostor
 
     ##
     # After initializing the parent a mechanize agent is created
+    #
+    # Additional configuration parameters:
+    #
+    # :posting_page
+    #
+    # Typical configuration parameters
+    # { :type => :phpbb2,
+    # :app_root => 'http://example.com/forum/',
+    # :login_page => 'login.php',
+    # :posting_page => 'posting.php',
+    # :user_agent => 'Windows IE 7',
+    # :username => 'myuser',
+    # :password => 'mypasswd' }
 
     def initialize(config={})
       super(config)
@@ -40,6 +54,9 @@ class WWW::Impostor
       @loggedin = false
       true
     end
+
+    ##
+    # make a new topic
 
     def new_topic(forum=@forum, subject=@subject, message=@message)
       raise PostError.new("forum not set") unless forum

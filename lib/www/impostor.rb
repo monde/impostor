@@ -10,30 +10,31 @@ module WWW
   #  require 'rubygems'
   #  require 'impostor'
   #  
-  #  # config yaml has entry :impostor_type => WWW::Impostor::SomeKind
-  #  post = WWW::Impostor.create(YAML.load_file('config.yml'))
-  #  # or initialize a concrete impostor
-  #  post = WWW::Impostor::Phpbb2.new(YAML.load_file('config.yml'))
+  #  # config yaml has entry :type => :phpbb2
+  #  post = WWW::Impostor.new(YAML.load_file('config.yml'))
   #  message = %q!hello world is to application
   #  programmers as tea pots are to graphics programmers!
   #  # your application store forum and topic ids
   #  post.post(forum=5,topic=10,message)
+  #  # make a new topic
+  #  subject = "about programmers..."
+  #  post.new_topic(forum=7,subject,message)
   #  post.logout
   #
-  #  keys and values to be set in impostor config
+  #  keys and values that must be set in the impostor configuration
   #
-  #  :impostor_type  - Class of impostor
+  #  :type           - kind of imPOSTor, :phpbb2, :wwf79, :wwf80, etc.
   #  :username       - forum username
   #  :password       - forum password
   #  :topics_cache   - cache of forum topics
   #  :user_agent     - Mechanize browser user-agent
   #  :cookie_jar     - saved cookies from Mechanize browser
-  #
   #  :app_root       - url to forum
   #  :login_page     - forum login page
-  #  :posting_page   - forum posting page (phpBB2 specific)
-  #  :new_reply_page - forum posting page (WWF8.0 specific)
-  #  :new_topic_page - forum posting page (WWF8.0 specific)
+  #
+  #  See documentation for each type of imPOSTor for additional configuration 
+  #  parameters that are needed for the specific kind of imPOSTor.  A sample 
+  #  configuration is provided in the documentation for each.
 
   class Impostor
 

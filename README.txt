@@ -16,7 +16,7 @@ Makes automatic posts to the following forum applications:
 
 == SYNOPSIS:
 
-# post and create concrete impostor
+# config yaml has entry :type => :phpbb2
 config = YAML::load_file('conf/impostor.yml')
 post = WWW::Impostor.new(config)
 message = %q{hello world is to application
