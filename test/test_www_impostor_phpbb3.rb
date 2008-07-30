@@ -34,13 +34,11 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
   end
 
   def phpbb3_good_submit_new_topic_form
-    load_page('phpbb3-new-topic-form.html').join
+    load_page('phpbb3-get-new-topic-form-good-response.html').join
   end
 
   def phpbb3_good_submit_post_form
-    #%q!<form action="./posting.php?mode=post&amp;f=37&amp;sid=a56da5e50e92e3f2d8dc14bb8c4936bf" method="post" name="postform" enctype="multipart/form-data">
-    #</form>!
-    ""
+    body = load_page('phpbb3-get-reply-form-good-response.html').join
   end
 
   def test_initialize_with_cookie_jar
@@ -449,19 +447,24 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     end
     assert_equal errmsg, err.original_exception.message
   end
+=end
 
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb3_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    form_page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
+    forum = 1
     posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    posting_page.query = "mode=reply&f=#{forum}&t=#{topic}"
+    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(form_page)
+    form = form_page.forms.first
+    button = form.buttons.detect{|b| b.name == 'post'}
     body = load_page('phpbb3-post-reply-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    WWW::Mechanize.any_instance.expects(:submit).with(form, button).once.returns(page)
+    
     subject = "test #{Time.now.to_s}"
     @im.expects(:get_subject).once.returns(subject)
 
@@ -472,6 +475,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
+=begin
   def test_too_many_posts_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}

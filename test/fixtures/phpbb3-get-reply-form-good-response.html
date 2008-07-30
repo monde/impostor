@@ -1,0 +1,1015 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-gb" xml:lang="en-gb">
+<head>
+<link REL="SHORTCUT ICON" HREF="http://example.com/favicon.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="content-language" content="en-gb" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="2000, 2002, 2005, 2007 phpBB Group" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title>EXAMPLE.COM &bull; Post a reply</title>
+
+<link rel="stylesheet" href="./styles/GnB/theme/stylesheet.css" type="text/css" />
+
+
+
+<script type="text/javascript">
+// <![CDATA[
+
+function popup(url, width, height, name)
+{
+if (!name)
+{
+name = '_popup';
+}
+
+window.open(url.replace(/&amp;/g, '&'), name, 'height=' + height + ',resizable=yes,scrollbars=yes,width=' + width);
+return false;
+}
+
+function jumpto()
+{
+var page = prompt('Enter the page number you wish to go to.:', '');
+var perpage = '';
+var base_url = '';
+
+if (page !== null && !isNaN(page) && page > 0)
+{
+document.location.href = base_url.replace(/&amp;/g, '&') + '&start=' + ((page - 1) * perpage);
+}
+}
+
+/**
+* Find a member
+*/
+function find_username(url)
+{
+popup(url, 760, 570, '_usersearch');
+return false;
+}
+
+/**
+* Mark/unmark checklist
+* id = ID of parent container, name = name prefix, state = state [true/false]
+*/
+function marklist(id, name, state)
+{
+var parent = document.getElementById(id);
+if (!parent)
+{
+eval('parent = document.' + id);
+}
+
+if (!parent)
+{
+return;
+}
+
+var rb = parent.getElementsByTagName('input');
+
+for (var r = 0; r < rb.length; r++)
+{
+if (rb[r].name.substr(0, name.length) == name)
+{
+rb[r].checked = state;
+}
+}
+}
+
+
+// ]]>
+</script>
+<SCRIPT TYPE="text/javascript">
+<!--
+// copyright 1999 Idocs, Inc. http://www.idocs.com/tags/
+// Distribute this script freely, but please keep this
+// notice with the code.
+
+var rollOverArr=new Array();
+function setrollover(OverImgSrc,pageImageName)
+{
+if (! document.images)return;
+if (pageImageName == null)
+pageImageName = document.images[document.images.length-1].name;
+rollOverArr[pageImageName]=new Object;
+rollOverArr[pageImageName].overImg = new Image;
+rollOverArr[pageImageName].overImg.src=OverImgSrc;
+}
+
+function rollover(pageImageName)
+{
+if (! document.images)return;
+if (! rollOverArr[pageImageName])return;
+if (! rollOverArr[pageImageName].outImg)
+{
+rollOverArr[pageImageName].outImg = new Image;
+rollOverArr[pageImageName].outImg.src = document.images[pageImageName].src;
+}
+document.images[pageImageName].src=rollOverArr[pageImageName].overImg.src;
+}
+
+function rollout(pageImageName)
+{
+if (! document.images)return;
+if (! rollOverArr[pageImageName])return;
+document.images[pageImageName].src=rollOverArr[pageImageName].outImg.src;
+}
+//-->
+</SCRIPT>
+
+</head>
+<body class="ltr">
+
+<a name="top"></a>
+
+<div id="wrapheader">
+	<table id="bx" width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<table id="bx" width="100%" height="40" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/header/h11.png" width="40" height="40" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h12.png" width="100" height="40" alt=""></td>
+				<td background="./styles/GnB/theme/images/header/h13.png" width="100%" height="40">
+				<td><img src="./styles/GnB/theme/images/header/h14.png" width="100" height="40" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h15.png" width="40" height="40" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" width="100%" height="140" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/header/h21.png" width="40" height="140" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h22.png" width="100" height="140" alt=""></td>
+				<td background="./styles/GnB/theme/images/header/h23.png" width="100%" height="140">
+					<div id="logodesc">
+						<table width="100%" cellspacing="0">
+							<tr>
+								<td><a href="./index.php"><img src="./styles/GnB/imageset/site_logo.png" width="480" height="80" alt="" title="" /></a></td>
+								<td width="100%" align="center"><h1>EXAMPLE.COM</h1><span class="gen">HOME OF THE MEATSHIELDS</span></td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td><img src="./styles/GnB/theme/images/header/h24.png" width="100" height="140" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h25.png" width="40" height="140" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" width="100%" height="66" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/header/h31.png" width="40" height="66" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h32.png" width="100" height="66" alt=""></td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+					<A HREF="./index.php"
+					onMouseOver = "rollover('home')"
+					onMouseOut = "rollout('home')"
+					>
+					<IMG SRC="./styles/GnB/theme/images/buttons/home1.png"
+					NAME="home"
+					ALT="Home Page" BORDER=0
+					HEIGHT=40 WIDTH=101
+					>
+					</A>
+					<SCRIPT TYPE="text/javascript">
+					<!--
+					setrollover("./styles/GnB/theme/images/buttons/home2.png");
+					//-->
+					</SCRIPT>
+				</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+					<A HREF="./faq.php"
+					onMouseOver = "rollover('faq')"
+					onMouseOut = "rollout('faq')"
+					>
+					<IMG SRC="./styles/GnB/theme/images/buttons/faq1.png"
+					NAME="faq"
+					ALT="Home Page" BORDER=0
+					HEIGHT=40 WIDTH=101
+					>
+					</A>
+					<SCRIPT TYPE="text/javascript">
+					<!--
+					setrollover("./styles/GnB/theme/images/buttons/faq2.png");
+					//-->
+					</SCRIPT>
+				</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+											<A HREF="./memberlist.php?mode=leaders"
+						onMouseOver = "rollover('team')"
+						onMouseOut = "rollout('team')"
+						>
+						<IMG SRC="./styles/GnB/theme/images/buttons/team1.png"
+						NAME="team"
+						ALT="Home Page" BORDER=0
+						HEIGHT=40 WIDTH=101
+						>
+						</A>
+						<SCRIPT TYPE="text/javascript">
+						<!--
+						setrollover("./styles/GnB/theme/images/buttons/team2.png");
+						//-->
+						</SCRIPT>
+									</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+											<A HREF="./search.php"
+						onMouseOver = "rollover('search')"
+						onMouseOut = "rollout('search')"
+						>
+						<IMG SRC="./styles/GnB/theme/images/buttons/search1.png"
+						NAME="search"
+						ALT="Home Page" BORDER=0
+						HEIGHT=40 WIDTH=101
+						>
+						</A>
+						<SCRIPT TYPE="text/javascript">
+						<!--
+						setrollover("./styles/GnB/theme/images/buttons/search2.png");
+						//-->
+						</SCRIPT>
+									</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+												<A HREF="./memberlist.php"
+							onMouseOver = "rollover('members')"
+							onMouseOut = "rollout('members')"
+							>
+							<IMG SRC="./styles/GnB/theme/images/buttons/members1.png"
+							NAME="members"
+							ALT="Home Page" BORDER=0
+							HEIGHT=40 WIDTH=101
+							>
+							</A>
+							<SCRIPT TYPE="text/javascript">
+							<!--
+							setrollover("./styles/GnB/theme/images/buttons/members2.png");
+							//-->
+							</SCRIPT>
+										</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="100%" height="66"></td>
+				<td><img src="./styles/GnB/theme/images/header/h34.png" width="100" height="66" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h35.png" width="40" height="66" alt=""></td>
+			</table>
+		</tr>
+	</table>
+</div>
+
+<div id="wrapcentre">
+	<table id="bx" width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<table id="bx" height="45" border="0" cellpadding="0" cellspacing="0" align="center">
+				<td><img src="./styles/GnB/theme/images/p_menu/p_01.png" width="61" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_02.png" width="20%" height="45"></td>
+				<td><img src="./styles/GnB/theme/images/p_menu/cu_l.png" width="44" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/cu_m.png" width="20%" height="45" align="center">
+					<h5>
+						 &nbsp;<a href="./ucp.php?i=pm&amp;folder=inbox"> <strong>0</strong> new messages									</a>
+													</h5>
+				</td>
+				<td background="./styles/GnB/theme/images/p_menu/cu_m.png" width="20%" height="45" align="center">
+					<h5>
+													<a href="./ucp.php?mode=logout&amp;sid=f28bbf47ef5da33390d83c7c26c5fb30"> Logout [ tester ]</a>&nbsp;
+											</h5>
+				</td>
+				<td background="./styles/GnB/theme/images/p_menu/cu_m.png" width="20%" height="45" align="center">
+												<h5>
+								<a href="./ucp.php"> User Control Panel</a>
+							</h5>
+										</td>
+				<td><img src="./styles/GnB/theme/images/p_menu/cu_r.png" width="45" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_02.png" width="20%" height="45"></td>
+				<td><img src="./styles/GnB/theme/images/p_menu/p_03.png" width="61" height="45" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" height="45" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/p_menu/p_08.png" width="61" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_85.png" width="100%" height="45">
+					<table width="100%" cellspacing="0">
+						<tr>
+															<td background="./styles/GnB/theme/images/p_menu/p_85.png" width="10%" height="36" align="center">
+									<A HREF="./search.php?search_id=unanswered"
+									onMouseOver = "rollover('search_unanswered')"
+									onMouseOut = "rollout('search_unanswered')"
+									>
+									<IMG SRC="./styles/GnB/theme/images/buttons/ut1.png"
+									NAME="search_unanswered"
+									ALT="View unanswered posts" BORDER=0
+									HEIGHT=36 WIDTH=150
+									>
+									</A>
+									<SCRIPT TYPE="text/javascript">
+									<!--
+									setrollover("./styles/GnB/theme/images/buttons/ut2.png");
+									//-->
+									</SCRIPT>
+								</td>
+								<td background="./styles/GnB/theme/images/p_menu/p_85.png" width="10%" height="36" align="center">
+									<A HREF="./search.php?search_id=active_topics"
+									onMouseOver = "rollover('search_active')"
+									onMouseOut = "rollout('search_active')"
+									>
+									<IMG SRC="./styles/GnB/theme/images/buttons/at1.png"
+									NAME="search_active"
+									ALT="View active topics" BORDER=0
+									HEIGHT=36 WIDTH=150
+									>
+									</A>
+									<SCRIPT TYPE="text/javascript">
+									<!--
+									setrollover("./styles/GnB/theme/images/buttons/at2.png");
+									//-->
+									</SCRIPT>
+								</td>
+								<td align="center" width="60%">
+									Last visit was: Mon Jul 14, 2008 10:02 am																	</td>
+																			<td background="./styles/GnB/theme/images/p_menu/p_85.png" width="10%" height="36" align="center">
+											<A HREF="./search.php?search_id=newposts"
+											onMouseOver = "rollover('search_new')"
+											onMouseOut = "rollout('search_new')"
+											>
+											<IMG SRC="./styles/GnB/theme/images/buttons/np1.png"
+											NAME="search_new"
+											ALT="View new posts" BORDER=0
+											HEIGHT=36 WIDTH=150
+											>
+											</A>
+											<SCRIPT TYPE="text/javascript">
+											<!--
+											setrollover("./styles/GnB/theme/images/buttons/np2.png");
+											//-->
+											</SCRIPT>
+										</td>
+										<td background="./styles/GnB/theme/images/p_menu/p_85.png" width="10%" height="36" align="center">
+											<A HREF="./search.php?search_id=egosearch"
+											onMouseOver = "rollover('search_your')"
+											onMouseOut = "rollout('search_your')"
+											>
+											<IMG SRC="./styles/GnB/theme/images/buttons/yp1.png"
+											NAME="search_your"
+											ALT="View your posts" BORDER=0
+											HEIGHT=36 WIDTH=150
+											>
+											</A>
+											<SCRIPT TYPE="text/javascript">
+											<!--
+											setrollover("./styles/GnB/theme/images/buttons/yp2.png");
+											//-->
+											</SCRIPT>
+										</td>
+															</tr>
+					</table>
+				</td>
+				<td><img src="./styles/GnB/theme/images/p_menu/p_09.png" width="61" height="45" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" height="40" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/p_menu/p_10.png" width="61" height="40" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_11.png" width="50%" height="40"></td>
+				<td background="./styles/GnB/theme/images/p_menu/clock.png" width="350" height="40">
+					<p class="gensmallclock" align="center">
+						<script language="javascript" src="./styles/GnB/template/liveclock.js">
+						</script>
+					</p>
+				</td>
+				<td background="./styles/GnB/theme/images/p_menu/p_11.png" width="20%" height="40"></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_11.png" width="30%" height="40" align="right">
+											<a href="./ucp.php?mode=delete_cookies">Delete all board cookies</a>
+									</td>
+				<td><img src="./styles/GnB/theme/images/p_menu/p_13.png" width="61" height="40" alt=""></td>
+			</table>
+		</tr>
+	</table>
+
+<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 5px;">
+	<tr>
+            <td><img src="./styles/GnB/theme/images/nav01.png" width="46" height="55" alt=""></td>
+
+		<td width="100%" background="./styles/GnB/theme/images/nav02.png" width="100%" height="55">
+			<p class="breadcrumbs"><a href="./index.php">Board index</a> &#187; <a href="./viewforum.php?f=11">GnB Chat</a> &#187; <a href="./viewforum.php?f=37">tester</a></p>
+			<p class="datetime">All times are UTC - 8 hours [ <abbr title="Daylight Saving Time">DST</abbr> ]</p>
+		</td>
+ <td><img src="./styles/GnB/theme/images/nav03.png" width="46" height="55" alt=""></td>
+
+	</tr>
+	</table>
+<br />	<div id="pageheader">
+		<h2><a class="titles" href="./viewtopic.php?f=37&amp;t=52">test</a></h2>
+
+					<p class="moderators">Moderators: <a href="./memberlist.php?mode=viewprofile&amp;u=58">dragonmike</a></p>
+			</div>
+
+	<br clear="all" /><br />
+	<form action="./posting.php?mode=reply&amp;f=37&amp;sid=f28bbf47ef5da33390d83c7c26c5fb30&amp;t=52" method="post" name="postform" enctype="multipart/form-data">
+
+<table class="tablebg" width="100%" cellspacing="1">
+<tr>
+	<th colspan="2"><b>Post a reply</b></th>
+</tr>
+
+
+<tr>
+	<td class="row1" width="22%"><b class="genmed">Subject:</b></td>
+	<td class="row2" width="78%"><input class="post" style="width:450px" type="text" name="subject" size="45" maxlength="64" tabindex="2" value="Re: test" /></td>
+</tr>
+<tr>
+	<td class="row1" valign="top"><b class="genmed">Message body:</b><br /><span class="gensmall">Enter your message here, it may contain no more than <strong>60000</strong> characters.&nbsp;</span><br /><br />
+			<table width="100%" cellspacing="5" cellpadding="0" border="0" align="center">
+		<tr>
+			<td class="gensmall" align="center"><b>Smilies</b></td>
+		</tr>
+		<tr>
+			<td align="center">
+									<a href="#" onclick="insert_text(':clap:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/eusa_clap.gif" width="19" height="16" alt=":clap:" title="clap" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':srpris:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/surprise.gif" width="18" height="18" alt=":srpris:" title="surprise" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':tkhnd:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/talk hand.gif" width="18" height="18" alt=":tkhnd:" title="talk hand" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':agry:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/angry.gif" width="34" height="18" alt=":agry:" title="angry" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':smg:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/smug.gif" width="18" height="18" alt=":smg:" title="smug" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':worrid:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/worried.gif" width="18" height="18" alt=":worrid:" title="worry" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':wnk:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/wink.gif" width="18" height="18" alt=":wnk:" title="wink" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':whw:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/whew.gif" width="34" height="18" alt=":whw:" title="whew" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':thup:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/thumb up.gif" width="39" height="18" alt=":thup:" title="thumb up" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':thdown:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/thumb down.gif" width="28" height="18" alt=":thdown:" title="thumb dn" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':thnk:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/think.gif" width="18" height="18" alt=":thnk:" title="think" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':blsh:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/blush.gif" width="18" height="18" alt=":blsh:" title="blush" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':cnfuse:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/confused.gif" width="20" height="18" alt=":cnfuse:" title="confused" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':sigh:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/sigh.gif" width="24" height="18" alt=":sigh:" title="sigh" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':rolin:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/rolling.gif" width="30" height="18" alt=":rolin:" title="rolling" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':rckon:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/rock on.gif" width="32" height="18" alt=":rckon:" title="rock on" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':lser:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/loser.gif" width="24" height="18" alt=":lser:" title="loser" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':bglaugh:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/laugh.gif" width="18" height="18" alt=":bglaugh:" title="big laugh" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':ilash:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/eyelash.gif" width="18" height="18" alt=":ilash:" title="eyelash" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':nuty:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/nutty.gif" width="24" height="18" alt=":nuty:" title="nutty" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':dh:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/doh.gif" width="24" height="18" alt=":dh:" title="doh" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':dntsee:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/dont see.gif" width="25" height="18" alt=":dntsee:" title="dont see" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':ibrow:', true); return false;" style="line-height: 20px;"><img src="./images/smilies/eyebrow.gif" width="18" height="18" alt=":ibrow:" title="eyebrow" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::bang::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/BangHead.gif" width="25" height="20" alt="::bang::" title="::bang::" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::nono::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/nono.gif" width="22" height="19" alt="::nono::" title="nono" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::salute::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_salut.gif" width="23" height="18" alt="::salute::" title="salute" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::punch::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/sFi_punch.gif" width="25" height="15" alt="::punch::" title="punch" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::nw::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/notworthy.gif" width="29" height="15" alt="::nw::" title="not worthy" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::pimp::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/character0005.gif" width="22" height="25" alt="::pimp::" title="pimp" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::dunno::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/dontknow.gif" width="30" height="20" alt="::dunno::" title="dunno" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::slappy::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/slapfight.gif" width="45" height="31" alt="::slappy::" title="slap fight" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::1up::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/1up.gif" width="21" height="22" alt="::1up::" title="1up" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::ets::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/emot-munch.gif" width="45" height="25" alt="::ets::" title="enjoy the show" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':)', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_e_smile.gif" width="15" height="17" alt=":)" title="Smile" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(';)', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_e_wink.gif" width="15" height="17" alt=";)" title="Wink" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':(', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_e_sad.gif" width="15" height="17" alt=":(" title="Sad" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':o', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_e_surprised.gif" width="15" height="17" alt=":o" title="Surprised" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':?', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_e_confused.gif" width="15" height="17" alt=":?" title="Confused" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('8-)', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_cool.gif" width="15" height="17" alt="8-)" title="Cool" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':x', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_mad.gif" width="15" height="17" alt=":x" title="Mad" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text(':P', true); return false;" style="line-height: 20px;"><img src="./images/smilies/icon_razz.gif" width="15" height="17" alt=":P" title="Razz" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::fu::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/thefinger.gif" width="37" height="21" alt="::fu::" title="fuku" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::exc::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/blob7.gif" width="31" height="31" alt="::exc::" title="excited" hspace="2" vspace="2" /></a>
+									<a href="#" onclick="insert_text('::ltr::', true); return false;" style="line-height: 20px;"><img src="./images/smilies/a_Lighter.gif" width="27" height="22" alt="::ltr::" title="epic" hspace="2" vspace="2" /></a>
+							</td>
+		</tr>
+
+					<tr>
+				<td align="center"><a class="nav" href="./posting.php?mode=smilies&amp;f=37" onclick="popup(this.href, 300, 350, '_phpbbsmilies'); return false;">View more smilies</a></td>
+			</tr>
+		
+		</table>
+		</td>
+	<td class="row2" valign="top">
+		<script type="text/javascript">
+		// <![CDATA[
+			var form_name = 'postform';
+			var text_name = 'message';
+		// ]]>
+		</script>
+
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+		
+		<!--danebrood quickreply box -->
+		<tr><td>
+		<script language="JavaScript" type="text/javascript">
+			function insertAtCursor(myField, myValue) {
+				var textareaArr = document.getElementsByName("message");
+				if(textareaArr.length && myValue != 'quickreply') {
+					var myField = textareaArr[0];
+					//IE support
+					if (document.selection) {
+						myField.focus();
+						sel = document.selection.createRange();
+						sel.text = myValue;
+					}
+					//MOZILLA/NETSCAPE support
+					else if (myField.selectionStart || myField.selectionStart == '0') {
+						var startPos = myField.selectionStart;
+						var endPos = myField.selectionEnd;
+						myField.value = myField.value.substring(0, startPos) + myValue + myField.value.substring(endPos, myField.value.length);
+					} else {
+						myField.value += myValue;
+					}
+				} else {
+					return;
+				}
+			}
+		</script>
+		Autorespondorz: 
+		<select name="quickreply" id="quickreply" onchange="insertAtCursor('message', this.value)">
+			<option value="quickreply">SELECT</option>
+			<option value="[x] nice report">[x] nice report</option>
+			<option value="[x] i concurr">[x] i concurr</option>
+			<option value="[x] is it friday yet?">[x] is it friday yet?</option>
+			<option value="[x] king of boomshot">[x] king of boomshot</option>
+			<option value="[x] radicle">[x] radicle</option>
+			<option value="[x] lurk more">[x] lurk more</option>
+			<option value="[x] user error">[x] user error</option>
+			<option value="[x] sorry">[x] sorry</option>
+			<option value="[x] thanks!">[x] thanks!</option>
+			<option value="[x] post of the day">[x] post of the day</option>
+			<option value="[x] pm'd">[x] pm'd</option>
+			<option value="[x] le hugs">[x] le hugs</option>
+			<option value="[x] you walked into my stream">[x] you walked into my stream</option>
+			<option value="[x] manjuice">[x] manjuice</option>
+			<option value="[x] get up and kill somethin'">[x] get up and kill somethin'</option>
+			<option value="[x] i'll inform the media">[x] i'll inform the media</option>
+			<option value="[x] snipe!">[x] snipe!</option>
+			<option value="[x] rather">[x] rather</option>
+			<option value="[x] OMGWTFBBQ">[x] OMGWTFBBQ</option>
+			<option value="[x] Ticketyboo?">[x] Ticketyboo?</option>
+			<option value="[x] who is with me?">[x] who is with me?</option>
+			<option value="[x] the game is flawed">[x] the game is flawed</option>
+			<option value="[x] i can make it!">[x] i can make it!</option>
+			<option value="[x] get away from my gold">[x] get away from my gold</option>
+			<option value="[x] Oh. my gosh.">[x] Oh. my gosh.</option>
+			<option value="[x] BWAHAHAHAHA">[x] BWAHAHAHAHA</option>
+			<option value="[x] MUHAHAHAHA">[x] MUAHAHAHAHA</option>
+			<option value="[x] AAAAHAHAHAHA">[x] AAAAHAHAHAHA</option>
+			<option value="[x] heh">[x] heh</option>
+			<option value="[x] note taken">[x] note taken</option>
+			<option value="[x] ::squeal::">[x] ::squeal::</option>
+			<option value="[x] sweet!">[x] sweet!</option>
+			<option value="[x] that's how i roll">[x] that's how i roll</option>
+			<option value="[x] done">[x] done</option>
+			<option value="[x] the queen has spoken">[x] the queen has spoken</option>
+			<option value="[x] word up">[x] word up</option>
+			<option value="[x] +1">[x] +1</option>
+			<option value="[x] frag out">[x] frag out</option>
+			<option value="[x] FTW">[x] FTW</option>
+			<option value="[x] pwned">[x] pwned</option>
+			<option value="[x] oh snap!">[x] oh snap!</option>
+			<option value="[x] ORLY?">[x] ORLY?</option>
+			<option value="[x] SRSLY?">[x] SRSLY?</option>
+			<option value="[x] j/k">[x] j/k</option>
+			<option value="[x] yer kidding, right?">[x] yer kidding, right?</option>
+			<option value="[x] snarf">[x] snarf</option>
+			<option value="[x] not it">[x] not it</option>
+			<option value="[x] IDK">[x] IDK</option>
+			<option value="[x] pimp down!">[x] pimp down!</option>
+			<option value="[x] have another">[x] have another</option>
+			<option value="[x] np">[x] np</option>
+			<option value="[x] consider it done">[x] consider it done</option>
+			<option value="[x] smoke tagger">[x] smoke tagger</option>
+			<option value="[x] lush">[x] lush</option>
+			<option value="[x] chewy!">[x] chewy!</option>
+			<option value="[x] spam post">[x] spam post</option>
+			<option value="[x] bullshit!">[x] bullshit</option>
+			<option value="[x] once a beustor, always a beustor">[x] once a beustor, always a beustor</option>
+			<option value="[x] starrrrt the gaaaaame">[x] starrrrt the gaaaaame</option>
+			<option value="[x] RARRRRR">[x] RARRRR</option>
+			<option value="[x] Awwww, crap">[x] Awwww, crap</option>
+			<option value="[x]">[x]<option>
+		</select>
+		</td></tr>
+		<!-- end danebrood--><tr valign="middle" align="left">
+	<td colspan="2">
+		<script type="text/javascript">
+		// <![CDATA[
+		
+		// Define the bbCode tags
+		var bbcode = new Array();
+		var bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]','[flash=]', '[/flash]','[size=]','[/size]', '[Gametrailers]', '[/Gametrailers]', '[IGNvideo]', '[/IGNvideo]', '[Spoiler]', '[/Spoiler]', '[YouTube]', '[/YouTube]');
+		var imageTag = false;
+		
+		// Helpline messages
+		var help_line = {
+			b: 'Bold text: [b]text[/b]',
+			i: 'Italic text: [i]text[/i]',
+			u: 'Underline text: [u]text[/u]',
+			q: 'Quote text: [quote]text[/quote]',
+			c: 'Code display: [code]code[/code]',
+			l: 'List: [list]text[/list]',
+			o: 'Ordered list: [list=]text[/list]',
+			p: 'Insert image: [img]http://image_url[/img]',
+			w: 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+			s: 'Font colour: [color=red]text[/color]  Tip: you can also use color=#FF0000',
+			f: 'Font size: [size=85]small text[/size]',
+			e: 'List: Add list element',
+			d: 'Flash: [flash=width,height]http://url[/flash]',
+			t: '{ BBCODE_T_HELP }',
+			tip: 'Tip: Styles can be applied quickly to selected text.'
+							,cb_22: 'Gametrailers: [Gametrailers]Video URL[/Gametrailers]'
+							,cb_24: '[IGNvideo]Video ID[/IGNvideo]'
+							,cb_26: 'Spoiler: [spoiler]Hidden text here[/spoiler]'
+							,cb_28: '[youtube]http://www.youtube.com/video bla bla[/youtube]'
+					}
+
+		// ]]>
+		</script>
+		<script type="text/javascript" src="./styles/GnB/template/editor.js"></script>
+
+		<input type="button" class="btnbbcode" accesskey="b" name="addbbcode0" value=" B " style="font-weight:bold; width: 30px;" onclick="bbstyle(0)" onmouseover="helpline('b')" onmouseout="helpline('tip')" />
+		<input type="button" class="btnbbcode" accesskey="i" name="addbbcode2" value=" i " style="font-style:italic; width: 30px;" onclick="bbstyle(2)" onmouseover="helpline('i')" onmouseout="helpline('tip')" />
+		<input type="button" class="btnbbcode" accesskey="u" name="addbbcode4" value=" u " style="text-decoration: underline; width: 30px;" onclick="bbstyle(4)" onmouseover="helpline('u')" onmouseout="helpline('tip')" />
+					<input type="button" class="btnbbcode" accesskey="q" name="addbbcode6" value="Quote" style="width: 50px" onclick="bbstyle(6)" onmouseover="helpline('q')" onmouseout="helpline('tip')" />
+				<input type="button" class="btnbbcode" accesskey="c" name="addbbcode8" value="Code" style="width: 40px" onclick="bbstyle(8)" onmouseover="helpline('c')" onmouseout="helpline('tip')" />
+		<input type="button" class="btnbbcode" accesskey="l" name="addbbcode10" value="List" style="width: 40px" onclick="bbstyle(10)" onmouseover="helpline('l')" onmouseout="helpline('tip')" />
+		<input type="button" class="btnbbcode" accesskey="o" name="addbbcode12" value="List=" style="width: 40px" onclick="bbstyle(12)" onmouseover="helpline('o')" onmouseout="helpline('tip')" />
+		<input type="button" class="btnbbcode" accesskey="t" name="addlitsitem" value="[*]" style="width: 40px" onclick="bbstyle(-1)" onmouseover="helpline('e')" onmouseout="helpline('tip')" />				
+					<input type="button" class="btnbbcode" accesskey="p" name="addbbcode14" value="Img" style="width: 40px" onclick="bbstyle(14)" onmouseover="helpline('p')" onmouseout="helpline('tip')" />
+					<input type="button" class="btnbbcode" accesskey="w" name="addbbcode16" value="URL" style="text-decoration: underline; width: 40px" onclick="bbstyle(16)" onmouseover="helpline('w')" onmouseout="helpline('tip')" />
+					<input type="button" class="btnbbcode" accesskey="d" name="addbbcode18" value="Flash" onclick="bbstyle(18)" onmouseover="helpline('d')" onmouseout="helpline('tip')" />
+				<span class="genmed nowrap">Font size: <select class="gensmall" name="addbbcode20" onchange="bbfontstyle('[size=' + this.form.addbbcode20.options[this.form.addbbcode20.selectedIndex].value + ']', '[/size]');this.form.addbbcode20.selectedIndex = 2;" onmouseover="helpline('f')" onmouseout="helpline('tip')">
+			<option value="50">Tiny</option>
+			<option value="85">Small</option>
+			<option value="100" selected="selected">Normal</option>
+			<option value="150">Large</option>
+			<option value="200">Huge</option>
+		</select></span>
+	</td>
+</tr>
+	<tr valign="middle" align="left">
+		<td colspan="2">
+					<input type="button" class="btnbbcode" name="addbbcode22" value="Gametrailers" onclick="bbstyle(22)" onmouseover="helpline('cb_22')" onmouseout="helpline('tip')" />
+					<input type="button" class="btnbbcode" name="addbbcode24" value="IGNvideo" onclick="bbstyle(24)" onmouseover="helpline('cb_24')" onmouseout="helpline('tip')" />
+					<input type="button" class="btnbbcode" name="addbbcode26" value="Spoiler" onclick="bbstyle(26)" onmouseover="helpline('cb_26')" onmouseout="helpline('tip')" />
+					<input type="button" class="btnbbcode" name="addbbcode28" value="YouTube" onclick="bbstyle(28)" onmouseover="helpline('cb_28')" onmouseout="helpline('tip')" />
+				</td>
+	</tr>
+<tr>
+	<td><input type="text" readonly="readonly" name="helpbox" style="width:100%" class="helpline" value="Tip: Styles can be applied quickly to selected text." /></td>
+			<td class="genmed" align="center">Font colour</td>
+	</tr>
+		<tr>
+			<td valign="top" style="width: 100%;"><textarea name="message" rows="15" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" style="width: 98%;"></textarea></td>
+						<td width="80" align="center" valign="top">
+				<script type="text/javascript">
+				// <![CDATA[
+					colorPalette('v', 7, 6)
+				// ]]>
+				</script>
+			</td>
+				 	</tr>
+		</table>
+	</td>
+</tr>
+
+
+<tr>
+	<td class="row1" valign="top"><b class="genmed">Options:</b><br />
+		<table cellspacing="2" cellpadding="0" border="0">
+		<tr>
+			<td class="gensmall"><a href="./faq.php?mode=bbcode">BBCode</a> is <em>ON</em></td>
+		</tr>
+				<tr>
+			<td class="gensmall">[img] is <em>ON</em></td>
+		</tr>
+		<tr>
+			<td class="gensmall">[flash] is <em>ON</em></td>
+		</tr>
+		<tr>
+			<td class="gensmall">[url] is <em>ON</em></td>
+		</tr>
+		<tr>
+			<td class="gensmall">Smilies are <em>ON</em></td>
+		</tr>
+				</table>
+	</td>
+	<td class="row2">
+		<table cellpadding="1">
+					<tr>
+				<td><input type="checkbox" class="radio" name="disable_bbcode" /></td>
+				<td class="gen">Disable BBCode</td>
+			</tr>
+					<tr>
+				<td><input type="checkbox" class="radio" name="disable_smilies" /></td>
+				<td class="gen">Disable smilies</td>
+			</tr>
+				<tr>
+			<td><input type="checkbox" class="radio" name="disable_magic_url" /></td>
+			<td class="gen">Do not automatically parse URLs</td>
+		</tr>
+					<tr>
+				<td><input type="checkbox" class="radio" name="attach_sig" checked="checked" /></td>
+				<td class="gen">Attach a signature (signatures can be altered via the UCP)</td>
+			</tr>
+					<tr>
+				<td><input type="checkbox" class="radio" name="notify" /></td>
+				<td class="gen">Notify me when a reply is posted</td>
+			</tr>
+						<tr>
+					<td><input type="checkbox" class="radio" name="lock_topic" /></td>
+					<td class="gen">Lock topic</td>
+				</tr>
+					</table>
+	</td>
+</tr>
+
+	<tr>
+		<td class="cat" colspan="2" align="center">
+			<input class="btnlite" type="submit" tabindex="5" name="preview" value="Preview" />
+			&nbsp; <input class="btnmain" type="submit" accesskey="s" tabindex="6" name="post" value="Submit" />
+			&nbsp; <input class="btnlite" type="submit" accesskey="k" tabindex="7" name="save" value="Save" />			&nbsp; <input class="btnlite" type="submit" accesskey="c" tabindex="9" name="cancel" value="Cancel" />
+		</td>
+	</tr>
+
+	<tr>
+	<th colspan="2">
+		<script type="text/javascript">
+		// <![CDATA[
+			/**
+			* Show upload progress bar
+			*/
+			function popup_progress_bar()
+			{
+				close_waitscreen = 0;
+				// no scrollbars
+				popup('./posting.php?f=37&amp;mode=popup', 400, 200, '_upload');
+			}
+		// ]]>
+		</script>
+
+		
+		Upload attachment	</th>
+</tr>
+<tr>
+	<td class="row3" colspan="2"><span class="gensmall">If you wish to attach one or more files enter the details below.</span></td>
+</tr>
+
+<tr> 
+	<td class="row1"><b class="genmed">Filename</b></td> 
+	<td class="row2"><input type="file" name="fileupload" size="40" maxlength="262144" value="" class="btnfile" /></td> 
+</tr> 
+<tr> 
+	<td class="row1"><b class="genmed">File comment</b></td> 
+	<td class="row2">
+		<table border="0" cellspacing="0" cellpadding="2">
+		<tr>
+			<td><textarea class="post" name="filecomment" rows="3" cols="35"></textarea>&nbsp;</td>
+			<td valign="top">
+				<table border="0" cellspacing="4" cellpadding="0">
+				<tr>
+					<td><input class="btnlite" type="submit" style="width:150px" name="add_file" value="Add the file" onclick="popup_progress_bar();" /></td>
+				</tr>
+				</table>
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr> 
+
+
+<tr>
+	<td class="cat" colspan="2" align="center"><input type="hidden" name="topic_cur_post_id" value="355" /><input type="hidden" name="lastclick" value="1216226353" />		<input class="btnlite" type="submit" tabindex="10" name="preview" value="Preview" />
+		&nbsp; <input class="btnmain" type="submit" accesskey="s" tabindex="11" name="post" value="Submit" />
+				&nbsp; <input class="btnlite" type="submit" accesskey="c" tabindex="14" name="cancel" value="Cancel" />
+	</td>
+</tr>
+</table>
+           <input type="hidden" name="creation_time" value="1216226353" />
+<input type="hidden" name="form_token" value="c218f826277a9b6ea327ebe9b4fba417e783935c" />
+       </form>
+    <br clear="all" />
+
+<table class="tablebg" width="100%" cellspacing="1">
+<tr>
+	<th align="center">Topic review - test</th>
+</tr>
+<tr>
+	<td class="row1"><div style="overflow: auto; width: 100%; height: 300px;">
+
+		<table class="tablebg" width="100%" cellspacing="1">
+		<tr>
+			<th width="22%">Author</th>
+			<th>Message</th>
+		</tr>
+		<tr class="row1">
+				<td rowspan="2" align="left" valign="top"><a id="pr355"></a>
+					<table width="150" cellspacing="0">
+					<tr>
+						<td align="center"><b class="postauthor">tester</b></td>
+					</tr>
+					</table>
+				</td>
+				<td width="100%">
+					<table width="100%" cellspacing="0">
+					<tr>
+						<td>&nbsp;</td>
+						<td class="gensmall" valign="middle" nowrap="nowrap"><b>Post subject:</b>&nbsp;</td>
+						<td class="gensmall" width="100%" valign="middle">test</td>
+						<td valign="top" nowrap="nowrap">&nbsp;<a href="#" onclick="addquote(355,'tester'); return false;"><img src="./styles/GnB/imageset/en/icon_post_quote.png" alt="Reply with quote" title="Reply with quote" /></a></td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr class="row1">
+				<td valign="top">
+					<table width="100%" cellspacing="0">
+					<tr>
+						<td valign="top">
+							<table width="100%" cellspacing="0" cellpadding="2">
+							<tr>
+								<td>
+									<div class="postbody">M0V3 4L0N6, N07H1N6 2 C H3R3</div>
+
+																			<div id="message_355" style="display: none;">M0V3 4L0N6, N07H1N6 2 C H3R3</div>
+																	</td>
+							</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table width="100%" cellspacing="0">
+							<tr valign="middle">
+								<td width="100%" align="left"><span class="gensmall"></span></td>
+								<td width="10" nowrap="nowrap"><a href="./viewtopic.php?p=355#p355"><img src="./styles/GnB/imageset/icon_post_target.png" width="12" height="9" alt="Post" title="Post" /></a></td>
+								<td class="gensmall" nowrap="nowrap"><b>Posted:</b> Fri Jul 04, 2008 9:38 pm</td>
+							</tr>
+							</table>
+						</td>
+					</tr>
+					</table>
+				</td>
+			</tr>
+			<tr>
+				<td class="spacer" colspan="2"><img src="images/spacer.gif" alt="" width="1" height="1" /></td>
+			</tr>
+				</table>
+	</div></td>
+</tr>
+</table>
+
+<br clear="all" /><table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 5px;">
+	<tr>
+            <td><img src="./styles/GnB/theme/images/nav01.png" width="46" height="55" alt=""></td>
+
+		<td width="100%" background="./styles/GnB/theme/images/nav02.png" width="100%" height="55">
+			<p class="breadcrumbs"><a href="./index.php">Board index</a> &#187; <a href="./viewforum.php?f=11">GnB Chat</a> &#187; <a href="./viewforum.php?f=37">tester</a></p>
+			<p class="datetime">All times are UTC - 8 hours [ <abbr title="Daylight Saving Time">DST</abbr> ]</p>
+		</td>
+ <td><img src="./styles/GnB/theme/images/nav03.png" width="46" height="55" alt=""></td>
+
+	</tr>
+	</table>		<br clear="all" />
+
+		<table id="bx" width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+	<tr>
+<table id="bx" width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+
+		<td><img src="./styles/GnB/theme/images/box_01.png" width="41" height="48" alt=""></td>
+		<td background="./styles/GnB/theme/images/box_02.png" width="50%" height="48"></td>
+		<td background="./styles/GnB/theme/images/cu.png" width="350" height="48"><h4 align="center" valign="middle">Who is online</h4></td>
+		<td background="./styles/GnB/theme/images/box_02.png" width="50%" height="48" align="right"></td>
+		<td><img src="./styles/GnB/theme/images/box_04.png" width="41" height="48" alt=""></td>
+</table>
+	</tr>
+	<tr>
+<table id="bx" width="100%" height="100%" border="0" cellpadding="0" cellspacing="0">
+
+		<td background="./styles/GnB/theme/images/box_08.png" width="41" height="100%"></td>
+		<td>  
+  
+	<table class="tablebg" width="100%" cellspacing="1">
+	<tr>
+		<td class="row1"><p class="gensmall">Users browsing this forum: <a href="./memberlist.php?mode=viewprofile&amp;u=57">tester</a> and 0 guests</p></td>
+	</tr>
+	</table>
+  
+     </td>
+		<td background="./styles/GnB/theme/images/box_09.png" width="41" height="100%"></td>
+	</tr>
+	<tr>
+		<td><img src="./styles/GnB/theme/images/box_10.png" width="41" height="46" alt=""></td>
+		<td background="./styles/GnB/theme/images/box_11.png" width="100%" height="46"></td>
+		<td><img src="./styles/GnB/theme/images/box_13.png" width="41" height="46" alt=""></td>
+	</tr>
+</table> 
+
+
+	<br clear="all" />
+
+	<table width="100%" cellspacing="1">
+	<tr>
+		<td align="right">	<form method="post" name="jumpbox" action="./viewforum.php" onsubmit="if(document.jumpbox.f.value == -1){return false;}">
+
+	<table cellspacing="0" cellpadding="0" border="0">
+	<tr>
+		<td nowrap="nowrap"><span class="gensmall">Jump to:</span>&nbsp;<select name="f" onchange="if(this.options[this.selectedIndex].value != -1){ document.forms['jumpbox'].submit() }">
+
+					<option value="-1">Select a forum</option>
+		<option value="-1">------------------</option>			<option value="5">Welcome Center</option>
+					<option value="6">&nbsp; &nbsp;Orientation</option>
+					<option value="7">&nbsp; &nbsp;Help</option>
+					<option value="8">Seriously</option>
+					<option value="9">&nbsp; &nbsp;Game of Fame</option>
+					<option value="10">&nbsp; &nbsp;Club 1000</option>
+					<option value="11">GnB Chat</option>
+					<option value="12">&nbsp; &nbsp;Gears &amp; Beers</option>
+					<option value="13">&nbsp; &nbsp;The Pub</option>
+					<option value="23">&nbsp; &nbsp;Member Blogs</option>
+					<option value="27">&nbsp; &nbsp;&nbsp; &nbsp;BluStorm3D's Realm</option>
+					<option value="25">&nbsp; &nbsp;&nbsp; &nbsp;Cappi's Blabs</option>
+					<option value="40">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;Archive</option>
+					<option value="41">&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;Cappi's Current Chronicles</option>
+					<option value="38">&nbsp; &nbsp;&nbsp; &nbsp;chachi's wax</option>
+					<option value="29">&nbsp; &nbsp;&nbsp; &nbsp;Greeney's Corner</option>
+					<option value="34">&nbsp; &nbsp;&nbsp; &nbsp;Hannie's Hale</option>
+					<option value="36">&nbsp; &nbsp;&nbsp; &nbsp;Jag's Jibba Jabba</option>
+					<option value="35">&nbsp; &nbsp;&nbsp; &nbsp;McSwiggs McBlogosphere</option>
+					<option value="26">&nbsp; &nbsp;&nbsp; &nbsp;Pinky's Closet</option>
+					<option value="32">&nbsp; &nbsp;&nbsp; &nbsp;Straight from Quahog</option>
+					<option value="30">&nbsp; &nbsp;&nbsp; &nbsp;The Smiths Temple</option>
+					<option value="31">&nbsp; &nbsp;&nbsp; &nbsp;The Sith Temple</option>
+					<option value="39">&nbsp; &nbsp;&nbsp; &nbsp;The Dead Room</option>
+					<option value="33">&nbsp; &nbsp;&nbsp; &nbsp;Volkmann's House of Mirrors</option>
+					<option value="42">&nbsp; &nbsp;&nbsp; &nbsp;Welcome to Jamo's</option>
+					<option value="15">&nbsp; &nbsp;Other Games</option>
+					<option value="16">&nbsp; &nbsp;&nbsp; &nbsp;Upcoming Titles of Interest</option>
+					<option value="22">&nbsp; &nbsp;&nbsp; &nbsp;Xbox Live Arcade</option>
+					<option value="17">&nbsp; &nbsp;&nbsp; &nbsp;Call of Duty 4: Modern Warfare</option>
+					<option value="18">&nbsp; &nbsp;&nbsp; &nbsp;Ghost Recon: Advanced Warfighter 2</option>
+					<option value="19">&nbsp; &nbsp;&nbsp; &nbsp;Grand Theft Auto IV</option>
+					<option value="20">&nbsp; &nbsp;&nbsp; &nbsp;Halo 3</option>
+					<option value="21">&nbsp; &nbsp;&nbsp; &nbsp;Rainbow 6: Vegas 1 &amp; 2</option>
+					<option value="43">&nbsp; &nbsp;&nbsp; &nbsp;Unreal Tournament III</option>
+					<option value="37">&nbsp; &nbsp;tester</option>
+					<option value="44">&nbsp; &nbsp;Movie Mania</option>
+		
+		</select>&nbsp;<input class="btnlite" type="submit" value="Go" /></td>
+	</tr>
+	</table>
+
+	</form>
+</td>
+	</tr>
+	</table>
+
+	</div>
+
+<!--
+	We request you retain the full copyright notice below including the link to www.phpbb.com.
+	This not only gives respect to the large amount of time given freely by the developers
+	but also helps build interest, traffic and use of phpBB3. If you (honestly) cannot retain
+	the full copyright we ask you at least leave in place the "Powered by phpBB" line, with
+	"phpBB" linked to www.phpbb.com. If you refuse to include even this then support on our
+	forums may be affected.
+
+	The phpBB Group : 2006
+//-->
+
+<div id="wrapfooter">
+	
+
+	
+</div>
+
+
+
+
+
+
+
+<table id="bx" width="100%" height="99" border="0" cellpadding="0" cellspacing="0">
+                 <td><img src="./styles/GnB/theme/images/footer/f_01.png" width="81" height="99" alt=""></td>
+                 <td background="./styles/GnB/theme/images/footer/f_02.png" width="100%" height="99" alt=""></td>
+                 <td><img src="./styles/GnB/theme/images/footer/f_03.png" width="82" height="99" alt=""></td>
+</table>
+
+
+<table id="bx" width="100%" height="89" border="0" cellpadding="0" cellspacing="0">
+                 <td><img src="./styles/GnB/theme/images/footer/f_10.png" width="81" height="89" alt=""></td>
+                 <td><a href="http://www.phpbb.com"><img src="./styles/GnB/theme/images/footer/f_11.png" width="170" height="89" alt=""></a></td>
+                 <td background="./styles/GnB/theme/images/footer/f_12.png" width="50%" height="89" alt=""></td>
+                 <td><a href="http://www.phpbb-fox.info"><img src="./styles/GnB/theme/images/footer/f_13.png" width="120" height="89" alt=""></a></td>
+                 <td background="./styles/GnB/theme/images/footer/f_12.png" width="50%" height="89" alt=""></td>
+                 <td><a href="http://www.phpbb-fox.info"><img src="./styles/GnB/theme/images/footer/f_14.png" width="170" height="89" alt=""></a></td>
+                 <td><img src="./styles/GnB/theme/images/footer/f_15.png" width="82" height="89" alt=""></td>
+
+</table>
+
+<table id="bx" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+                 
+<tr>
+<td align="center"
+</span>
+</td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

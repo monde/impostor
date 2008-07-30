@@ -87,7 +87,7 @@ class WWW::Impostor
       form['disable_bbcode'] = 'on'
       form['disable_smilies'] = 'on'
       form['disable_magic_url'] = 'on'
-      form['attach_sig'] = 'on'
+      #form['attach_sig'] = 'on'
 
       begin
         page = @agent.submit(form, button)
@@ -116,7 +116,7 @@ class WWW::Impostor
       raise PostError.new("not logged in") unless @loggedin
 
       uri = posting_page
-      uri.query = "mode=reply&t=#{topic}"
+      uri.query = "mode=reply&f=#{forum}&t=#{topic}"
 
       # get the submit form
       begin
@@ -125,35 +125,44 @@ class WWW::Impostor
         raise PostError.new(err)
       end
 
-      form = page.form('post') rescue nil
+      form = page.form('postform') rescue nil
       button = form.buttons.with.name('post').first rescue nil
       raise PostError.new("post form not found") unless button && form
 
+      false
       # set up the form and submit it
       form.message = message
-      form['disable_html'] = nil
       form['disable_bbcode'] = 'on'
       form['disable_smilies'] = 'on'
+      form['disable_magic_url'] = 'on'
+      #form['attach_sig'] = 'on'
+
       begin
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
-      mes = page.search("//span[@class='gen']").last
-      posted = mes.innerText =~ /Your message has been entered successfully./ rescue false
-      if posted
-        @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-        return true
-      end
+      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+      true
 
-      too_many = (mes.innerText =~ 
-        /You cannot make another post so soon after your last; please try again in a short while./ rescue
-        false)
-      raise ThrottledError.new("too many posts in too short amount of time") if too_many
+      # XXX i don't have sufficient data about phpbb3 to determine if a post
+      # rejected for flooding, etc.
+      #
+      #mes = page.search("//span[@class='gen']").last
+      #posted = mes.innerText =~ /Your message has been entered successfully./ rescue false
+      #if posted
+      #  @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+      #  return true
+      #end
 
-      # false otherwise, should we raise an exception instead?
-      false
+      #too_many = (mes.innerText =~ 
+      #  /You cannot make another post so soon after your last; please try again in a short while./ rescue
+      #  false)
+      #raise ThrottledError.new("too many posts in too short amount of time") if too_many
+
+      ## false otherwise, should we raise an exception instead?
+      #false
     end
 
     ##
