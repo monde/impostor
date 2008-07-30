@@ -98,7 +98,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
-=begin
   def test_bad_login_page_should_raise_exception
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
@@ -111,6 +110,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_already_logged_in_should_not_post_login_information_again_instance_varialbe
     @im.instance_variable_set(:@loggedin, true)
     @im.expects(:fetch_login_page).never
