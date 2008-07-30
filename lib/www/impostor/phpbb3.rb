@@ -55,7 +55,6 @@ class WWW::Impostor
       true
     end
 
-=begin
     ##
     # make a new topic
 
@@ -120,6 +119,7 @@ class WWW::Impostor
       true
     end
 
+=begin
     ##
     # Attempt to post to the forum
 
