@@ -71,15 +71,12 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal true, button.is_a?(WWW::Mechanize::Form::Button)
   end
 
-=begin
   def test_login_form_and_button_should_raise_login_error_when_form_is_missing
     err = assert_raise(WWW::Impostor::LoginError) do
       form, button = @im.send(:login_form_and_button, nil)
     end
     assert_equal "unknown login page format", err.original_exception.message
   end
-
-=end
 
 =begin
   def test_should_be_logged_in?
