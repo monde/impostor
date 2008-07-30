@@ -90,6 +90,7 @@ class WWW::Impostor
       #form['attach_sig'] = 'on'
 
       begin
+        sleep(1)
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
@@ -138,11 +139,13 @@ class WWW::Impostor
       #form['attach_sig'] = 'on'
 
       begin
+        sleep(1)
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
+      # XXX post will be tucked away in last <div class="postbody">my post</div>
       @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
       true
 
