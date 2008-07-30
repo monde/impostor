@@ -104,7 +104,6 @@ class WWW::Impostor
       true
     end
 
-=begin
     ##
     # Attempt to post to the forum
 
@@ -156,7 +155,6 @@ class WWW::Impostor
       # false otherwise, should we raise an exception instead?
       false
     end
-=end
 
     ##
     # Get the posting page for the application (specific to phpBB3)
