@@ -241,12 +241,11 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal "not logged in", err.original_exception.message
   end
 
-=begin
   def test_getting_bad_post_page_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
@@ -258,6 +257,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_getting_bad_post_form_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -265,7 +265,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
@@ -280,7 +280,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
@@ -297,7 +297,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
     err = assert_raise(WWW::Impostor::PostError) do
@@ -313,7 +313,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
     body = load_page('phpbb3-post-new_topic-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
@@ -335,7 +335,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
     body = load_page('phpbb3-post-new_topic-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
@@ -359,7 +359,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     subject = "hello world"
     message = "hello ruby"
     posting_page = @im.posting_page
-    posting_page.query = "mode=newtopic&f=#{forum}"
+    posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
     body = load_page('phpbb3-post-new_topic-good-response.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)

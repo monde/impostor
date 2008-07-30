@@ -67,7 +67,7 @@ class WWW::Impostor
       raise PostError.new("not logged in") unless @loggedin
 
       uri = posting_page
-      uri.query = "mode=newtopic&f=#{forum}"
+      uri.query = "mode=post&f=#{forum}"
 
       # get the submit form
       begin
@@ -171,6 +171,7 @@ class WWW::Impostor
       # false otherwise, should we raise an exception instead?
       false
     end
+=end
 
     ##
     # Get the posting page for the application (specific to phpBB3)
@@ -178,7 +179,6 @@ class WWW::Impostor
     def posting_page
       URI.join(app_root, config[:posting_page])
     end
-=end
   
     ##
     # does the work of logging into phpbb
