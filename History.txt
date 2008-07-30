@@ -1,9 +1,10 @@
-== 0.0.1 / 2008-07-20
-
-* 1 major enhancement
-  * Added support for phpBB3
-
-== 0.0.1 / 2008-02-02
+### 0.0.1 / 2008-02-02
 
 * 1 major enhancement
   * Birthday!
+
+### 0.0.2 / 2008-07-30 (don't use this code for spam)
+
+* 1 minor enhancement:
+  * support for phpBB3
+

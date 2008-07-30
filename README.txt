@@ -37,6 +37,11 @@ post.logout
 * mechanize
 * hpricot
 
+== SOURCE
+
+git clone git://github.com/monde/impostor.git
+svn co svn://rubyforge.org/var/svn/impostor/trunk impostor
+
 == INSTALL:
 
 * sudo gem install impostor
