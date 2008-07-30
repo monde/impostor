@@ -208,7 +208,6 @@ class WWW::Impostor
     end
 
     protected
-=begin
     ##
     # does the work of posting the login form
 
@@ -219,7 +218,6 @@ class WWW::Impostor
         raise LoginError.new(err)
       end
     end
-=end
 
     ##
     # returns the login form and its button from the login page
@@ -228,7 +226,7 @@ class WWW::Impostor
       form = page.forms.first rescue nil
       raise LoginError.new("unknown login page format") unless form
       
-      button = page.forms.first.buttons.with.name('login').first
+      button = form.buttons.with.name('login').first
       form['username'] = username
       form['password'] = password
       form['autologin'] = 'on'

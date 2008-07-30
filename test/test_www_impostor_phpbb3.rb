@@ -78,24 +78,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal "unknown login page format", err.original_exception.message
   end
 
-=begin
-  def test_should_be_logged_in?
-    response = {'content-type' => 'text/html'}
-    body = load_page('phpbb3-logged-in.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    assert_equal true, @im.send(:logged_in?, page)
-  end
-
-  def test_should_not_be_logged_in?
-    response = {'content-type' => 'text/html'}
-    body = load_page('phpbb3-not-logged-in.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    assert_equal false, @im.send(:logged_in?, page)
-  end
-
-=end
-
-=begin
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb3-logged-in.html').join
@@ -107,6 +89,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal page, @im.send(:post_login, form, button)
   end
 
+=begin
   def test_post_login_should_raise_login_error
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
@@ -157,6 +140,22 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     @im.expects(:load_topics).once.returns(true)
 
     assert_equal true, @im.login
+  end
+=end
+
+=begin
+  def test_should_be_logged_in?
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb3-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    assert_equal true, @im.send(:logged_in?, page)
+  end
+
+  def test_should_not_be_logged_in?
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb3-not-logged-in.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    assert_equal false, @im.send(:logged_in?, page)
   end
 =end
 
