@@ -430,24 +430,23 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal "post form not found", err.original_exception.message
   end
 
-=begin
   def test_submitting_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb3_good_submit_post_form
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
+    forum = 9
     posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
+    posting_page.query = "mode=reply&f=#{forum}&t=#{topic}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      @im.post(1,topic,'hello')
+      @im.post(forum,topic,'hello')
     end
     assert_equal errmsg, err.original_exception.message
   end
-=end
 
   def test_should_post
     @im.instance_variable_set(:@loggedin, true)
