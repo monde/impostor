@@ -38,7 +38,6 @@ class WWW::Impostor
       @loggedin = false
     end
 
-=begin
     ##
     # clean up the state of the library and log out
 
@@ -56,6 +55,7 @@ class WWW::Impostor
       true
     end
 
+=begin
     ##
     # make a new topic
 
