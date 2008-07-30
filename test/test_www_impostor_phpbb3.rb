@@ -148,14 +148,12 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal true, @im.send(:logged_in?, page)
   end
 
-=begin
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb3-not-logged-in.html').join
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     assert_equal false, @im.send(:logged_in?, page)
   end
-=end
 
 =begin
   def test_logout_does_nothing_if_logged_out

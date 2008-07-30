@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-gb" xml:lang="en-gb">
+<head>
+<link REL="SHORTCUT ICON" HREF="http://example.com/favicon.ico">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="content-language" content="en-gb" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="2000, 2002, 2005, 2007 phpBB Group" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title>EXAMPLE.COM &bull; User Control Panel &bull; Login</title>
+
+<link rel="stylesheet" href="./styles/GnB/theme/stylesheet.css" type="text/css" />
+
+
+
+<script type="text/javascript">
+// <![CDATA[
+
+function popup(url, width, height, name)
+{
+if (!name)
+{
+name = '_popup';
+}
+
+window.open(url.replace(/&amp;/g, '&'), name, 'height=' + height + ',resizable=yes,scrollbars=yes,width=' + width);
+return false;
+}
+
+function jumpto()
+{
+var page = prompt('Enter the page number you wish to go to.:', '');
+var perpage = '';
+var base_url = '';
+
+if (page !== null && !isNaN(page) && page > 0)
+{
+document.location.href = base_url.replace(/&amp;/g, '&') + '&start=' + ((page - 1) * perpage);
+}
+}
+
+/**
+* Find a member
+*/
+function find_username(url)
+{
+popup(url, 760, 570, '_usersearch');
+return false;
+}
+
+/**
+* Mark/unmark checklist
+* id = ID of parent container, name = name prefix, state = state [true/false]
+*/
+function marklist(id, name, state)
+{
+var parent = document.getElementById(id);
+if (!parent)
+{
+eval('parent = document.' + id);
+}
+
+if (!parent)
+{
+return;
+}
+
+var rb = parent.getElementsByTagName('input');
+
+for (var r = 0; r < rb.length; r++)
+{
+if (rb[r].name.substr(0, name.length) == name)
+{
+rb[r].checked = state;
+}
+}
+}
+
+
+// ]]>
+</script>
+<SCRIPT TYPE="text/javascript">
+<!--
+// copyright 1999 Idocs, Inc. http://www.idocs.com/tags/
+// Distribute this script freely, but please keep this
+// notice with the code.
+
+var rollOverArr=new Array();
+function setrollover(OverImgSrc,pageImageName)
+{
+if (! document.images)return;
+if (pageImageName == null)
+pageImageName = document.images[document.images.length-1].name;
+rollOverArr[pageImageName]=new Object;
+rollOverArr[pageImageName].overImg = new Image;
+rollOverArr[pageImageName].overImg.src=OverImgSrc;
+}
+
+function rollover(pageImageName)
+{
+if (! document.images)return;
+if (! rollOverArr[pageImageName])return;
+if (! rollOverArr[pageImageName].outImg)
+{
+rollOverArr[pageImageName].outImg = new Image;
+rollOverArr[pageImageName].outImg.src = document.images[pageImageName].src;
+}
+document.images[pageImageName].src=rollOverArr[pageImageName].overImg.src;
+}
+
+function rollout(pageImageName)
+{
+if (! document.images)return;
+if (! rollOverArr[pageImageName])return;
+document.images[pageImageName].src=rollOverArr[pageImageName].outImg.src;
+}
+//-->
+</SCRIPT>
+
+</head>
+<body class="ltr">
+
+<a name="top"></a>
+
+<div id="wrapheader">
+	<table id="bx" width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<table id="bx" width="100%" height="40" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/header/h11.png" width="40" height="40" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h12.png" width="100" height="40" alt=""></td>
+				<td background="./styles/GnB/theme/images/header/h13.png" width="100%" height="40">
+				<td><img src="./styles/GnB/theme/images/header/h14.png" width="100" height="40" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h15.png" width="40" height="40" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" width="100%" height="140" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/header/h21.png" width="40" height="140" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h22.png" width="100" height="140" alt=""></td>
+				<td background="./styles/GnB/theme/images/header/h23.png" width="100%" height="140">
+					<div id="logodesc">
+						<table width="100%" cellspacing="0">
+							<tr>
+								<td><a href="./index.php"><img src="./styles/GnB/imageset/site_logo.png" width="480" height="80" alt="" title="" /></a></td>
+								<td width="100%" align="center"><h1>EXAMPLE.COM</h1><span class="gen">HOME OF THE MEATSHIELDS</span></td>
+							</tr>
+						</table>
+					</div>
+				</td>
+				<td><img src="./styles/GnB/theme/images/header/h24.png" width="100" height="140" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h25.png" width="40" height="140" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" width="100%" height="66" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/header/h31.png" width="40" height="66" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h32.png" width="100" height="66" alt=""></td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+					<A HREF="./index.php"
+					onMouseOver = "rollover('home')"
+					onMouseOut = "rollout('home')"
+					>
+					<IMG SRC="./styles/GnB/theme/images/buttons/home1.png"
+					NAME="home"
+					ALT="Home Page" BORDER=0
+					HEIGHT=40 WIDTH=101
+					>
+					</A>
+					<SCRIPT TYPE="text/javascript">
+					<!--
+					setrollover("./styles/GnB/theme/images/buttons/home2.png");
+					//-->
+					</SCRIPT>
+				</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+					<A HREF="./faq.php"
+					onMouseOver = "rollover('faq')"
+					onMouseOut = "rollout('faq')"
+					>
+					<IMG SRC="./styles/GnB/theme/images/buttons/faq1.png"
+					NAME="faq"
+					ALT="Home Page" BORDER=0
+					HEIGHT=40 WIDTH=101
+					>
+					</A>
+					<SCRIPT TYPE="text/javascript">
+					<!--
+					setrollover("./styles/GnB/theme/images/buttons/faq2.png");
+					//-->
+					</SCRIPT>
+				</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+											<A HREF="./memberlist.php?mode=leaders"
+						onMouseOver = "rollover('team')"
+						onMouseOut = "rollout('team')"
+						>
+						<IMG SRC="./styles/GnB/theme/images/buttons/team1.png"
+						NAME="team"
+						ALT="Home Page" BORDER=0
+						HEIGHT=40 WIDTH=101
+						>
+						</A>
+						<SCRIPT TYPE="text/javascript">
+						<!--
+						setrollover("./styles/GnB/theme/images/buttons/team2.png");
+						//-->
+						</SCRIPT>
+									</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+									</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="20%" height="66" align="center">
+									</td>
+				<td background="./styles/GnB/theme/images/header/h33.png" width="100%" height="66"></td>
+				<td><img src="./styles/GnB/theme/images/header/h34.png" width="100" height="66" alt=""></td>
+				<td><img src="./styles/GnB/theme/images/header/h35.png" width="40" height="66" alt=""></td>
+			</table>
+		</tr>
+	</table>
+</div>
+
+<div id="wrapcentre">
+	<table id="bx" width="100%" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<table id="bx" height="45" border="0" cellpadding="0" cellspacing="0" align="center">
+				<td><img src="./styles/GnB/theme/images/p_menu/p_01.png" width="61" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_02.png" width="20%" height="45"></td>
+				<td><img src="./styles/GnB/theme/images/p_menu/cu_l.png" width="44" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/cu_m.png" width="20%" height="45" align="center">
+					<h5>
+						 &nbsp;<a href="./ucp.php?mode=register"> Register</a>
+												</h5>
+				</td>
+				<td background="./styles/GnB/theme/images/p_menu/cu_m.png" width="20%" height="45" align="center">
+					<h5>
+													<a href="./ucp.php?mode=login"> Login</a>&nbsp;
+											</h5>
+				</td>
+				<td background="./styles/GnB/theme/images/p_menu/cu_m.png" width="20%" height="45" align="center">
+									</td>
+				<td><img src="./styles/GnB/theme/images/p_menu/cu_r.png" width="45" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_02.png" width="20%" height="45"></td>
+				<td><img src="./styles/GnB/theme/images/p_menu/p_03.png" width="61" height="45" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" height="45" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/p_menu/p_08.png" width="61" height="45" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_85.png" width="100%" height="45">
+					<table width="100%" cellspacing="0">
+						<tr>
+													</tr>
+					</table>
+				</td>
+				<td><img src="./styles/GnB/theme/images/p_menu/p_09.png" width="61" height="45" alt=""></td>
+			</table>
+		</tr>
+		<tr>
+			<table id="bx" height="40" border="0" cellpadding="0" cellspacing="0">
+				<td><img src="./styles/GnB/theme/images/p_menu/p_10.png" width="61" height="40" alt=""></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_11.png" width="50%" height="40"></td>
+				<td background="./styles/GnB/theme/images/p_menu/clock.png" width="350" height="40">
+					<p class="gensmallclock" align="center">
+						<script language="javascript" src="./styles/GnB/template/liveclock.js">
+						</script>
+					</p>
+				</td>
+				<td background="./styles/GnB/theme/images/p_menu/p_11.png" width="20%" height="40"></td>
+				<td background="./styles/GnB/theme/images/p_menu/p_11.png" width="30%" height="40" align="right">
+											<a href="./ucp.php?mode=delete_cookies">Delete all board cookies</a>
+									</td>
+				<td><img src="./styles/GnB/theme/images/p_menu/p_13.png" width="61" height="40" alt=""></td>
+			</table>
+		</tr>
+	</table>
+
+<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 5px;">
+	<tr>
+            <td><img src="./styles/GnB/theme/images/nav01.png" width="46" height="55" alt=""></td>
+
+		<td width="100%" background="./styles/GnB/theme/images/nav02.png" width="100%" height="55">
+			<p class="breadcrumbs"><a href="./index.php">Board index</a></p>
+			<p class="datetime">All times are UTC - 5 hours [ <abbr title="Daylight Saving Time">DST</abbr> ]</p>
+		</td>
+ <td><img src="./styles/GnB/theme/images/nav03.png" width="46" height="55" alt=""></td>
+
+	</tr>
+	</table>
+<br />
+<form action="./ucp.php?mode=login" method="post">
+
+<table class="tablebg" width="100%" cellspacing="1">
+<tr>
+			<th colspan="2">Login</th>
+	</tr>
+   <tr>	<td class="row1" width="50%">
+		<p class="genmed">In order to login you must be registered. Registering takes only a few moments but gives you increased capabilities. The board administrator may also grant additional permissions to registered users. Before you register please ensure you are familiar with our terms of use and related policies. Please ensure you read any forum rules as you navigate around the board.</p>
+
+		<p class="genmed" align="center">
+			<a href="./ucp.php?mode=terms">Terms of use</a> | <a href="./ucp.php?mode=privacy">Privacy policy</a>
+		</p>
+	</td>
+		<td class="row2">
+	
+		<table align="center" cellspacing="1" cellpadding="4" style="width: 100%;">
+					<tr>
+				<td class="gensmall" colspan="2" align="center"><span class="error">You have specified an incorrect username. Please check your username and try again. If you continue to have problems please contact the <a href="mailto:bbadmin@example.com">Board Administrator</a>.</span></td>
+			</tr>
+		
+		<tr>
+			<td valign="top" ><b class="gensmall">Username:</b></td>
+			<td><input class="post" type="text" name="username" size="25" value="" tabindex="1" />
+									<br /><a class="gensmall" href="./ucp.php?mode=register">Register</a>
+							</td>
+		</tr>
+		<tr>
+			<td valign="top" ><b class="gensmall">Password:</b></td>
+			<td>
+				<input class="post" type="password" name="password" size="25" tabindex="2" />
+				<br /><a class="gensmall" href="./ucp.php?mode=sendpassword">I forgot my password</a><br /><a class="gensmall" href="./ucp.php?mode=resend_act">Resend activation e-mail</a>			</td>
+		</tr>
+					<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" class="radio" name="autologin" tabindex="3" /> <span class="gensmall">Log me on automatically each visit</span></td>
+			</tr>
+						<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" class="radio" name="viewonline" tabindex="4" /> <span class="gensmall">Hide my online status this session</span></td>
+			</tr>
+				</table>
+	</td>
+</tr>
+
+<tr>
+	<td class="cat" colspan="2" align="center"><input type="hidden" name="redirect" value="index.php" />
+<input type="hidden" name="sid" value="f98d88e31f8d3556b0b6eac699b2b032" />
+<input type="submit" name="login" class="btnmain" value="Login" tabindex="5" /></td>
+</tr>
+</table>
+
+</form>
+
+<br clear="all" />
+
+<table width="100%" cellspacing="0" cellpadding="0" style="margin-top: 5px;">
+	<tr>
+            <td><img src="./styles/GnB/theme/images/nav01.png" width="46" height="55" alt=""></td>
+
+		<td width="100%" background="./styles/GnB/theme/images/nav02.png" width="100%" height="55">
+			<p class="breadcrumbs"><a href="./index.php">Board index</a></p>
+			<p class="datetime">All times are UTC - 5 hours [ <abbr title="Daylight Saving Time">DST</abbr> ]</p>
+		</td>
+ <td><img src="./styles/GnB/theme/images/nav03.png" width="46" height="55" alt=""></td>
+
+	</tr>
+	</table>
+<br clear="all" />
+
+<div align="right"></div>
+
+<img src="./cron.php?cron_type=tidy_cache" width="1" height="1" alt="cron" /></div>
+
+<!--
+	We request you retain the full copyright notice below including the link to www.phpbb.com.
+	This not only gives respect to the large amount of time given freely by the developers
+	but also helps build interest, traffic and use of phpBB3. If you (honestly) cannot retain
+	the full copyright we ask you at least leave in place the "Powered by phpBB" line, with
+	"phpBB" linked to www.phpbb.com. If you refuse to include even this then support on our
+	forums may be affected.
+
+	The phpBB Group : 2006
+//-->
+
+<div id="wrapfooter">
+	
+
+	
+</div>
+
+
+
+
+
+
+
+<table id="bx" width="100%" height="99" border="0" cellpadding="0" cellspacing="0">
+                 <td><img src="./styles/GnB/theme/images/footer/f_01.png" width="81" height="99" alt=""></td>
+                 <td background="./styles/GnB/theme/images/footer/f_02.png" width="100%" height="99" alt=""></td>
+                 <td><img src="./styles/GnB/theme/images/footer/f_03.png" width="82" height="99" alt=""></td>
+</table>
+
+
+<table id="bx" width="100%" height="89" border="0" cellpadding="0" cellspacing="0">
+                 <td><img src="./styles/GnB/theme/images/footer/f_10.png" width="81" height="89" alt=""></td>
+                 <td><a href="http://www.phpbb.com"><img src="./styles/GnB/theme/images/footer/f_11.png" width="170" height="89" alt=""></a></td>
+                 <td background="./styles/GnB/theme/images/footer/f_12.png" width="50%" height="89" alt=""></td>
+                 <td><a href="http://www.phpbb-fox.info"><img src="./styles/GnB/theme/images/footer/f_13.png" width="120" height="89" alt=""></a></td>
+                 <td background="./styles/GnB/theme/images/footer/f_12.png" width="50%" height="89" alt=""></td>
+                 <td><a href="http://www.phpbb-fox.info"><img src="./styles/GnB/theme/images/footer/f_14.png" width="170" height="89" alt=""></a></td>
+                 <td><img src="./styles/GnB/theme/images/footer/f_15.png" width="82" height="89" alt=""></td>
+
+</table>
+
+<table id="bx" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+                 
+<tr>
+<td align="center"
+</span>
+</td>
+</tr>
+</table>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
