@@ -84,19 +84,18 @@ class WWW::Impostor
       # set up the form and submit it
       form['subject'] = subject
       form['message'] = message
-      form['disable_bbcode'] = 'on'
-      form['disable_smilies'] = 'on'
-      form['disable_magic_url'] = 'on'
-      #form['attach_sig'] = 'on'
+      form['lastclick'] = (form['lastclick'].to_i - 60).to_s
 
       begin
-        sleep(1)
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
-      topic = @agent.current_page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i rescue 0
+      # new topic will be current page uri since phpbb3 will 302 to the new
+      # topic page, e.g.
+      # http://example.com/forum/viewtopic.php?f=37&t=52
+      topic = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i rescue 0
       raise PostError.new('unexpected new topic ID') unless topic > 0
 
       # save new topic id and topic name
@@ -130,42 +129,25 @@ class WWW::Impostor
       button = form.buttons.with.name('post').first rescue nil
       raise PostError.new("post form not found") unless button && form
 
-      false
       # set up the form and submit it
       form.message = message
-      form['disable_bbcode'] = 'on'
-      form['disable_smilies'] = 'on'
-      form['disable_magic_url'] = 'on'
-      #form['attach_sig'] = 'on'
+      form['lastclick'] = (form['lastclick'].to_i - 60).to_s
 
       begin
-        sleep(1)
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
-      # XXX post will be tucked away in last <div class="postbody">my post</div>
+      # new post will be in current page uri since phpbb3 will 302 to the new
+      # post page post anchor, e.g.
+      # http://example.com/forum/viewtopic.php?f=37&t=52&p=3725#p3725
+      postid = page.uri.query.split('&').detect{|a| a =~ /^p=/}.split('=').last.to_i rescue 0
+      raise PostError.new("message did not post") unless postid > 0
+
       @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+
       true
-
-      # XXX i don't have sufficient data about phpbb3 to determine if a post
-      # rejected for flooding, etc.
-      #
-      #mes = page.search("//span[@class='gen']").last
-      #posted = mes.innerText =~ /Your message has been entered successfully./ rescue false
-      #if posted
-      #  @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-      #  return true
-      #end
-
-      #too_many = (mes.innerText =~ 
-      #  /You cannot make another post so soon after your last; please try again in a short while./ rescue
-      #  false)
-      #raise ThrottledError.new("too many posts in too short amount of time") if too_many
-
-      ## false otherwise, should we raise an exception instead?
-      #false
     end
 
     ##

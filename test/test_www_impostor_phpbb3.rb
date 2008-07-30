@@ -311,7 +311,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     #uri = URI.parse("http://localhost/forum/viewtopic.php?f=37&t=205")
     uri = URI.parse("http://localhost/forum/viewtopic.php?f=2")
     page = WWW::Mechanize::Page.new(uri, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:current_page).once.returns(page)
     form = post_page.forms.first
     button = form.buttons.detect{|b| b.name == 'post'}
     WWW::Mechanize.any_instance.expects(:submit).with(form, button).once.returns(page)
@@ -336,7 +335,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     body = load_page('phpbb3-post-new_topic-good-response.html').join
     uri = URI.parse("http://localhost/forum/viewtopic.php?f=2&t=29")
     page = WWW::Mechanize::Page.new(uri, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:current_page).once.returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
 
     @im.expects(:add_subject).once.with(forum,29,subject)
@@ -462,7 +460,12 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     form = form_page.forms.first
     button = form.buttons.detect{|b| b.name == 'post'}
     body = load_page('phpbb3-post-reply-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    posting_page.query = "mode=reply&f=#{forum}&t=#{topic}"
+    page_url = @im.posting_page
+    page_url.path = "/forum/viewtopic.php"
+    page_url.query = "f=#{forum}&t=#{topic}&p=3725"
+    page_url.fragment = "p3725"
+    page = WWW::Mechanize::Page.new(uri=page_url, response, body, code=nil, mech=nil)
     WWW::Mechanize.any_instance.expects(:submit).with(form, button).once.returns(page)
     
     subject = "test #{Time.now.to_s}"
