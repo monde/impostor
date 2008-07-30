@@ -312,34 +312,11 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     body = "JUNK"
     #uri = URI.parse("http://localhost/forum/viewtopic.php?f=37&t=205")
     uri = URI.parse("http://localhost/forum/viewtopic.php?f=2")
-    WWW::Mechanize.any_instance.expects(:current_page).once.returns(uri)
     page = WWW::Mechanize::Page.new(uri, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:current_page).once.returns(page)
     form = post_page.forms.first
     button = form.buttons.detect{|b| b.name == 'post'}
     WWW::Mechanize.any_instance.expects(:submit).with(form, button).once.returns(page)
-    err = assert_raise(WWW::Impostor::PostError) do
-      @im.new_topic(f=forum,s="hello world",m="hello ruby")
-    end
-    assert_equal "unexpected new topic ID", err.original_exception.message
-  end
-
-=begin
-  def test_malformed_viewtopic_response_prev_url_for_new_topic_should_raise_exception
-    @im.instance_variable_set(:@loggedin, true)
-    response = {'content-type' => 'text/html'}
-    body = phpbb3_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    forum = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=post&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
-    body = load_page('phpbb3-post-new_topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
-    body = '<html><head><link rel="prev" href="http://localhost/phpBB3/viewtopic.php?junk" title="View previous topic"></head><body></body></html>'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
@@ -357,13 +334,12 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+
     body = load_page('phpbb3-post-new_topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    uri = URI.parse("http://localhost/forum/viewtopic.php?f=2&t=29")
+    page = WWW::Mechanize::Page.new(uri, response, body, code=nil, mech=nil)
+    WWW::Mechanize.any_instance.expects(:current_page).once.returns(page)
     WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
-    body = load_page('phpbb3-get-viewtopic-for-new-topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
 
     @im.expects(:add_subject).once.with(forum,29,subject)
     assert_equal true, @im.new_topic(f=forum,s=subject,m=message)
@@ -372,7 +348,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal subject, @im.instance_variable_get(:@subject)
     assert_equal message, @im.instance_variable_get(:@message)
   end
-=end
 
 =begin
   def test_posting_page
