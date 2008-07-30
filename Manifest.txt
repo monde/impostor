@@ -5,6 +5,7 @@ Rakefile
 lib/impostor.rb
 lib/www/impostor.rb
 lib/www/impostor/phpbb2.rb
+lib/www/impostor/phpbb3.rb
 lib/www/impostor/wwf79.rb
 lib/www/impostor/wwf80.rb
 test/fixtures/phpbb2-get-new_topic-form-good-response.html
@@ -18,6 +19,13 @@ test/fixtures/phpbb2-post-new_topic-good-response.html
 test/fixtures/phpbb2-post-reply-good-response.html
 test/fixtures/phpbb2-post-reply-throttled-response.html
 test/fixtures/phpbb2-too-many-posts.html
+test/fixtures/phpbb3-get-new-topic-form-good-response.html
+test/fixtures/phpbb3-get-reply-form-good-response.html
+test/fixtures/phpbb3-logged-in.html
+test/fixtures/phpbb3-login.html
+test/fixtures/phpbb3-not-logged-in.html
+test/fixtures/phpbb3-post-new_topic-good-response.html
+test/fixtures/phpbb3-post-reply-good-response.html
 test/fixtures/wwf79-forum_posts.html
 test/fixtures/wwf79-general-new-topic-error.html
 test/fixtures/wwf79-general-posting-error.html
@@ -44,6 +52,7 @@ test/fixtures/wwf80-too-many-posts.html
 test/test_helper.rb
 test/test_www_impostor.rb
 test/test_www_impostor_phpbb2.rb
+test/test_www_impostor_phpbb3.rb
 test/test_www_impostor_wwf79.rb
 test/test_www_impostor_wwf80.rb
 vendor/plugins/impostor/lib/autotest/discover.rb
