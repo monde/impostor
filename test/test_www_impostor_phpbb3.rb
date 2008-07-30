@@ -125,7 +125,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     @im.login
   end
 
-=begin
   def test_login_should_login
     @im.instance_variable_set(:@loggedin, false)
     login_page = mock()
@@ -141,7 +140,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
 
     assert_equal true, @im.login
   end
-=end
 
 =begin
   def test_should_be_logged_in?
