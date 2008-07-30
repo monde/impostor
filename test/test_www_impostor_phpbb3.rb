@@ -34,18 +34,22 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
   end
 
   def phpbb3_good_submit_new_topic_form
-    %q!<form action="posting.php" method="post" name="post">
-    <input name="post" type="submit">
-    <input name="subject" type="text">
-    <input name="message" value="" type="hidden">
+    %q!<form action="./posting.php?mode=post&amp;f=37&amp;sid=a56da5e50e92e3f2d8dc14bb8c4936bf" method="post" name="postform" enctype="multipart/form-data">
+    <input class="post" style="width:450px" type="text" name="subject" size="45" maxlength="60" tabindex="2" value="" />
+    <textarea name="message" rows="15" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" style="width: 98%;"></textarea>
+    <input type="checkbox" class="radio" name="disable_bbcode" />
+	  <input type="checkbox" class="radio" name="disable_smilies" />
+		<input type="checkbox" class="radio" name="disable_magic_url" />
+		<input type="checkbox" class="radio" name="attach_sig" checked="checked" />
+		<input type="checkbox" class="radio" name="notify" />
+    <input class="btnlite" type="submit" value="Go" />
     </form>!
   end
 
   def phpbb3_good_submit_post_form
-    %q!<form action="posting.php" method="post" name="post">
-    <input name="post" type="submit">
-    <input name="message" value="" type="hidden">
-    </form>!
+    #%q!<form action="./posting.php?mode=post&amp;f=37&amp;sid=a56da5e50e92e3f2d8dc14bb8c4936bf" method="post" name="postform" enctype="multipart/form-data">
+    #</form>!
+    ""
   end
 
   def test_initialize_with_cookie_jar
@@ -257,11 +261,10 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
-=begin
   def test_getting_bad_post_form_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = '<form action="posting.php" method="post" name="post"></form>'
+    body = '<form action="./posting.php?mode=post&amp;f=37&amp;sid=a56da5e50e92e3f2d8dc14bb8c4936bf" method="post" name="BADPOSTFORM" enctype="multipart/form-data"></form>'
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
@@ -276,7 +279,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
   def test_submitting_bad_post_for_new_topic_form_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
-    body = phpbb3_good_submit_new_topic_form
+    body = "<html><body>#{phpbb3_good_submit_new_topic_form}</body></html"
     page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
@@ -290,6 +293,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_unexpected_viewtopic_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
