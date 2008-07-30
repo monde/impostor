@@ -78,6 +78,8 @@ class WWW::Impostor
 
       form = page.form('postform') rescue nil
       raise PostError.new("post form not found") unless form
+      button = form.buttons.detect{|b| b.name == 'post'}
+      raise PostError.new("post form button not found") unless button
 
       # set up the form and submit it
       form['subject'] = subject
@@ -86,32 +88,14 @@ class WWW::Impostor
       form['disable_smilies'] = 'on'
       form['disable_magic_url'] = 'on'
       form['attach_sig'] = 'on'
-      form['notify'] = 'nil'
+
       begin
-        page = @agent.submit(form)
+        page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
-      # if the response is correct there will be a meta link that looks something like
-      # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
-      #
-      # this link needs to be followed, the page it leads to will give us
-      # the topic id that was created for the topic name that we created
-      a = (page.search("//meta[@http-equiv='refresh']").attr('content') rescue nil)
-      a = (/url=(.*)/.match(a)[1] rescue nil)
-      raise PostError.new('unexpected new topic response from refresh') unless a
-
-      a = URI.join(app_root, a)
-      page = @agent.get(a)
-      link = (page.search("//link[@rel='prev']").first['href'] rescue nil)
-      raise PostError.new('unexpected new topic response from link prev') unless link
-
-      # t=XXX will be our new topic id, i.e.
-      # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
-      u = (URI.parse(link) rescue nil)
-      topic = (CGI::parse(u.query)['t'][0] rescue nil)
-      topic = topic.to_i
+      topic = @agent.current_page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i rescue 0
       raise PostError.new('unexpected new topic ID') unless topic > 0
 
       # save new topic id and topic name

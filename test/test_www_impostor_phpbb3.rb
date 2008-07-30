@@ -34,16 +34,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
   end
 
   def phpbb3_good_submit_new_topic_form
-    %q!<form action="./posting.php?mode=post&amp;f=37&amp;sid=a56da5e50e92e3f2d8dc14bb8c4936bf" method="post" name="postform" enctype="multipart/form-data">
-    <input class="post" style="width:450px" type="text" name="subject" size="45" maxlength="60" tabindex="2" value="" />
-    <textarea name="message" rows="15" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" style="width: 98%;"></textarea>
-    <input type="checkbox" class="radio" name="disable_bbcode" />
-	  <input type="checkbox" class="radio" name="disable_smilies" />
-		<input type="checkbox" class="radio" name="disable_magic_url" />
-		<input type="checkbox" class="radio" name="attach_sig" checked="checked" />
-		<input type="checkbox" class="radio" name="notify" />
-    <input class="btnlite" type="submit" value="Go" />
-    </form>!
+    load_page('phpbb3-new-topic-form.html').join
   end
 
   def phpbb3_good_submit_post_form
@@ -293,7 +284,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal errmsg, err.original_exception.message
   end
 
-=begin
   def test_unexpected_viewtopic_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
@@ -303,35 +293,37 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=post&f=#{forum}"
     WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
+    WWW::Mechanize.any_instance.expects(:submit).once.returns('JUNK')
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
-    assert_equal "unexpected new topic response from refresh", err.original_exception.message
+    assert_equal "unexpected new topic ID", err.original_exception.message
   end
 
   def test_malformed_viewtopic_response_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb3_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    post_page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=post&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
-    body = load_page('phpbb3-post-new_topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-    follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
-    body = 'junk'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
+    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(post_page)
+    body = "JUNK"
+    #uri = URI.parse("http://localhost/forum/viewtopic.php?f=37&t=205")
+    uri = URI.parse("http://localhost/forum/viewtopic.php?f=2")
+    WWW::Mechanize.any_instance.expects(:current_page).once.returns(uri)
+    page = WWW::Mechanize::Page.new(uri, response, body, code=nil, mech=nil)
+    form = post_page.forms.first
+    button = form.buttons.detect{|b| b.name == 'post'}
+    WWW::Mechanize.any_instance.expects(:submit).with(form, button).once.returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
-    assert_equal "unexpected new topic response from link prev", err.original_exception.message
+    assert_equal "unexpected new topic ID", err.original_exception.message
   end
 
+=begin
   def test_malformed_viewtopic_response_prev_url_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
