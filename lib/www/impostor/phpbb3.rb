@@ -234,6 +234,7 @@ class WWW::Impostor
 
       return form, button
     end
+=end
 
     ##
     # fetches the login page
@@ -246,6 +247,7 @@ class WWW::Impostor
       end
     end
 
+=begin
     ##
     # Checks if the agent is already logged by stored cookie
 

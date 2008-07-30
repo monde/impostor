@@ -51,6 +51,15 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal @im.version, "WWW::Impostor::Phpbb3"
   end
 
+  def test_fetch_login_page
+    page = load_page('phpbb3-login.html').join
+    WWW::Mechanize.any_instance.expects(:get).once.with(
+      URI.join(@app_root, config[:login_page])
+    ).returns(page)
+    
+    assert_equal page, @im.send(:fetch_login_page)
+  end
+
 =begin
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
@@ -66,14 +75,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal false, @im.send(:logged_in?, page)
   end
 
-  def test_fetch_login_page
-    page = load_page('phpbb3-login.html').join
-    WWW::Mechanize.any_instance.expects(:get).once.with(
-      URI.join(@app_root, config[:login_page])
-    ).returns(page)
-    
-    assert_equal page, @im.send(:fetch_login_page)
-  end
 =end
 
 =begin
