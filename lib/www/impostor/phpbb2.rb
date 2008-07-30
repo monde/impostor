@@ -248,12 +248,10 @@ class WWW::Impostor
     # Checks if the agent is already logged by stored cookie
 
     def logged_in?(page)
-      mm = page.search("//a[@class='mainmenu']")
-      return false unless mm
-      mm.each do |m|
-        return true if (m.innerText =~ /Log out \[ #{username} \]/ rescue false)
-      end
-      false
+      mm = page.search( "//a" ).detect{|a| a.inner_html =~ /Log out \[ #{username} \]/i}
+      mm ||= page.search( "//a" ).detect{|a| a['href'] =~ /\/login\.php\?logout=true/}
+
+      mm.nil? ? false : true
     end
 
   end

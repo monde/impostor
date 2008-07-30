@@ -2,14 +2,23 @@
 <html dir="ltr"><head>
 
 
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Content-Style-Type" content="text/css"><title>yourdomain.com :: Index</title><!-- link rel="stylesheet" href="templates/subSilver/subSilver.css" type="text/css" -->
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Style-Type" content="text/css">
 
+<link rel="top" href="http://example.com/forum/index.php" title="EXAMPLE.COM Forum Index">
+<link rel="search" href="http://example.com/forum/search.php" title="Search">
+<link rel="help" href="http://example.com/forum/faq.php" title="FAQ">
+<link rel="author" href="http://example.com/forum/memberlist.php" title="Memberlist">
 
-
-
+<title>EXAMPLE.COM :: Log in</title>
+<!-- link rel="stylesheet" href="templates/subSilver/subsilver.css" type="text/css" -->
 <style type="text/css">
 <!--
+.dom_overview_abshidden {
+	position: absolute;
+	visibility: hidden;
+	width: 300px;
+}
 /*
   The original subSilver Theme for phpBB version 2+
   Created by subBlue design
@@ -22,32 +31,32 @@
 
 /* General page style. The scroll bar colours only visible in IE5.5+ */
 body {
-	background-color: #E5E5E5;
-	scrollbar-face-color: #DEE3E7;
-	scrollbar-highlight-color: #FFFFFF;
-	scrollbar-shadow-color: #DEE3E7;
-	scrollbar-3dlight-color: #D1D7DC;
-	scrollbar-arrow-color:  #006699;
-	scrollbar-track-color: #EFEFEF;
-	scrollbar-darkshadow-color: #98AAB1;
+	background-color: #336633;
+	scrollbar-face-color: #cbe3cb;
+	scrollbar-highlight-color: #ffffff;
+	scrollbar-shadow-color: #cbe3cb;
+	scrollbar-3dlight-color: #009b01;
+	scrollbar-arrow-color:  #264E18;
+	scrollbar-track-color: #ffffff;
+	scrollbar-darkshadow-color: #d4d4d4;
 }
 
 /* General font families for common tags */
-font,th,td,p { font-family: Verdana, Arial, Helvetica, sans-serif }
-a:link,a:active,a:visited { color : #006699; }
+font,th,td,p { font-family: Arial }
+a:link,a:active,a:visited { color : #264E18; }
 a:hover		{ text-decoration: underline; color : #DD6900; }
-hr	{ height: 0px; border: solid #D1D7DC 0px; border-top-width: 1px;}
+hr	{ height: 0px; border: solid #009b01 0px; border-top-width: 1px;}
 
 /* This is the border line & background colour round the entire page */
-.bodyline	{ background-color: #FFFFFF; border: 1px #98AAB1 solid; }
+.bodyline	{ background-color: #ffffff; border: 1px #d4d4d4 solid; }
 
 /* This is the outline round the main forum tables */
-.forumline	{ background-color: #FFFFFF; border: 2px #006699 solid; }
+.forumline	{ background-color: #ffffff; border: 2px #46af47 solid; }
 
 /* Main table cell colours and backgrounds */
-td.row1	{ background-color: #EFEFEF; }
-td.row2	{ background-color: #DEE3E7; }
-td.row3	{ background-color: #D1D7DC; }
+td.row1	{ background-color: #ffffff; }
+td.row2	{ background-color: #cbe3cb; }
+td.row3	{ background-color: #009b01; }
 
 /*
   This is for the table cell above the Topics, Post & Last posts on the index.php page
@@ -55,21 +64,21 @@ td.row3	{ background-color: #D1D7DC; }
   However, you could replace this with a bitmap specific for each forum
 */
 td.rowpic {
-		background-color: #FFFFFF;
-		background-image: url(templates/subSilver/images/cellpic2.jpg);
+		background-color: #ffffff;
+		background-image: url(templates/subSilver/images/);
 		background-repeat: repeat-y;
 }
 
 /* Header cells - the blue and silver gradient backgrounds */
 th	{
-	color: #FFA34F; font-size: 11px; font-weight : bold;
-	background-color: #006699; height: 25px;
-	background-image: url(templates/subSilver/images/cellpic3.gif);
+	color: #8080ff; font-size: 11px; font-weight : bold;
+	background-color: #264E18; height: 25px;
+	background-image: url(templates/subSilver/images/);
 }
 
 td.cat,td.catHead,td.catSides,td.catLeft,td.catRight,td.catBottom {
-			background-image: url(templates/subSilver/images/cellpic1.gif);
-			background-color:#D1D7DC; border: #FFFFFF; border-style: solid; height: 28px;
+			background-image: url(templates/subSilver/images/);
+			background-color:#009b01; border: #ffffff; border-style: solid; height: 28px;
 }
 
 /*
@@ -82,10 +91,10 @@ td.cat,td.catHead,td.catBottom {
 	border-width: 0px 0px 0px 0px;
 }
 th.thHead,th.thSides,th.thTop,th.thLeft,th.thRight,th.thBottom,th.thCornerL,th.thCornerR {
-	font-weight: bold; border: #FFFFFF; border-style: solid; height: 28px;
+	font-weight: bold; border: #ffffff; border-style: solid; height: 28px;
 }
 td.row3Right,td.spaceRow {
-	background-color: #D1D7DC; border: #FFFFFF; border-style: solid;
+	background-color: #009b01; border: #ffffff; border-style: solid;
 }
 
 th.thHead,td.catHead { font-size: 12px; border-width: 1px 1px 0px 1px; }
@@ -99,7 +108,7 @@ th.thCornerR { border-width: 1px 1px 0px 0px; }
 
 /* The largest text used in the index page title and toptic title etc. */
 .maintitle	{
-	font-weight: bold; font-size: 22px; font-family: "Trebuchet MS",Verdana, Arial, Helvetica, sans-serif;
+	font-weight: bold; font-size: 22px; font-family: "Arial",Arial;
 	text-decoration: none; line-height : 120%; color : #000000;
 }
 
@@ -108,32 +117,32 @@ th.thCornerR { border-width: 1px 1px 0px 0px; }
 .genmed { font-size : 11px; }
 .gensmall { font-size : 10px; }
 .gen,.genmed,.gensmall { color : #000000; }
-a.gen,a.genmed,a.gensmall { color: #006699; text-decoration: none; }
+a.gen,a.genmed,a.gensmall { color: #264E18; text-decoration: none; }
 a.gen:hover,a.genmed:hover,a.gensmall:hover	{ color: #DD6900; text-decoration: underline; }
 
 /* The register, login, search etc links at the top of the page */
 .mainmenu		{ font-size : 11px; color : #000000 }
-a.mainmenu		{ text-decoration: none; color : #006699;  }
+a.mainmenu		{ text-decoration: none; color : #264E18;  }
 a.mainmenu:hover{ text-decoration: underline; color : #DD6900; }
 
 /* Forum category titles */
-.cattitle		{ font-weight: bold; font-size: 12px ; letter-spacing: 1px; color : #006699}
-a.cattitle		{ text-decoration: none; color : #006699; }
+.cattitle		{ font-weight: bold; font-size: 12px ; letter-spacing: 1px; color : #264E18}
+a.cattitle		{ text-decoration: none; color : #264E18; }
 a.cattitle:hover{ text-decoration: underline; }
 
 /* Forum title: Text and link to the forums used in: index.php */
-.forumlink		{ font-weight: bold; font-size: 12px; color : #006699; }
-a.forumlink 	{ text-decoration: none; color : #006699; }
+.forumlink		{ font-weight: bold; font-size: 12px; color : #264E18; }
+a.forumlink 	{ text-decoration: none; color : #264E18; }
 a.forumlink:hover{ text-decoration: underline; color : #DD6900; }
 
 /* Used for the navigation text, (Page 1,2,3 etc) and the navigation bar when in a forum */
 .nav			{ font-weight: bold; font-size: 11px; color : #000000;}
-a.nav			{ text-decoration: none; color : #006699; }
+a.nav			{ text-decoration: none; color : #264E18; }
 a.nav:hover		{ text-decoration: underline; }
 
 /* titles for the topics: could specify viewed link colour too */
 .topictitle,h1,h2	{ font-weight: bold; font-size: 11px; color : #000000; }
-a.topictitle:link   { text-decoration: none; color : #006699; }
+a.topictitle:link   { text-decoration: none; color : #264E18; }
 a.topictitle:visited { text-decoration: none; color : #5493B4; }
 a.topictitle:hover	{ text-decoration: underline; color : #DD6900; }
 
@@ -145,58 +154,58 @@ a.topictitle:hover	{ text-decoration: underline; color : #DD6900; }
 
 /* The content of the posts (body of text) */
 .postbody { font-size : 12px; line-height: 18px}
-a.postlink:link	{ text-decoration: none; color : #006699 }
+a.postlink:link	{ text-decoration: none; color : #264E18 }
 a.postlink:visited { text-decoration: none; color : #5493B4; }
 a.postlink:hover { text-decoration: underline; color : #DD6900}
 
 /* Quote & Code blocks */
 .code {
-	font-family: Courier, 'Courier New', sans-serif; font-size: 11px; color: #006600;
-	background-color: #FAFAFA; border: #D1D7DC; border-style: solid;
+	font-family: verdana; font-size: 11px; color: #006600;
+	background-color: #46af47; border: #009b01; border-style: solid;
 	border-left-width: 1px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px
 }
 
 .quote {
-	font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 11px; color: #444444; line-height: 125%;
-	background-color: #FAFAFA; border: #D1D7DC; border-style: solid;
+	font-family: Arial; font-size: 11px; color: #444444; line-height: 125%;
+	background-color: #46af47; border: #009b01; border-style: solid;
 	border-left-width: 1px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px
 }
 
 /* Copyright and bottom info */
-.copyright		{ font-size: 10px; font-family: Verdana, Arial, Helvetica, sans-serif; color: #444444; letter-spacing: -1px;}
+.copyright		{ font-size: 10px; font-family: Arial; color: #444444; letter-spacing: -1px;}
 a.copyright		{ color: #444444; text-decoration: none;}
 a.copyright:hover { color: #000000; text-decoration: underline;}
 
 /* Form elements */
 input,textarea, select {
 	color : #000000;
-	font: normal 11px Verdana, Arial, Helvetica, sans-serif;
+	font: normal 11px Arial;
 	border-color : #000000;
 }
 
 /* The text input fields background colour */
 input.post, textarea.post, select {
-	background-color : #FFFFFF;
+	background-color : #ffffff;
 }
 
 input { text-indent : 2px; }
 
 /* The buttons used for bbCode styling in message post */
 input.button {
-	background-color : #EFEFEF;
+	background-color : #ffffff;
 	color : #000000;
-	font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px; font-family: Arial;
 }
 
 /* The main submit button option */
 input.mainoption {
-	background-color : #FAFAFA;
+	background-color : #46af47;
 	font-weight : bold;
 }
 
 /* None-bold submit button */
 input.liteoption {
-	background-color : #FAFAFA;
+	background-color : #46af47;
 	font-weight : normal;
 }
 
@@ -204,129 +213,506 @@ input.liteoption {
   help line. This is actually a text box, but if set to be the same
   colour as the background no one will know ;)
 */
-.helpline { background-color: #DEE3E7; border-style: none; }
+.helpline { background-color: #cbe3cb; border-style: none; }
 
 /* Import the fancy styles for IE only (NS4.x doesn't use the @import function) */
 @import url("templates/subSilver/formIE.css");
 -->
 </style>
-<script language="Javascript" type="text/javascript">
-<!--
-	if ( 0 )
-	{
-		window.open('privmsg.php?mode=newpm', '_phpbbprivmsg', 'HEIGHT=225,resizable=yes,WIDTH=400');;
-	}
-//-->
-</script></head><body bgcolor="#e5e5e5" link="#006699" text="#000000" vlink="#5493b4">
+<script language="Javascript">
+var win = null;
+function Gk_PopTart(mypage,myname,w,h,scroll)
+{
+  LeftPosition = (screen.width) ? (screen.width-w)/2 : 0;
+  TopPosition = (screen.height) ? (screen.height-h)/2 : 0;
+  settings = 'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable=yes';
+  win = window.open(mypage,myname,settings);
+}
+</script>
+</head><body link="#264e18" text="#000000" vlink="#5493b4" bgcolor="#336633">
 
 <a name="top"></a>
 
-<table align="center" border="0" cellpadding="10" cellspacing="0" width="100%">
+<table width="100%" align="center" border="0" cellpadding="10" cellspacing="0">
 	<tbody><tr>
-		<td class="bodyline"><table border="0" cellpadding="0" cellspacing="0" width="100%">
+		<td class="bodyline"><div align="center"><a href="http://example.com/forum/index.php"><img src="not_files/greenforumheader.gif" alt="EXAMPLE.COM Forum Index" vspace="1" border="0"></a>
+			  </div>
+				<table width="100%" border="0" cellpadding="0" cellspacing="0">
 			<tbody><tr>
-				<td><a href="http://localhost/phpBB2/index.php"><img src="logged-in_files/logo_phpBB.gif" alt="yourdomain.com Forum Index" border="0" vspace="1"></a></td>
-				<td align="center" valign="middle" width="100%"><span class="maintitle">yourdomain.com</span><br><span class="gen">A _little_ text to describe your forum<br>&nbsp; </span>
+				<td valign="middle" width="100%" align="center"><span class="maintitle"><br>
+			    EXAMPLE.COM</span><br>
+				  <span class="gen">Skateboarding, music, nightlife and other shenanigans<br>Remember - registered users can see all forums so sign up <link rel="search" type="application/opensearchdescription+xml" title="EXAMPLE" href="http://example.com/forum/search.xml"><br>&nbsp; </span>
+				<center><span class="mainmenu"><a href="http://example.com/forum/calendar.php" class="mainmenu"><img src="not_files/icon_mini_calendar.gif" alt="Calendar" height="13" hspace="3" width="12" border="0">Calendar</a>&nbsp;&nbsp;<a href="http://example.com/forum/gp.php" class="mainmenu"><img src="not_files/gp.gif" alt="GP GeoForum" height="18" hspace="3" width="19" border="0">GoogleMAP</a>&nbsp;&nbsp;<a href="http://example.com/forum/faq.php" class="mainmenu"><img src="not_files/icon_mini_faq.gif" alt="FAQ" height="13" hspace="3" width="12" border="0">FAQ</a>&nbsp; &nbsp;<a href="http://example.com/forum/shop.php" class="mainmenu"><img src="not_files/icon_shop.gif" alt="Shops" height="13" hspace="3" width="12" border="0">Shops</a>&nbsp; &nbsp;<a href="http://example.com/forum/search.php" class="mainmenu"><img src="not_files/icon_mini_search.gif" alt="Search" height="13" hspace="3" width="12" border="0">Search</a>&nbsp; &nbsp;<a href="http://example.com/forum/memberlist.php" class="mainmenu"><img src="not_files/icon_mini_members.gif" alt="Memberlist" height="13" hspace="3" width="12" border="0">Memberlist</a>&nbsp; &nbsp;<a href="http://example.com/forum/groupcp.php" class="mainmenu"><img src="not_files/icon_mini_groups.gif" alt="Usergroups" height="13" hspace="3" width="12" border="0">Usergroups</a>&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+						&nbsp;<a href="http://example.com/forum/profile.php?mode=register" class="mainmenu"><img src="not_files/icon_mini_register.gif" alt="Register" height="13" hspace="3" width="12" border="0">Register</a>&nbsp;
+						<span class="mainmenu">&nbsp;<a href="http://example.com/forum/profile.php?mode=editprofile" class="mainmenu"><img src="not_files/icon_mini_profile.gif" alt="Profile" height="13" hspace="3" width="12" border="0">Profile</a>&nbsp; &nbsp;<a href="http://example.com/forum/privmsg.php?folder=inbox" class="mainmenu"><img src="not_files/icon_mini_message.gif" alt="Log in to check your private messages" height="13" hspace="3" width="12" border="0">Log in to check your private messages</a>&nbsp; &nbsp;<a href="http://example.com/forum/login.php" class="mainmenu"><img src="not_files/icon_mini_login.gif" alt="Log in" height="13" hspace="3" width="12" border="0">Log in</a>&nbsp;&nbsp;
+                         <a href="http://example.com/forum/activity.php" class="mainmenu"><img src="not_files/icon_mini_activity.gif" alt="Games" height="13" hspace="3" width="12" border="0">Games</a>&nbsp; &nbsp;
+						</span></span></center>
+
+
 				<table border="0" cellpadding="2" cellspacing="0">
-					<tbody><tr>
-						<td align="center" nowrap="nowrap" valign="top"><span class="mainmenu">&nbsp;<a href="http://localhost/phpBB2/faq.php" class="mainmenu"><img src="logged-in_files/icon_mini_faq.gif" alt="FAQ" border="0" height="13" hspace="3" width="12">FAQ</a>&nbsp; &nbsp;<a href="http://localhost/phpBB2/search.php" class="mainmenu"><img src="logged-in_files/icon_mini_search.gif" alt="Search" border="0" height="13" hspace="3" width="12">Search</a>&nbsp; &nbsp;<a href="http://localhost/phpBB2/memberlist.php" class="mainmenu"><img src="logged-in_files/icon_mini_members.gif" alt="Memberlist" border="0" height="13" hspace="3" width="12">Memberlist</a>&nbsp; &nbsp;<a href="http://localhost/phpBB2/groupcp.php" class="mainmenu"><img src="logged-in_files/icon_mini_groups.gif" alt="Usergroups" border="0" height="13" hspace="3" width="12">Usergroups</a>&nbsp;
-						</span></td>
-					</tr>
-					<tr>
-						<td align="center" height="25" nowrap="nowrap" valign="top"><span class="mainmenu">&nbsp;<a href="http://localhost/phpBB2/profile.php?mode=editprofile" class="mainmenu"><img src="logged-in_files/icon_mini_profile.gif" alt="Profile" border="0" height="13" hspace="3" width="12">Profile</a>&nbsp; &nbsp;<a href="http://localhost/phpBB2/privmsg.php?folder=inbox" class="mainmenu"><img src="logged-in_files/icon_mini_message.gif" alt="You have no new messages" border="0" height="13" hspace="3" width="12">You have no new messages</a>&nbsp; &nbsp;<a href="http://localhost/phpBB2/login.php?logout=true&amp;sid=c52fdbbee4eb77304055585f38d955b5" class="mainmenu"><img src="logged-in_files/icon_mini_login.gif" alt="Log out [ somedude ]" border="0" height="13" hspace="3" width="12">Log out [ somedude ]</a>&nbsp;</span></td>
-					</tr>
-				</tbody></table></td>
+
+						</table></td>
 			</tr>
 		</tbody></table>
 
 		<br>
 
-<table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
-  <tbody><tr>
-	<td align="left" valign="bottom"><span class="gensmall">
-	You last visited on Sat Aug 04, 2007 12:43 am<br>
-	The time now is Sat Aug 04, 2007 12:43 am<br></span><span class="nav"><a href="http://localhost/phpBB2/index.php" class="nav">yourdomain.com Forum Index</a></span></td>
-	<td class="gensmall" align="right" valign="bottom">
-		<a href="http://localhost/phpBB2/search.php?search_id=newposts" class="gensmall">View posts since last visit</a><br><a href="http://localhost/phpBB2/search.php?search_id=egosearch" class="gensmall">View your posts</a><br>
-		<a href="http://localhost/phpBB2/search.php?search_id=unanswered" class="gensmall">View unanswered posts</a></td>
-  </tr>
-</tbody></table>
-
-<table class="forumline" border="0" cellpadding="2" cellspacing="1" width="100%">
-  <tbody><tr>
-	<th colspan="2" class="thCornerL" height="25" nowrap="nowrap">&nbsp;Forum&nbsp;</th>
-	<th class="thTop" nowrap="nowrap" width="50">&nbsp;Topics&nbsp;</th>
-	<th class="thTop" nowrap="nowrap" width="50">&nbsp;Posts&nbsp;</th>
-	<th class="thCornerR" nowrap="nowrap">&nbsp;Last Post&nbsp;</th>
-  </tr>
-  <tr>
-	<td class="catLeft" colspan="2" height="28"><span class="cattitle"><a href="http://localhost/phpBB2/index.php?c=1" class="cattitle">Test category 1</a></span></td>
-	<td class="rowpic" colspan="3" align="right">&nbsp;</td>
-  </tr>
-  <tr>
-	<td class="row1" align="center" height="50" valign="middle"><img src="logged-in_files/folder_big.gif" alt="No new posts" title="No new posts" height="25" width="46"></td>
-	<td class="row1" height="50" width="100%"><span class="forumlink"> <a href="http://localhost/phpBB2/viewforum.php?f=1" class="forumlink">Test Forum 1</a><br>
-	  </span> <span class="genmed">This is just a test forum.<br>
-	  </span><span class="gensmall">&nbsp; &nbsp;</span></td>
-	<td class="row2" align="center" height="50" valign="middle"><span class="gensmall">1</span></td>
-	<td class="row2" align="center" height="50" valign="middle"><span class="gensmall">1</span></td>
-	<td class="row2" align="center" height="50" nowrap="nowrap" valign="middle"> <span class="gensmall">Sat Oct 21, 2000 12:01 am<br><a href="http://localhost/phpBB2/profile.php?mode=viewprofile&amp;u=2">admin</a> <a href="http://localhost/phpBB2/viewtopic.php?p=1#1"><img src="logged-in_files/icon_latest_reply.gif" alt="View latest post" title="View latest post" border="0"></a></span></td>
-  </tr>
-  <tr>
-	<td class="row1" align="center" height="50" valign="middle"><img src="logged-in_files/folder_big.gif" alt="No new posts" title="No new posts" height="25" width="46"></td>
-	<td class="row1" height="50" width="100%"><span class="forumlink"> <a href="http://localhost/phpBB2/viewforum.php?f=2" class="forumlink">Cell Photo Bot</a><br>
-	  </span> <span class="genmed"><br>
-	  </span><span class="gensmall">&nbsp; &nbsp;</span></td>
-	<td class="row2" align="center" height="50" valign="middle"><span class="gensmall">1</span></td>
-	<td class="row2" align="center" height="50" valign="middle"><span class="gensmall">1</span></td>
-	<td class="row2" align="center" height="50" nowrap="nowrap" valign="middle"> <span class="gensmall">Thu Aug 02, 2007 4:43 pm<br><a href="http://localhost/phpBB2/profile.php?mode=viewprofile&amp;u=2">admin</a> <a href="http://localhost/phpBB2/viewtopic.php?p=2#2"><img src="logged-in_files/icon_latest_reply.gif" alt="View latest post" title="View latest post" border="0"></a></span></td>
-  </tr>
-</tbody></table>
-
-<table align="center" border="0" cellpadding="2" cellspacing="0" width="100%">
-  <tbody><tr>
- 	<td align="left">
- 		<span class="gensmall"><a href="http://localhost/phpBB2/index.php?mark=forums" class="gensmall">Mark all forums read</a></span>
- 	</td>
-	<td align="right"><span class="gensmall">All times are GMT</span></td>
-  </tr>
-</tbody></table>
-
-<table class="forumline" border="0" cellpadding="3" cellspacing="1" width="100%">
-  <tbody><tr>
-	<td class="catHead" colspan="2" height="28"><span class="cattitle"><a href="http://localhost/phpBB2/viewonline.php" class="cattitle">Who is Online</a></span></td>
-  </tr>
-  <tr>
-	<td class="row1" rowspan="2" align="center" valign="middle"><img src="logged-in_files/whosonline.gif" alt="Who is Online"></td>
-	<td class="row1" align="left" width="100%"><span class="gensmall">Our users have posted a total of <b>2</b> articles<br>We have <b>2</b> registered users<br>The newest registered user is <b><a href="http://localhost/phpBB2/profile.php?mode=viewprofile&amp;u=3">somedude</a></b></span>
-	</td>
-  </tr>
-  <tr>
-	<td class="row1" align="left"><span class="gensmall">In total there is <b>1</b> user online :: 1 Registered, 0 Hidden and 0 Guests &nbsp; [ <span style="color: rgb(255, 163, 79);">Administrator</span> ] &nbsp; [ <span style="color: rgb(0, 102, 0);">Moderator</span> ]<br>Most users ever online was <b>1</b> on Thu Aug 02, 2007 4:41 pm<br>Registered Users: <a href="http://localhost/phpBB2/profile.php?mode=viewprofile&amp;u=3">somedude</a></span></td>
-  </tr>
-</tbody></table>
-
-<table border="0" cellpadding="1" cellspacing="1" width="100%">
+		
+<div id="item_0_83" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tbody><tr>
-	<td align="left" valign="top"><span class="gensmall">This data is based on users active over the past five minutes</span></td>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=83" class="topictitle">bollox</a>
+	</span><hr><span class="genmed">July 06 1964
+	(44 year old)
+	</span><br><span class="gensmall">(adjusted to match your timezone difference, which is 12.00 hours)
+	</span></td>
+</tr>
+<tr>
+	<td class="row1" align="center"><span class="gensmall">
+		<img src="not_files/1.html" alt="" border="0">
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_0_201" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=201" class="topictitle">buckSHOT</a>
+	</span><hr><span class="genmed">July 06 1985
+	(23 year old)
+	</span><br><span class="gensmall">(adjusted to match your timezone difference, which is 1.00 hours)
+	</span></td>
+</tr>
+<tr>
+	<td class="row1" align="center"><span class="gensmall">
+		<img src="not_files/238744651209207d09.jpg" alt="" border="0">
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_0_378" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=378" class="topictitle">dober</a>
+	</span><hr><span class="genmed">July 07 1974
+	(34 year old)
+	</span></td>
+</tr>
+<tr>
+	<td class="row1" align="center"><span class="gensmall">
+		<img src="not_files/grosso.gif" alt="" border="0">
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_0_333" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=333" class="topictitle">MissJacki</a>
+	</span><hr><span class="genmed">July 07 1981
+	(27 year old)
+	</span></td>
+</tr>
+<tr>
+	<td class="row1" align="center"><span class="gensmall">
+		<img src="not_files/318546ca28ac66500.jpg" alt="" border="0">
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_0_533" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=533" class="topictitle">sjdagger</a>
+	</span><hr><span class="genmed">July 06 1983
+	(25 year old)
+	</span></td>
+</tr>
+<tr>
+	<td class="row1" align="center"><span class="gensmall">
+		<img src="not_files/15446483b8138df798.jpg" alt="" border="0">
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+
+<div id="item_1_2607" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/viewtopic.php?t=2607" class="topictitle">Magic Music Festival - 7/9/2008 Germany</a><br>
+	</span><span class="postdetails">
+		Event: 09 Jul 2008<br>
+		<b>Forum:</b>&nbsp;
+		<a href="http://example.com/forum/index.php?c=1" class="gensmall">General Debris</a>
+		»
+		<a href="http://example.com/forum/viewforum.php?f=8" class="gensmall">Music / Concerts</a>
+		<br>
+	</span><hr><span class="postdetails">
+		<b>Author:</b>&nbsp;bobcat<br>
+		<b>Posted:</b>&nbsp;Fri Nov 02, 2007 7:54 am<br>
+		<b>Replies:</b>&nbsp;0<br>
+		<b>Views:</b>&nbsp;13<br>
+	</span></td>
+</tr>
+<tr>
+	<td class="row1"><span class="postbody">
+		Sleestock 2008?
+<br>
+
+<br>
+these guys know how to party!
+<br>
+
+<br>
+[quote]Magic Circle Music
+<br>
+Proudly Presents
+<br>
+The Magic Circle Festival 2008
+<br>
+&#8220;The Kings Of Metal 20th Anniversary Event&#8221;
+<br>
+(Bad Arolsen, Germany)
+<br>
+
+<br>
+...
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_1_4778" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/viewtopic.php?t=4778" class="topictitle">Pablito in Sleeattle July 2-6</a><br>
+	</span><span class="postdetails">
+		Event starting 02 Jul 2008 for 4 days<br>
+		<b>Forum:</b>&nbsp;
+		<a href="http://example.com/forum/index.php?c=1" class="gensmall">General Debris</a>
+		»
+		<a href="http://example.com/forum/viewforum.php?f=2" class="gensmall">Operation: Skooterboard!</a>
+		<br>
+	</span><hr><span class="postdetails">
+		<b>Author:</b>&nbsp;pablitolaak<br>
+		<b>Posted:</b>&nbsp;Tue Jul 01, 2008 3:09 pm<br>
+		<b>Replies:</b>&nbsp;17<br>
+		<b>Views:</b>&nbsp;165<br>
+	</span></td>
+</tr>
+<tr>
+	<td class="row1"><span class="postbody">
+		Yo duders!!!
+<br>
+
+<br>
+Pablito will be in Seattle (actually staying with friends in Renton,
+not far from that park with lights on it now!) from July 2-6th. I would
+love to get some skating in with some local... </span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_1_4785" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/viewtopic.php?t=4785" class="topictitle">Murdock, Neon Nights, Valkyries, and Emeralds @ King Cobra</a><br>
+	</span><span class="postdetails">
+		Event from Fri Jul 11, 2008 8:00 pm to Fri Jul 11, 2008 10:54 pm<br>
+		<b>Forum:</b>&nbsp;
+		<a href="http://example.com/forum/index.php?c=1" class="gensmall">General Debris</a>
+		»
+		<a href="http://example.com/forum/viewforum.php?f=8" class="gensmall">Music / Concerts</a>
+		<br>
+	</span><hr><span class="postdetails">
+		<b>Author:</b>&nbsp;gr8noise<br>
+		<b>Posted:</b>&nbsp;Wed Jul 02, 2008 9:55 am<br>
+		<b>Replies:</b>&nbsp;0<br>
+		<b>Views:</b>&nbsp;9<br>
+	</span></td>
+</tr>
+<tr>
+	<td class="row1"><span class="postbody">
+		<a href="http://a633.ac-images.myspacecdn.com/images01/66/l_a5d30f72ac0e356d788e8a1953a2d770.jpg" target="_blank" class="postlink">http://a633.ac-images.myspacecdn.com/images01/66/l_a5d30f72ac0e356d788e8a1953a2d770.jpg</a>
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_1_4786" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/viewtopic.php?t=4786" class="topictitle">Rat City Ruckus @ Fun House</a><br>
+	</span><span class="postdetails">
+		Event from Sat Jul 05, 2008 8:00 pm to Sat Jul 05, 2008 10:58 pm<br>
+		<b>Forum:</b>&nbsp;
+		<a href="http://example.com/forum/index.php?c=1" class="gensmall">General Debris</a>
+		»
+		<a href="http://example.com/forum/viewforum.php?f=8" class="gensmall">Music / Concerts</a>
+		<br>
+	</span><hr><span class="postdetails">
+		<b>Author:</b>&nbsp;gr8noise<br>
+		<b>Posted:</b>&nbsp;Wed Jul 02, 2008 9:58 am<br>
+		<b>Replies:</b>&nbsp;0<br>
+		<b>Views:</b>&nbsp;10<br>
+	</span></td>
+</tr>
+<tr>
+	<td class="row1"><span class="postbody">
+		Round out your holiday weekend at the Fun House with Rat City Ruckus...
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+<div id="item_1_4796" class="dom_overview_abshidden"><table class="bodyline" width="100%" border="0" cellpadding="2" cellspacing="1"><tbody><tr><td><table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<td class="row1"><span class="topictitle">
+		<a href="http://example.com/forum/viewtopic.php?t=4796" class="topictitle">6/6 - Dragonforce - FREE SHOW - El Corizon</a><br>
+	</span><span class="postdetails">
+		Event: 06 Jul 2008<br>
+		<b>Forum:</b>&nbsp;
+		<a href="http://example.com/forum/index.php?c=1" class="gensmall">General Debris</a>
+		»
+		<a href="http://example.com/forum/viewforum.php?f=8" class="gensmall">Music / Concerts</a>
+		<br>
+	</span><hr><span class="postdetails">
+		<b>Author:</b>&nbsp;bobcat<br>
+		<b>Posted:</b>&nbsp;Thu Jul 03, 2008 12:27 pm<br>
+		<b>Replies:</b>&nbsp;1<br>
+		<b>Views:</b>&nbsp;15<br>
+	</span></td>
+</tr>
+<tr>
+	<td class="row1"><span class="postbody">
+		<a href="http://a359.ac-images.myspacecdn.com/images01/43/l_d89f5aacd9ac817d238349907e7a6556.png" target="_blank" class="postlink">http://a359.ac-images.myspacecdn.com/images01/43/l_d89f5aacd9ac817d238349907e7a6556.png</a>
+<br>
+
+<br>
+THIS SUNDAY!
+<br>
+July 6, 2008
+<br>
+
+<br>
+FREE! ALL AGES!
+<br>
+Doors @ 7:00 PM
+<br>
+
+<br>
+@ El Corazon
+<br>
+109 Eastlake Avenu...
+	</span></td>
+</tr>
+</tbody></table></td></tr></tbody></table></div>
+
+
+<script language="JavaScript" type="text/javascript" src="not_files/js_dom_toggle.js"></script>
+<script language="Javascript" type="text/javascript" src="not_files/js_dom_overview.js"></script>
+
+<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<tbody><tr>
+	<td align="right"><span class="mainmenu">
+		<a href="#" onclick="dom_toggle.toggle('calrow','calrow_pic', './templates/greenSilver/images/icon_down_arrow.gif', './templates/greenSilver/images/icon_up_arrow.gif'); return false;" class="gensmall"><img src="not_files/icon_up_arrow.gif" id="calrow_pic" alt="" hspace="2" border="0">Calendar</a>
+	</span></td>
+	<td width="2"></td>
+</tr>
+</tbody></table>
+<table id="calrow" style="" width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>
+
+<table class="forumline" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tbody><tr>
+	<th class="thHead" colspan="7" height="25">
+		<a href="http://example.com/forum/calendar.php" title="Calendar"><img src="not_files/icon_calendar.gif" alt="Calendar" align="top" border="0"></a>&nbsp;Calendar
+	</th>
+</tr>
+<tr>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=5" class="genmed">Sat 05 Jul 2008</a>
+	</span></td>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<b>
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=6" class="genmed">Sun 06 Jul 2008</a>
+		</b>
+	</span></td>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=7" class="genmed">Mon 07 Jul 2008</a>
+	</span></td>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=8" class="genmed">Tue 08 Jul 2008</a>
+	</span></td>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=9" class="genmed">Wed 09 Jul 2008</a>
+	</span></td>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=10" class="genmed">Thu 10 Jul 2008</a>
+	</span></td>
+	<td class="row2" width="14%" align="center"><span class="genmed">
+		<a href="http://example.com/forum/calendar.php?y=2008&amp;m=7&amp;d=11" class="genmed">Fri 11 Jul 2008</a>
+	</span></td>
+</tr>
+<tr>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	<tbody><tr>
+		<td><img src="not_files/icon_tiny_topic.gif" alt="Topic" title="Topic" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/viewtopic.php?t=4778" class="gensmall" onmouseover="dom_overview.show('item_1_4778');">Pablito in Sleeattle July 2-6</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_topic.gif" alt="Topic" title="Topic" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/viewtopic.php?t=4786" class="gensmall" onmouseover="dom_overview.show('item_1_4786');">Rat City Ruckus @ Fun House</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	</tbody></table></td>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	<tbody><tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=83" class="gensmall" onmouseover="dom_overview.show('item_0_83');">bollox</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=201" class="gensmall" onmouseover="dom_overview.show('item_0_201');">buckSHOT</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=533" class="gensmall" onmouseover="dom_overview.show('item_0_533');">sjdagger</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_topic.gif" alt="Topic" title="Topic" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/viewtopic.php?t=4796" class="gensmall" onmouseover="dom_overview.show('item_1_4796');">6/6 - Dragonforce - FREE SH...</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	</tbody></table></td>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	<tbody><tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=83" class="gensmall" onmouseover="dom_overview.show('item_0_83');">bollox</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=201" class="gensmall" onmouseover="dom_overview.show('item_0_201');">buckSHOT</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=378" class="gensmall" onmouseover="dom_overview.show('item_0_378');">dober</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	<tr>
+		<td><img src="not_files/icon_tiny_profile.gif" alt="Date of Birth" title="Date of Birth" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/profile.php?mode=viewprofile&amp;u=333" class="gensmall" onmouseover="dom_overview.show('item_0_333');">MissJacki</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	</tbody></table></td>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	</table></td>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	<tbody><tr>
+		<td><img src="not_files/icon_tiny_topic.gif" alt="Topic" title="Topic" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/viewtopic.php?t=2607" class="gensmall" onmouseover="dom_overview.show('item_1_2607');">Magic Music Festival - 7/9/...</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	</tbody></table></td>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	</table></td>
+	<td class="row1" height="70" valign="top" width="14%"><table width="100%" border="0" cellpadding="0" cellspacing="1">
+	<tbody><tr>
+		<td><img src="not_files/icon_tiny_topic.gif" alt="Topic" title="Topic" border="0"></td>
+		<td width="100%"><span class="gensmall">
+			<a href="http://example.com/forum/viewtopic.php?t=4785" class="gensmall" onmouseover="dom_overview.show('item_1_4785');">Murdock, Neon Nights, Valky...</a>
+		</span></td>
+		<td nowrap="nowrap" align="right"><span class="gensmall">
+		</span></td>
+	</tr>
+	</tbody></table></td>
 </tr>
 </tbody></table>
 
+</td></tr></tbody></table>
 
-<br clear="all">
 
-<table align="center" border="0" cellpadding="0" cellspacing="3">
+
+
+<form action="login.php" method="post" target="_top">
+
+<table width="100%" align="center" border="0" cellpadding="2" cellspacing="2">
   <tbody><tr>
-	<td align="center" width="20"><img src="logged-in_files/folder_new_big.gif" alt="New posts"></td>
-	<td><span class="gensmall">New posts</span></td>
-	<td>&nbsp;&nbsp;</td>
-	<td align="center" width="20"><img src="logged-in_files/folder_big.gif" alt="No new posts"></td>
-	<td><span class="gensmall">No new posts</span></td>
-	<td>&nbsp;&nbsp;</td>
-	<td align="center" width="20"><img src="logged-in_files/folder_locked_big.gif" alt="Forum is locked"></td>
-	<td><span class="gensmall">Forum is locked</span></td>
+	<td class="nav" align="left"><a href="http://example.com/forum/index.php" class="nav">EXAMPLE.COM Forum Index</a></td>
   </tr>
 </tbody></table>
+
+<table class="forumline" width="100%" align="center" border="0" cellpadding="4" cellspacing="1">
+  <tbody><tr>
+	<th class="thHead" height="25" nowrap="nowrap">Please enter your username and password to log in.</th>
+  </tr>
+  <tr>
+	<td class="row1"><table width="100%" border="0" cellpadding="3" cellspacing="1">
+		  <tbody><tr>
+			<td colspan="2" align="center">&nbsp;</td>
+		  </tr>
+		  <tr>
+			<td width="45%" align="right"><span class="gen">Username:</span></td>
+			<td>
+			  <input class="post" name="username" size="25" maxlength="40" value="" type="text">
+			</td>
+		  </tr>
+		  <tr>
+			<td align="right"><span class="gen">Password:</span></td>
+			<td>
+			  <input class="post" name="password" size="25" maxlength="32" type="password">
+			</td>
+		  </tr>
+		  <tr align="center">
+			<td colspan="2"><span class="gen">Log me on automatically each visit: <input name="autologin" type="checkbox"></span></td>
+		  </tr>
+		  <tr align="center">
+			<td colspan="2"><input name="redirect" value="" type="hidden"><input name="login" class="mainoption" value="Log in" type="submit"></td>
+		  </tr>
+		  <tr align="center">
+			<td colspan="2"><span class="gensmall"><a href="http://example.com/forum/profile.php?mode=sendpassword" class="gensmall">I forgot my password</a></span></td>
+		  </tr>
+		</tbody></table></td>
+  </tr>
+</tbody></table>
+
+</form>
 
 
 <div align="center"><span class="copyright"><br><br>
@@ -340,10 +726,9 @@ input.liteoption {
 
 	The phpBB Group : 2002
 // -->
-Powered by <a href="http://www.phpbb.com/" target="_phpbb" class="copyright">phpBB</a> Â© 2001, 2005 phpBB Group<br></span></div>
+Powered by <a href="http://www.phpbb.com/" target="_phpbb" class="copyright">phpBB</a> © 2001, 2005 phpBB Group<br></span></div>
 		</td>
 	</tr>
 </tbody></table>
-
 
 </body></html>
