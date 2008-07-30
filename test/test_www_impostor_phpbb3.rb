@@ -349,12 +349,12 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal message, @im.instance_variable_get(:@message)
   end
 
-=begin
   def test_posting_page
     c = config
     assert_equal URI.join(@app_root, c[:posting_page]), @im.posting_page
   end
 
+=begin
   def test_post_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
