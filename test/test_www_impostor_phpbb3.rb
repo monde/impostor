@@ -162,7 +162,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal false, @im.logout
   end
 
-=begin
   def test_logout
     @im.instance_variable_set(:@loggedin, true)
     cookie_jar = mock()
@@ -176,7 +175,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal nil, @im.instance_variable_get(:@message)
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
-=end
 
 =begin
   def phpbb3_good_submit_post_form
