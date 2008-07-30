@@ -5,7 +5,7 @@ require 'mechanize'
 require 'cgi'
 
 ##
-# phpBB version of the Impostor
+# phpBB2 version of the Impostor
 #
 
 class WWW::Impostor
