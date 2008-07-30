@@ -13,11 +13,13 @@ Makes automatic posts to the following forum applications:
 * Web Wiz Forums (WWF) 7.9
 * Web Wiz Forums (WWF) 8.0
 * PHP Bullitin Board (phpBB) 2.0 (2.0.22)
+* PHP Bullitin Board (phpBB) 3.0
 
 == SYNOPSIS:
 
-# config yaml has options specefic to wwf79, wwf80, phpbb2, etc.
-# read the impostor docs for options to the kind of forum in use
+# config yaml has options specific to wwf79, phpbb2, etc.
+# Read the impostor docs for configuration options for the kind of forum to 
+# be accessed.
 # config can be keyed by symbols or strings
 config = YAML::load_file('conf/impostor.yml')
 post = WWW::Impostor.new(config)
