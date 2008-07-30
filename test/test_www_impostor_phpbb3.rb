@@ -60,6 +60,27 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal page, @im.send(:fetch_login_page)
   end
 
+  def test_login_form_and_button_should_return_a_form_and_button
+    response = {'content-type' => 'text/html'}
+    body = load_page('phpbb3-login.html').join
+    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    form, button = @im.send(:login_form_and_button, page)
+    assert_equal "POST", form.method
+    assert_equal "./ucp.php?mode=login&sid=a9b66b7fedae3d5696d297194f940aa4", form.action
+    assert_equal true, form.is_a?(WWW::Mechanize::Form)
+    assert_equal true, button.is_a?(WWW::Mechanize::Form::Button)
+  end
+
+=begin
+  def test_login_form_and_button_should_raise_login_error_when_form_is_missing
+    err = assert_raise(WWW::Impostor::LoginError) do
+      form, button = @im.send(:login_form_and_button, nil)
+    end
+    assert_equal "unknown login page format", err.original_exception.message
+  end
+
+=end
+
 =begin
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
@@ -78,22 +99,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
 =end
 
 =begin
-  def test_login_form_and_button_should_raise_login_error_when_form_is_missing
-    err = assert_raise(WWW::Impostor::LoginError) do
-      form, button = @im.send(:login_form_and_button, nil)
-    end
-    assert_equal "unknown login page format", err.original_exception.message
-  end
-
-  def test_login_form_and_button_should_return_a_form_and_button
-    response = {'content-type' => 'text/html'}
-    body = load_page('phpbb3-login.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    form, button = @im.send(:login_form_and_button, page)
-    assert_equal true, form.is_a?(WWW::Mechanize::Form)
-    assert_equal true, button.is_a?(WWW::Mechanize::Form::Button)
-  end
-
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb3-logged-in.html').join

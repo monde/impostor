@@ -219,6 +219,7 @@ class WWW::Impostor
         raise LoginError.new(err)
       end
     end
+=end
 
     ##
     # returns the login form and its button from the login page
@@ -234,7 +235,6 @@ class WWW::Impostor
 
       return form, button
     end
-=end
 
     ##
     # fetches the login page
