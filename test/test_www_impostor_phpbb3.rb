@@ -191,17 +191,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal false, @im.instance_variable_get(:@loggedin)
   end
 
-  def test_new_topic_not_logged_in_should_raise_exception
-    @im.expects(:login).once.returns(false)
-    @im.instance_variable_set(:@loggedin, false)
 
-    err = assert_raise(WWW::Impostor::PostError) do
-      @im.new_topic(f=2,s="hello world",m="hello ruby")
-    end
-    assert_equal "not logged in", err.original_exception.message
-  end
-
-=begin
   def test_new_topic_without_forum_set_should_raise_exception
     @im.instance_variable_set(:@forum, nil)
     err = assert_raise(WWW::Impostor::PostError) do
@@ -241,6 +231,17 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal "message not set", err.original_exception.message
   end
 
+  def test_new_topic_not_logged_in_should_raise_exception
+    @im.expects(:login).once.returns(false)
+    @im.instance_variable_set(:@loggedin, false)
+
+    err = assert_raise(WWW::Impostor::PostError) do
+      @im.new_topic(f=2,s="hello world",m="hello ruby")
+    end
+    assert_equal "not logged in", err.original_exception.message
+  end
+
+=begin
   def test_getting_bad_post_page_for_new_topic_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     forum = 2
