@@ -398,22 +398,23 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal "not logged in", err.original_exception.message
   end
 
-=begin
   def test_bad_post_page_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     topic = 1
+    forum = 2
     posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
+    posting_page.query = "mode=reply&f=#{forum}&t=#{topic}"
     errmsg = "from test #{Time.now.to_s}"
     WWW::Mechanize.any_instance.expects(:get).once.with(
       posting_page
     ).raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
-      @im.post(7,topic,'hello')
+      @im.post(forum,topic,'hello')
     end
     assert_equal errmsg, err.original_exception.message
   end
 
+=begin
   def test_bad_post_form_for_post_should_raise_exception
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
