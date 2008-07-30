@@ -8,7 +8,7 @@ imPOSTor posts messages to forums
 
 == FEATURES/PROBLEMS:
 
-Makes automatic posts to the following forum applications:
+Makes automated posts to the following forum applications:
 
 * Web Wiz Forums (WWF) 7.9
 * Web Wiz Forums (WWF) 8.0
