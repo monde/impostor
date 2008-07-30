@@ -479,45 +479,5 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal 'hello', @im.instance_variable_get(:@message)
   end
 
-=begin
-  def test_too_many_posts_for_post_should_raise_exception
-    @im.instance_variable_set(:@loggedin, true)
-    response = {'content-type' => 'text/html'}
-    body = phpbb3_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    body = load_page('phpbb3-post-reply-throttled-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-
-    err = assert_raise(WWW::Impostor::ThrottledError) do
-      @im.post(1,topic,'hello')
-    end
-    assert_equal "too many posts in too short amount of time", err.original_exception.message
-  end
-
-  def test_getting_unknown_post_response_should_return_false
-    @im.instance_variable_set(:@loggedin, true)
-    response = {'content-type' => 'text/html'}
-    body = phpbb3_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    topic = 2
-    posting_page = @im.posting_page
-    posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    body = 'junk'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
-
-    assert_equal false, @im.post(1,topic,'hello')
-    assert_equal nil, @im.instance_variable_get(:@forum)
-    assert_equal nil, @im.instance_variable_get(:@topic)
-    assert_equal nil, @im.instance_variable_get(:@subject)
-    assert_equal nil, @im.instance_variable_get(:@message)
-  end
-=end
 end
 
