@@ -141,7 +141,6 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal true, @im.login
   end
 
-=begin
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb3-logged-in.html').join
@@ -149,6 +148,7 @@ class TestWwwImpostorPhpbb3 < Test::Unit::TestCase
     assert_equal true, @im.send(:logged_in?, page)
   end
 
+=begin
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb3-not-logged-in.html').join
