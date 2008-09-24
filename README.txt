@@ -1,6 +1,7 @@
 impostor
     by Mike Mondragon
     http://impostor.rubyforge.org/
+    http://github.com/monde/impostor/tree/master
 
 == DESCRIPTION:
   
@@ -44,7 +45,12 @@ svn co svn://rubyforge.org/var/svn/impostor/trunk impostor
 
 == INSTALL:
 
+conventional
 * sudo gem install impostor
+
+github
+* gem sources -a http://gems.github.com
+* sudo gem install monde-impostor
 
 == LICENSE:
 
