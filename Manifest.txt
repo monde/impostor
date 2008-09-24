@@ -1,7 +1,9 @@
+.gitignore
 History.txt
 Manifest.txt
 README.txt
 Rakefile
+impostor.gemspec
 lib/impostor.rb
 lib/www/impostor.rb
 lib/www/impostor/phpbb2.rb
