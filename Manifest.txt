@@ -3,6 +3,7 @@ History.txt
 Manifest.txt
 README.txt
 Rakefile
+dev_tools/github.rb
 impostor.gemspec
 lib/impostor.rb
 lib/www/impostor.rb
@@ -51,6 +52,7 @@ test/fixtures/wwf80-not-logged-in.html
 test/fixtures/wwf80-post-new_topic-good-response.html
 test/fixtures/wwf80-post-reply-good-response.html
 test/fixtures/wwf80-too-many-posts.html
+test/test_github.rb
 test/test_helper.rb
 test/test_www_impostor.rb
 test/test_www_impostor_phpbb2.rb

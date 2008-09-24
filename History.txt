@@ -1,3 +1,8 @@
+### 0.2.1 / 2008-09-24 (to screen scrape is to love the internets)
+
+* 1 minor enhancement:
+  * test to insure builds as a github gem
+
 ### 0.2.0 / 2008-07-30 (don't use this code for spam)
 
 * 1 minor enhancement:
