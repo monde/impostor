@@ -1,11 +1,4 @@
-require File.join(File.dirname(__FILE__), "..", "lib", "www", "impostor")
-require File.join(File.dirname(__FILE__), "..", "lib", "www", "impostor", "phpbb2")
 require File.join(File.dirname(__FILE__), "test_helper")
-
-require 'test/unit'
-require 'rubygems'
-require 'mocha'
-require 'mechanize'
 
 class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
   include TestHelper
@@ -23,9 +16,9 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
   def config(config={})
     c = {:type => :phpbb2,
       :app_root => @app_root,
-      :login_page => 'login.php', 
-      :posting_page => 'posting.php', 
-      :user_agent => 'Windows IE 7', 
+      :login_page => 'login.php',
+      :posting_page => 'posting.php',
+      :user_agent => 'Windows IE 7',
       :username => 'tester',
       :password => 'test',
       :cookie_jar => @cookie_jar
@@ -51,13 +44,13 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
   def test_initialize_with_cookie_jar
     FileUtils.touch(@cookie_jar)
 
-    WWW::Mechanize::CookieJar.any_instance.expects(:load).once.with(@cookie_jar)
+    Mechanize::CookieJar.any_instance.expects(:load).once.with(@cookie_jar)
     im = WWW::Impostor.new(config())
     assert im
   end
 
   def test_initialize_without_cookie_jar
-    WWW::Mechanize::CookieJar.any_instance.expects(:load).never
+    Mechanize::CookieJar.any_instance.expects(:load).never
     im = WWW::Impostor.new(config())
     assert im
   end
@@ -69,23 +62,23 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
   def test_should_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb2-logged-in.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     assert_equal true, @im.send(:logged_in?, page)
   end
 
   def test_should_not_be_logged_in?
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb2-not-logged-in.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     assert_equal false, @im.send(:logged_in?, page)
   end
 
   def test_fetch_login_page
     page = load_page('phpbb2-login.html').join
-    WWW::Mechanize.any_instance.expects(:get).once.with(
+    Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
     ).returns(page)
-    
+
     assert_equal page, @im.send(:fetch_login_page)
   end
 
@@ -99,26 +92,26 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
   def test_login_form_and_button_should_return_a_form_and_button
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb2-login.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form, button = @im.send(:login_form_and_button, page)
-    assert_equal true, form.is_a?(WWW::Mechanize::Form)
-    assert_equal true, button.is_a?(WWW::Mechanize::Form::Button)
+    assert_equal true, form.is_a?(Mechanize::Form)
+    assert_equal true, button.is_a?(Mechanize::Form::Button)
   end
 
   def test_post_login_should_return_page
     response = {'content-type' => 'text/html'}
     body = load_page('phpbb2-logged-in.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     form = mock()
     button = mock()
-    WWW::Mechanize.any_instance.expects(:submit).once.with(form, button).returns(page)
+    Mechanize.any_instance.expects(:submit).once.with(form, button).returns(page)
 
     assert_equal page, @im.send(:post_login, form, button)
   end
 
   def test_post_login_should_raise_login_error
     errmsg = "from test #{Time.now.to_s}"
-    WWW::Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
+    Mechanize.any_instance.expects(:submit).raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::LoginError) do
       page = @im.send(:post_login, nil, nil)
     end
@@ -127,7 +120,7 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
 
   def test_bad_login_page_should_raise_exception
     errmsg = "from test #{Time.now.to_s}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(
+    Mechanize.any_instance.expects(:get).once.with(
       URI.join(@app_root, config[:login_page])
     ).raises(StandardError, errmsg)
 
@@ -179,7 +172,7 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     cookie_jar = mock()
     @im.expects(:cookie_jar).times(2).returns(cookie_jar)
-    WWW::Mechanize::CookieJar.any_instance.expects(:save_as).once.with(cookie_jar).returns(nil)
+    Mechanize::CookieJar.any_instance.expects(:save_as).once.with(cookie_jar).returns(nil)
     @im.expects(:save_topics).once
     assert_equal true, @im.logout
     assert_equal nil, @im.instance_variable_get(:@forum)
@@ -248,7 +241,7 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
     errmsg = "from test #{Time.now.to_s}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(
+    Mechanize.any_instance.expects(:get).once.with(
       posting_page
     ).raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
@@ -261,11 +254,11 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = '<form action="posting.php" method="post" name="post"></form>'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.post(1,topic,'hello')
     end
@@ -276,13 +269,13 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     errmsg = "from test #{Time.now.to_s}"
-    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
+    Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.post(1,topic,'hello')
     end
@@ -293,14 +286,14 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     body = load_page('phpbb2-post-reply-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:submit).once.returns(page)
     subject = "test #{Time.now.to_s}"
     @im.expects(:get_subject).once.returns(subject)
 
@@ -315,14 +308,14 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     body = load_page('phpbb2-post-reply-throttled-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:submit).once.returns(page)
 
     err = assert_raise(WWW::Impostor::ThrottledError) do
       @im.post(1,topic,'hello')
@@ -334,14 +327,14 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_post_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     topic = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=reply&t=#{topic}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     body = 'junk'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:submit).once.returns(page)
 
     assert_equal false, @im.post(1,topic,'hello')
     assert_equal nil, @im.instance_variable_get(:@forum)
@@ -405,7 +398,7 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
     errmsg = "from test #{Time.now.to_s}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(
+    Mechanize.any_instance.expects(:get).once.with(
       posting_page
     ).raises(StandardError, errmsg)
 
@@ -419,11 +412,11 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = '<form action="posting.php" method="post" name="post"></form>'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
@@ -434,13 +427,13 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
     errmsg = "from test #{Time.now.to_s}"
-    WWW::Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
+    Mechanize.any_instance.expects(:submit).once.raises(StandardError, errmsg)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
@@ -451,12 +444,12 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns('junk')
+    Mechanize.any_instance.expects(:get).once.with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:submit).once.returns('junk')
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
@@ -467,18 +460,18 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
     body = load_page('phpbb2-post-new_topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:submit).once.returns(page)
     follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
     body = 'junk'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(body)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:get).with(follow).returns(body)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
@@ -489,18 +482,18 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
     body = load_page('phpbb2-post-new_topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:submit).once.returns(page)
     follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
     body = '<html><head><link rel="prev" href="http://localhost/phpBB2/viewtopic.php?junk" title="View previous topic"></head><body></body></html>'
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:get).with(follow).returns(page)
     err = assert_raise(WWW::Impostor::PostError) do
       @im.new_topic(f=forum,s="hello world",m="hello ruby")
     end
@@ -511,20 +504,20 @@ class TestWwwImpostorPhpbb2 < Test::Unit::TestCase
     @im.instance_variable_set(:@loggedin, true)
     response = {'content-type' => 'text/html'}
     body = phpbb2_good_submit_new_topic_form
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
     forum = 2
     subject = "hello world"
     message = "hello ruby"
     posting_page = @im.posting_page
     posting_page.query = "mode=newtopic&f=#{forum}"
-    WWW::Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
+    Mechanize.any_instance.expects(:get).with(posting_page).returns(page)
     body = load_page('phpbb2-post-new_topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:submit).once.returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:submit).once.returns(page)
     follow = URI.join(@app_root, 'viewtopic.php?p=60#60')
     body = load_page('phpbb2-get-viewtopic-for-new-topic-good-response.html').join
-    page = WWW::Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
-    WWW::Mechanize.any_instance.expects(:get).with(follow).returns(page)
+    page = Mechanize::Page.new(uri=nil, response, body, code=nil, mech=nil)
+    Mechanize.any_instance.expects(:get).with(follow).returns(page)
 
     @im.expects(:add_subject).once.with(forum,29,subject)
     assert_equal true, @im.new_topic(f=forum,s=subject,m=message)

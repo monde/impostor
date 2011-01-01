@@ -1,15 +1,9 @@
-require 'rubygems'
-require 'hpricot'
-gem 'mechanize', '>= 0.7.0'
-require 'mechanize'
-require 'cgi'
-
 ##
 # Web Wiz Forums version 7.9 of the Impostor
 #
 
 class WWW::Impostor
-  
+
   class Wwf79 < WWW::Impostor
 
     ##
@@ -32,7 +26,7 @@ class WWW::Impostor
 
     def initialize(config={})
       super(config)
-      @agent = WWW::Mechanize.new
+      @agent = Mechanize.new
       @agent.user_agent_alias = user_agent
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
       @message = nil
@@ -162,18 +156,18 @@ class WWW::Impostor
 
     ##
     # Get the new posts page for the application (specific to WWF7.9)
-  
+
     def forum_posts_page
       URI.join(app_root, config[:forum_posts_page])
     end
 
     ##
     # Get the new topic page for the application (specific to WWF7.9)
-  
+
     def post_message_page
       URI.join(app_root, config[:post_message_page])
     end
-  
+
     ##
     # does the work of logging into WWF 7.9
 
@@ -221,7 +215,7 @@ class WWW::Impostor
       form = page.forms.with.name('frmLogin').first rescue nil
       raise LoginError.new("unknown login page format") unless form
 
-      button = WWW::Mechanize::Form::Button.new('Submit', 'Forum Login')
+      button = Mechanize::Form::Button.new('Submit', 'Forum Login')
       form.add_button_to_query(button)
       form['name'] = username
       form['password'] = password

@@ -4,7 +4,7 @@ impostor
     http://github.com/monde/impostor/tree/master
 
 == DESCRIPTION:
-  
+
 imPOSTor posts messages to forums
 
 == FEATURES/PROBLEMS:
@@ -19,7 +19,7 @@ Makes automated posts to the following forum applications:
 == SYNOPSIS:
 
 # config yaml has options specific to wwf79, phpbb2, etc.
-# Read the impostor docs for configuration options for the kind of forum to 
+# Read the impostor docs for configuration options for the kind of forum to
 # be accessed.
 # config can be keyed by symbols or strings
 config = YAML::load_file('conf/impostor.yml')

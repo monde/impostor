@@ -1,8 +1,4 @@
-require File.join(File.dirname(__FILE__), "..", "lib", "www", "impostor")
 require File.join(File.dirname(__FILE__), "test_helper")
-
-require 'tempfile'
-require 'test/unit'
 
 class TestWwwImpostor < Test::Unit::TestCase
 

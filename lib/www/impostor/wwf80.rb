@@ -1,15 +1,9 @@
-require 'rubygems'
-require 'hpricot'
-gem 'mechanize', '>= 0.7.0'
-require 'mechanize'
-require 'cgi'
-
 ##
 # Web Wiz Forums version 8.0 of the Impostor
 #
 
 class WWW::Impostor
-  
+
   class Wwf80 < WWW::Impostor
 
     ##
@@ -32,7 +26,7 @@ class WWW::Impostor
 
     def initialize(config={})
       super(config)
-      @agent = WWW::Mechanize.new
+      @agent = Mechanize.new
       @agent.user_agent_alias = user_agent
       # jar is a yaml file
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
@@ -92,13 +86,13 @@ class WWW::Impostor
         msgs = error.search("//td")
 
         # throttled
-        too_many = (msgs.last.innerText =~ 
+        too_many = (msgs.last.innerText =~
         /You have exceeded the number of posts permitted in the time span/ rescue
         false)
         raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
 
         # general error
-        had_error = (error.last.innerText =~ 
+        had_error = (error.last.innerText =~
         /Error: Message Not Posted/ rescue
         false)
         raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
@@ -154,13 +148,13 @@ class WWW::Impostor
         msgs = error.search("//td")
 
         # throttled
-        too_many = (msgs.last.innerText =~ 
+        too_many = (msgs.last.innerText =~
         /You have exceeded the number of posts permitted in the time span/ rescue
         false)
         raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
 
         # general error
-        had_error = (error.last.innerText =~ 
+        had_error = (error.last.innerText =~
         /Error: Message Not Posted/ rescue
         false)
         raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
@@ -172,18 +166,18 @@ class WWW::Impostor
 
     ##
     # Get the new reply page for the application (specific to WWF8.0)
-  
+
     def new_reply_page
       URI.join(app_root, config[:new_reply_page])
     end
 
     ##
     # Get the new topic page for the application (specific to WWF8.0)
-  
+
     def new_topic_page
       URI.join(app_root, config[:new_topic_page])
     end
-  
+
     ##
     # does the work of logging into WWF 8.0
 
@@ -230,7 +224,7 @@ class WWW::Impostor
     def login_form_and_button(page)
       form = page.forms.with.name('frmLogin').first rescue nil
       raise LoginError.new("unknown login page format") unless form
-      
+
       button = form.buttons.with.name('Submit').first
       form['name'] = username
       form['password'] = password

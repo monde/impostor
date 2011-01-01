@@ -1,4 +1,12 @@
-require 'rubygems'
+%W{ mechanize nokogiri cgi }.each do |g|
+  begin
+    require g
+  rescue LoadError
+    require 'rubygems'
+    require g
+  end
+end
+
 Dir.glob(File.join(File.dirname(__FILE__), 'impostor/*.rb')).each {|f| require f }
 
 module WWW
@@ -9,7 +17,7 @@ module WWW
   # == Example
   #  require 'rubygems'
   #  require 'impostor'
-  #  
+  #
   #  # config yaml has options specefic to wwf79, wwf80, phpbb2, etc.
   #  # read the impostor docs for options to the kind of forum in use
   #  # config can be keyed by symbols or strings
@@ -34,8 +42,8 @@ module WWW
   #  :app_root       - url to forum
   #  :login_page     - forum login page
   #
-  #  See documentation for each type of imPOSTor for additional configuration 
-  #  parameters that are needed for the specific kind of imPOSTor.  A sample 
+  #  See documentation for each type of imPOSTor for additional configuration
+  #  parameters that are needed for the specific kind of imPOSTor.  A sample
   #  configuration is provided in the documentation for each.
 
   class Impostor
@@ -86,13 +94,13 @@ module WWW
     class PostError < ImpostorError; end
 
     ##
-    # An error for impostor when a topic id can't be found based on a 
+    # An error for impostor when a topic id can't be found based on a
     # name/title.
 
     class TopicError < ImpostorError; end
 
     ##
-    # An error for impostor when the receiving forum rejects the post due to 
+    # An error for impostor when the receiving forum rejects the post due to
     # a throttling or spam error but which the user can re-attempt at a later
     # time.
 
@@ -100,7 +108,7 @@ module WWW
 
     ##
     # Pass in a config hash to initialize
- 
+
     def initialize(conf={})
       @config = conf
       load_topics
@@ -114,7 +122,7 @@ module WWW
       clz = type.is_a?(Class) ? type : eval("WWW::Impostor::#{type.to_s.capitalize}")
       clz
     end
-  
+
     ##
     # Access the current config and key it without regard for symbols or strings
 
@@ -125,17 +133,17 @@ module WWW
 
     ##
     # Get/set the application version that impostor is interfacing with
-  
+
     attr_accessor :version
-  
+
     ##
     # Login to the forum, returns true if logged in, false otherwise
-  
+
     def login; end
 
     ##
     # Log out of the forum, true if logged in, false otherwise
-  
+
     def logout; end
 
     ##
@@ -166,33 +174,33 @@ module WWW
 
     def save_topics
       cache = config[:topics_cache] ||= ""
-      if File::exist?(cache) 
+      if File::exist?(cache)
         File.open(cache, 'w') do |out|
           YAML.dump(@topics, out)
         end
       end
     end
-  
+
     ##
     # Post the message
-  
+
     def post(forum = @forum, topic = @topic, message = @message); end
-  
+
     ##
     #  get/set the current message
-  
+
     attr_accessor :message
 
     ##
     #  get/set the current subject
-  
+
     attr_accessor :subject
-  
+
     ##
     # Get/set the form id
-  
+
     attr_accessor :forum
-  
+
     ##
     # Get/set the topic id
 
@@ -212,12 +220,12 @@ module WWW
     # Make a new topic
 
     def new_topic(forum=@forum, subject=@subject, message=@message); end
-   
+
     ##
     # Gets the application root of the application such as
     # http://example.com/phpbb or http://example.com/forums
-  
-    def app_root 
+
+    def app_root
       config[:app_root]
     end
 
@@ -229,25 +237,25 @@ module WWW
     def topics_cache
       config[:topics_cache]
     end
-  
+
     ##
     # Get the login page for the application
-  
+
     def login_page
       URI.join(app_root, config[:login_page])
     end
 
     ##
     # Get the username for the application
-  
-    def username 
+
+    def username
       config[:username]
     end
-  
+
     ##
     # Get the password for the application
-  
-    def password 
+
+    def password
       config[:password]
     end
 
@@ -258,7 +266,7 @@ module WWW
     def user_agent
       config[:user_agent]
     end
-  
+
     ##
     # is a yaml file for WWW::Mechanize::CookieJar
 

@@ -1,15 +1,9 @@
-require 'rubygems'
-require 'hpricot'
-gem 'mechanize', '>= 0.7.0'
-require 'mechanize'
-require 'cgi'
-
 ##
 # phpBB3 version of the Impostor
 #
 
 class WWW::Impostor
-  
+
   class Phpbb3 < WWW::Impostor
 
     ##
@@ -30,7 +24,7 @@ class WWW::Impostor
 
     def initialize(config={})
       super(config)
-      @agent = WWW::Mechanize.new
+      @agent = Mechanize.new
       @agent.user_agent_alias = user_agent
       # jar is a yaml file
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
@@ -152,11 +146,11 @@ class WWW::Impostor
 
     ##
     # Get the posting page for the application (specific to phpBB3)
-  
+
     def posting_page
       URI.join(app_root, config[:posting_page])
     end
-  
+
     ##
     # does the work of logging into phpbb
 
@@ -202,7 +196,7 @@ class WWW::Impostor
     def login_form_and_button(page)
       form = page.forms.first rescue nil
       raise LoginError.new("unknown login page format") unless form
-      
+
       button = form.buttons.with.name('login').first
       form['username'] = username
       form['password'] = password

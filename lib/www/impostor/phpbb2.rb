@@ -1,15 +1,9 @@
-require 'rubygems'
-require 'hpricot'
-gem 'mechanize', '>= 0.7.0'
-require 'mechanize'
-require 'cgi'
-
 ##
 # phpBB2 version of the Impostor
 #
 
 class WWW::Impostor
-  
+
   class Phpbb2 < WWW::Impostor
 
     ##
@@ -30,7 +24,7 @@ class WWW::Impostor
 
     def initialize(config={})
       super(config)
-      @agent = WWW::Mechanize.new
+      @agent = Mechanize.new
       @agent.user_agent_alias = user_agent
       # jar is a yaml file
       @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
@@ -162,7 +156,7 @@ class WWW::Impostor
         return true
       end
 
-      too_many = (mes.innerText =~ 
+      too_many = (mes.innerText =~
         /You cannot make another post so soon after your last; please try again in a short while./ rescue
         false)
       raise ThrottledError.new("too many posts in too short amount of time") if too_many
@@ -173,11 +167,11 @@ class WWW::Impostor
 
     ##
     # Get the posting page for the application (specific to phpBB2)
-  
+
     def posting_page
       URI.join(app_root, config[:posting_page])
     end
-  
+
     ##
     # does the work of logging into phpbb
 
@@ -224,7 +218,7 @@ class WWW::Impostor
     def login_form_and_button(page)
       form = page.forms.first rescue nil
       raise LoginError.new("unknown login page format") unless form
-      
+
       button = page.forms.first.buttons.with.name('login').first
       form['username'] = username
       form['password'] = password

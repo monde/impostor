@@ -3,4 +3,4 @@
 # Please see the LICENSE file for licensing.
 #
 
-require 'www/impostor'
+require File.join(File.dirname(__FILE__), 'www', 'impostor')

@@ -1,7 +1,7 @@
-$:.unshift File.join(File.dirname(__FILE__), "..", "lib")
+require File.join(File.dirname(__FILE__), "..", "lib", "impostor")
 
-require 'net/http'
-require 'net/https'
+require 'test/unit'
+require 'mocha'
 
 # monkey patch Net::HTTP so un caged requests don't go over the wire
 module Net #:nodoc:
