@@ -2,7 +2,6 @@ $:.unshift File.expand_path('..', __FILE__)
 $:.unshift File.expand_path('../../lib', __FILE__)
 
 require "impostor"
-require "rspec"
 
 require 'rspec'
 
@@ -22,3 +21,18 @@ module WWW::Impostor::Test
   end
 
 end
+
+module Helper
+
+  def impostor(config = {})
+    config[:type] ||= :test
+    WWW::Impostor.new(config)
+  end
+
+  def config(config = {})
+    WWW::Impostor::Config.new(config)
+  end
+
+end
+
+include Helper

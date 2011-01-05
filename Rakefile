@@ -6,7 +6,6 @@ rescue LoadError
   require 'rubygems'
   require 'hoe'
 end
-require 'rspec'
 require 'rspec/core/rake_task'
 
 $LOAD_PATH.unshift 'lib'

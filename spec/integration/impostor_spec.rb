@@ -3,13 +3,11 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 describe "an impostor" do
 
   it "should have a version" do
-    im = WWW::Impostor.new(:type => :test)
-    im.version.should == "0.3.0"
+    impostor.version.should == "0.3.0"
   end
 
   it "should post a message" do
-    im = WWW::Impostor.new(:type => :test)
-    im.post(formum=1, topic=2, message="Hello World").should == {
+    impostor.post(formum=1, topic=2, message="Hello World").should == {
       :forum => 1,
       :topic => 2,
       :message => "Hello World",
@@ -18,8 +16,7 @@ describe "an impostor" do
   end
 
   it "should create a new topic with a given subject and initial message" do
-    im = WWW::Impostor.new(:type => :test)
-    im.new_topic(formum=1, subject="No Teapots!", message="Hello World").should == {
+    impostor.new_topic(formum=1, subject="No Teapots!", message="Hello World").should == {
       :forum => 1,
       :subject => "No Teapots!",
       :message => "Hello World",
