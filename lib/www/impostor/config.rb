@@ -1,7 +1,6 @@
 class WWW::Impostor::Config
 
   def initialize(config)
-    # FIXME should we just deep symbolize the config keys?
     @config = config
     setup_agent
     load_topics
@@ -11,7 +10,6 @@ class WWW::Impostor::Config
   # Access the current config and key it without regard for symbols or strings
 
   def config(key)
-    # FIXME should we just deep symbolize the config keys?
     @config[key.to_sym] || @config[key.to_s]
   end
 
