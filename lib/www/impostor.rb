@@ -7,7 +7,7 @@
   end
 end
 
-Dir.glob(File.join(File.dirname(__FILE__), 'impostor/*.rb')).each {|f| require f }
+Dir.glob(File.join(File.dirname(__FILE__), 'impostor/**/*.rb')).each {|f| require f }
 
 module WWW
 
@@ -48,230 +48,57 @@ module WWW
 
   class Impostor
 
-    class << self #:nodoc:
-      alias orig_new new
-      def new(conf)
-        klass = WWW::Impostor.create(conf)
-        klass.orig_new(conf)
-      end
-    end
-
     ##
     # Gem version of Impostor
 
-    VERSION = '0.2.1'
-
-    ##
-    # An application error
-
-    class ImpostorError < RuntimeError
-
-      ##
-      # The original exception
-
-      attr_accessor :original_exception
-
-      ##
-      # Creates a new ImpostorError with +message+ and +original_exception+
-
-      def initialize(e)
-        exception = e.class == String ? StandardError.new(e) : e
-        @original_exception = exception
-        message = "Impostor error: #{exception.message} (#{exception.class})"
-        super message
-      end
-
-    end
-
-    ##
-    # An error for impostor login failure
-
-    class LoginError < ImpostorError; end
-
-    ##
-    # An error for impostor post failure
-
-    class PostError < ImpostorError; end
-
-    ##
-    # An error for impostor when a topic id can't be found based on a
-    # name/title.
-
-    class TopicError < ImpostorError; end
-
-    ##
-    # An error for impostor when the receiving forum rejects the post due to
-    # a throttling or spam error but which the user can re-attempt at a later
-    # time.
-
-    class ThrottledError < ImpostorError; end
+    VERSION = '0.3.0'
 
     ##
     # Pass in a config hash to initialize
 
-    def initialize(conf={})
-      @config = conf
-      load_topics
-    end
+    def initialize(config={})
+      @config = Config.new(config)
+      @auth   = Auth.new(@config)
+      @topic  = Topic.new(@auth, @config)
+      @post   = Post.new(@auth, @config)
 
-    ##
-    # Instantiate a specific impostor based on its symbol name
+      type = self.config(:type)
+      if type
+        extend eval("WWW::Impostor::#{type.to_s.capitalize}")
+        @auth.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Auth")
+        @topic.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Topic")
+        @post.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Post")
+      end
 
-    def self.create(conf={})
-      type = conf[:type] || conf[:type.to_s]
-      clz = type.is_a?(Class) ? type : eval("WWW::Impostor::#{type.to_s.capitalize}")
-      clz
     end
 
     ##
     # Access the current config and key it without regard for symbols or strings
 
-    def config(*key)
-      return @config if key.empty?
-      @config[key.first.to_sym] || @config[key.first.to_s]
+    def config(key)
+      @config.config(key)
     end
 
     ##
-    # Get/set the application version that impostor is interfacing with
+    # our version
 
-    attr_accessor :version
-
-    ##
-    # Login to the forum, returns true if logged in, false otherwise
-
-    def login; end
-
-    ##
-    # Log out of the forum, true if logged in, false otherwise
-
-    def logout; end
-
-    ##
-    # Load the topics that the impostor already knows about
-
-    def load_topics
-      cache = config[:topics_cache] ||= ""
-      if File::exist?(cache)
-        @topics = YAML::load_file(cache)
-      else
-        @topics = Hash.new
-      end
-    end
-
-    ##
-    # Add subject to topics hash
-
-    def add_subject(forum,topic,name)
-      if @topics[forum].nil?
-        @topics[forum] = {topic, name}
-      else
-        @topics[forum][topic] = name
-      end
-    end
-
-    ##
-    # Save the topics
-
-    def save_topics
-      cache = config[:topics_cache] ||= ""
-      if File::exist?(cache)
-        File.open(cache, 'w') do |out|
-          YAML.dump(@topics, out)
-        end
-      end
+    def version
+      VERSION
     end
 
     ##
     # Post the message
 
-    def post(forum = @forum, topic = @topic, message = @message); end
-
-    ##
-    #  get/set the current message
-
-    attr_accessor :message
-
-    ##
-    #  get/set the current subject
-
-    attr_accessor :subject
-
-    ##
-    # Get/set the form id
-
-    attr_accessor :forum
-
-    ##
-    # Get/set the topic id
-
-    attr_accessor :topic
-
-    ##
-    # Get the topic name (subject) based on forum and topic ids
-
-    def get_subject(forum = @forum, topic = @topic)
-      if @topics && @topics[forum]
-        return @topics[forum][topic]
-      end
-      nil
+    def post(forum, topic, message)
+      @post.post(forum, topic, message)
     end
 
     ##
     # Make a new topic
 
-    def new_topic(forum=@forum, subject=@subject, message=@message); end
-
-    ##
-    # Gets the application root of the application such as
-    # http://example.com/phpbb or http://example.com/forums
-
-    def app_root
-      config[:app_root]
+    def new_topic(forum, subject, message)
+      @topic.new_topic(forum, subject, message)
     end
 
-    protected
-
-    ##
-    # Get the topics cache
-
-    def topics_cache
-      config[:topics_cache]
-    end
-
-    ##
-    # Get the login page for the application
-
-    def login_page
-      URI.join(app_root, config[:login_page])
-    end
-
-    ##
-    # Get the username for the application
-
-    def username
-      config[:username]
-    end
-
-    ##
-    # Get the password for the application
-
-    def password
-      config[:password]
-    end
-
-    ##
-    # A Mechanize user agent name, see the mechanize documentation
-    # 'Linux Mozilla', 'Mac Safari', 'Windows IE 7', etc.
-
-    def user_agent
-      config[:user_agent]
-    end
-
-    ##
-    # is a yaml file for WWW::Mechanize::CookieJar
-
-    def cookie_jar
-      config[:cookie_jar]
-    end
   end
 end

@@ -7,9 +7,7 @@ class WWW::Impostor
   class Wwf79 < WWW::Impostor
 
     ##
-    # After initializing the parent a mechanize agent is created
-    #
-    # Additional configuration parameters:
+    # Additional configuration parameters for a Wwf79 compatible agent:
     #
     # :forum_posts_page
     # :post_message_page
@@ -23,15 +21,6 @@ class WWW::Impostor
     # :user_agent => 'Windows IE 7',
     # :username => 'myuser',
     # :password => 'mypasswd' }
-
-    def initialize(config={})
-      super(config)
-      @agent = Mechanize.new
-      @agent.user_agent_alias = user_agent
-      @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
-      @message = nil
-      @loggedin = false
-    end
 
     ##
     # clean up the state of the library and log out
@@ -50,26 +39,19 @@ class WWW::Impostor
       true
     end
 
+    def _new_topic_form_query(forum)
+      uri = posting_page
+      uri.query = "FID=#{forum}"
+      uri
+    end
+
     ##
     # create a new topic
 
     def new_topic(forum=@forum, subject=@subject, message=@message)
-      raise PostError.new("forum not set") unless forum
-      raise PostError.new("topic name not given") unless subject
-      raise PostError.new("message not set") unless message
 
-      login
-      raise PostError.new("not logged in") unless @loggedin
+      super
 
-      uri = post_message_page
-      uri.query = "FID=#{forum}"
-
-      # get the submit form
-      begin
-        page = @agent.get(uri)
-      rescue StandardError => err
-        raise PostError.new(err)
-      end
       form = page.form('frmAddMessage') rescue nil
       button = form.buttons.with.name('Submit').first rescue nil
       raise PostError.new("post form not found") unless button && form
@@ -191,10 +173,6 @@ class WWW::Impostor
       @loggedin
     end
 
-    def version
-      @version ||= self.class.to_s
-    end
-
     protected
 
     ##
@@ -240,7 +218,7 @@ class WWW::Impostor
       mm = page.search("//a[@class='nav']")
       return false unless mm
       mm.each do |m|
-        return true if (m.innerText =~ /Logout \[#{username}\]/ rescue false)
+        return true if (m.text =~ /Logout \[#{username}\]/ rescue false)
       end
       false
     end

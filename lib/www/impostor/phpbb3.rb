@@ -7,9 +7,7 @@ class WWW::Impostor
   class Phpbb3 < WWW::Impostor
 
     ##
-    # After initializing the parent a mechanize agent is created
-    #
-    # Additional configuration parameters:
+    # Additional configuration parameters for a Phpbb3 compatible agent:
     #
     # :posting_page
     #
@@ -21,16 +19,6 @@ class WWW::Impostor
     # :user_agent => 'Windows IE 7',
     # :username => 'myuser',
     # :password => 'mypasswd' }
-
-    def initialize(config={})
-      super(config)
-      @agent = Mechanize.new
-      @agent.user_agent_alias = user_agent
-      # jar is a yaml file
-      @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
-      @message = nil
-      @loggedin = false
-    end
 
     ##
     # clean up the state of the library and log out
@@ -49,26 +37,18 @@ class WWW::Impostor
       true
     end
 
+    def _new_topic_form_query(forum)
+      uri = posting_page
+      uri.query = "mode=newtopic&f=#{forum}"
+      uri
+    end
+
     ##
     # make a new topic
 
     def new_topic(forum=@forum, subject=@subject, message=@message)
-      raise PostError.new("forum not set") unless forum
-      raise PostError.new("topic name not given") unless subject
-      raise PostError.new("message not set") unless message
 
-      login
-      raise PostError.new("not logged in") unless @loggedin
-
-      uri = posting_page
-      uri.query = "mode=post&f=#{forum}"
-
-      # get the submit form
-      begin
-        page = @agent.get(uri)
-      rescue StandardError => err
-        raise PostError.new(err)
-      end
+      super
 
       form = page.form('postform') rescue nil
       raise PostError.new("post form not found") unless form
@@ -172,10 +152,6 @@ class WWW::Impostor
       load_topics if @loggedin
 
       @loggedin
-    end
-
-    def version
-      @version ||= self.class.to_s
     end
 
     protected

@@ -4,12 +4,10 @@
 
 class WWW::Impostor
 
-  class Wwf80 < WWW::Impostor
+  module Wwf80
 
     ##
-    # After initializing the parent a mechanize agent is created
-    #
-    # Additional configuration parameters:
+    # Additional configuration parameters for a Wwf80 compatible agent:
     #
     # :new_reply_page
     # :new_topic_page
@@ -23,16 +21,6 @@ class WWW::Impostor
     # :user_agent => 'Windows IE 7',
     # :username => 'myuser',
     # :password => 'mypasswd' }
-
-    def initialize(config={})
-      super(config)
-      @agent = Mechanize.new
-      @agent.user_agent_alias = user_agent
-      # jar is a yaml file
-      @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
-      @message = nil
-      @loggedin = false
-    end
 
     ##
     # clean up the state of the library and log out
@@ -51,52 +39,41 @@ class WWW::Impostor
       true
     end
 
-    def new_topic(forum=@forum, subject=@subject, message=@message)
-      raise PostError.new("forum not set") unless forum
-      raise PostError.new("topic name not given") unless subject
-      raise PostError.new("message not set") unless message
-
-      login
-      raise PostError.new("not logged in") unless @loggedin
-
+    def _new_topic_form_query(forum)
       uri = new_topic_page
       uri.query = "FID=#{forum}"
+      uri
+    end
 
-      # get the submit form
-      begin
-        page = @agent.get(uri)
-      rescue StandardError => err
-        raise PostError.new(err)
-      end
+    def _new_topic_check_topic_form(page)
+      check_and_raise_if_error(page)
+    end
+
+    def _new_topic_validate_topic_form(page)
       form = page.form('frmMessageForm') rescue nil
       button = form.buttons.with.name('Submit').first rescue nil
       raise PostError.new("post form not found") unless button && form
+      form
+    end
+
+    def _new_topic_set_subject_and_message(form, subject, message)
+      raise 'not implemented'
+    end
+
+    def new_topic(forum=@forum, subject=@subject, message=@message)
+
+      super
 
       # set up the form and submit it
       form.subject = subject
       form.message = message
+
       begin
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
-
-      error = page.search("//table[@class='errorTable']")
-      if error
-        msgs = error.search("//td")
-
-        # throttled
-        too_many = (msgs.last.innerText =~
-        /You have exceeded the number of posts permitted in the time span/ rescue
-        false)
-        raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
-
-        # general error
-        had_error = (error.last.innerText =~
-        /Error: Message Not Posted/ rescue
-        false)
-        raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
-      end
+      check_and_raise_if_error(page)
 
       # look up the new topic id
       form = page.form('frmMessageForm') rescue nil
@@ -130,6 +107,7 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
+      check_and_raise_if_error(page)
 
       form = page.form('frmMessageForm') rescue nil
       button = form.buttons.with.name('Submit').first rescue nil
@@ -142,23 +120,7 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-
-      error = page.search("//table[@class='errorTable']")
-      if error
-        msgs = error.search("//td")
-
-        # throttled
-        too_many = (msgs.last.innerText =~
-        /You have exceeded the number of posts permitted in the time span/ rescue
-        false)
-        raise ThrottledError.new(msgs.last.innerText.gsub(/\s+/m,' ').strip) if too_many
-
-        # general error
-        had_error = (error.last.innerText =~
-        /Error: Message Not Posted/ rescue
-        false)
-        raise PostError.new(error.last.innerText.gsub(/\s+/m,' ').strip) if had_error
-      end
+      check_and_raise_if_error(page)
 
       @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
       return true
@@ -168,14 +130,14 @@ class WWW::Impostor
     # Get the new reply page for the application (specific to WWF8.0)
 
     def new_reply_page
-      URI.join(app_root, config[:new_reply_page])
+      URI.join(app_root, config(:new_reply_page))
     end
 
     ##
     # Get the new topic page for the application (specific to WWF8.0)
 
     def new_topic_page
-      URI.join(app_root, config[:new_topic_page])
+      URI.join(app_root, config(:new_topic_page))
     end
 
     ##
@@ -199,10 +161,6 @@ class WWW::Impostor
       load_topics if @loggedin
 
       @loggedin
-    end
-
-    def version
-      @version ||= self.class.to_s
     end
 
     protected
@@ -250,9 +208,28 @@ class WWW::Impostor
       mm = page.search("//a[@class='nav']")
       return false unless mm
       mm.each do |m|
-        return true if (m.innerText =~ /Logout \[#{username}\]/ rescue false)
+        return true if (m.text =~ /Logout \[#{username}\]/ rescue false)
       end
       false
+    end
+  end
+
+  def check_and_raise_if_error(page)
+    error = page.search("//table[@class='errorTable']")
+    if error
+      msgs = error.search("//td")
+
+      # throttled
+      too_many = (msgs.last.text =~
+      /You have exceeded the number of posts permitted in the time span/ rescue
+      false)
+      raise ThrottledError.new(msgs.last.text.gsub(/\s+/m,' ').strip) if too_many
+
+      # general error
+      had_error = (error.last.text =~
+      /Error: Message Not Posted/ rescue
+      false)
+      raise PostError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
     end
   end
 end
