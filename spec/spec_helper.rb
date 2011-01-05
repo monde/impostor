@@ -8,21 +8,16 @@ require 'rspec'
 
 RSpec.configure do |config|
   config.mock_with :rspec
-
-  #config.include Spec::Builders
-  #config.include Spec::Helpers
-  #config.include Spec::Indexes
-  #config.include Spec::Matchers
-  #config.include Spec::Path
-  #config.include Spec::Rubygems
-  #config.include Spec::Platforms
-  #config.include Spec::Sudo
 end
-
 
 module WWW::Impostor::Test
 
   module Auth
+    def login
+      true
+    end
+    def logout
+    end
   end
 
   module Post

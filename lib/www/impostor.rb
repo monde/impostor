@@ -29,7 +29,6 @@ module WWW
   #  # make a new topic
   #  subject = "about programmers..."
   #  post.new_topic(forum=7,subject,message)
-  #  post.logout
   #
   #  keys and values that can be set in the impostor configuration
   #
@@ -62,21 +61,13 @@ module WWW
       @topic  = Topic.new(@auth, @config)
       @post   = Post.new(@auth, @config)
 
-      type = self.config(:type)
-      if type
-        extend eval("WWW::Impostor::#{type.to_s.capitalize}")
-        @auth.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Auth")
-        @topic.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Topic")
-        @post.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Post")
-      end
+      type = @config.config(:type)
+      raise ConfigError.new("Missing 'type' key in configuration") unless type
 
-    end
-
-    ##
-    # Access the current config and key it without regard for symbols or strings
-
-    def config(key)
-      @config.config(key)
+      extend eval("WWW::Impostor::#{type.to_s.capitalize}")
+      @auth.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Auth")
+      @topic.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Topic")
+      @post.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Post")
     end
 
     ##

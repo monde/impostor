@@ -46,5 +46,10 @@ module WWW
 
     class ThrottledError < ImpostorError; end
 
+    ##
+    # An for misconfiguration
+
+    class ConfigError < ImpostorError; end
+
   end
 end
