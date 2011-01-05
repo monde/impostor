@@ -13,11 +13,6 @@ end
 module WWW::Impostor::Test
 
   module Auth
-    def login
-      true
-    end
-    def logout
-    end
   end
 
   module Post
