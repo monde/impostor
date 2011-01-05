@@ -2,8 +2,19 @@ class WWW::Impostor::Config
 
   def initialize(config)
     @config = config
+    validate_keys(:type, :username, :password, :app_root, :login_page)
     setup_agent
     load_topics
+  end
+
+  ##
+  # Validates expected keys are in the config
+
+  def validate_keys(*keys)
+    keys.each do |key|
+      val = self.config(key)
+      raise WWW::Impostor::ConfigError.new("Missing key '#{key}' in configuration") unless val
+    end
   end
 
   ##
@@ -67,13 +78,6 @@ class WWW::Impostor::Config
   end
 
   ##
-  # Get the topic name (subject) based on forum and topic ids
-
-  def get_subject(forum, topic)
-    @config.get_subject(forum, topic)
-  end
-
-  ##
   # Gets the application root of the application such as
   # http://example.com/phpbb or http://example.com/forums
 
@@ -114,7 +118,7 @@ class WWW::Impostor::Config
   # 'Linux Mozilla', 'Mac Safari', 'Windows IE 7', etc.
 
   def user_agent
-    self.config(:user_agent)
+    self.config(:user_agent) || 'Mechanize'
   end
 
   ##

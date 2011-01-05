@@ -5,8 +5,24 @@ require "impostor"
 
 require 'rspec'
 
-RSpec.configure do |config|
-  config.mock_with :rspec
+module ImpostorSpecHelper
+
+  def impostor(config = {})
+    c = { :type => :test }
+    WWW::Impostor.new(c.merge(config))
+  end
+
+  def config(config = {})
+    c = { :type => :test,
+          :username => "user",
+          :password => "pass",
+          :app_root => "http://example.com",
+          :login_page => "/login"
+    }
+
+    WWW::Impostor::Config.new(c.merge(config))
+  end
+
 end
 
 module WWW::Impostor::Test
@@ -22,17 +38,7 @@ module WWW::Impostor::Test
 
 end
 
-module Helper
-
-  def impostor(config = {})
-    config[:type] ||= :test
-    WWW::Impostor.new(config)
-  end
-
-  def config(config = {})
-    WWW::Impostor::Config.new(config)
-  end
-
+RSpec.configure do |config|
+  config.mock_with :rspec
+  config.include ImpostorSpecHelper
 end
-
-include Helper
