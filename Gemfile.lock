@@ -10,8 +10,6 @@ GEM
       rake (>= 0.8.7)
     mechanize (1.0.0)
       nokogiri (>= 1.2.1)
-    mocha (0.9.10)
-      rake
     mongrel (1.1.5)
       cgi_multipart_eof_fix (>= 2.4)
       daemons (>= 1.0.3)
@@ -19,6 +17,7 @@ GEM
       gem_plugin (>= 0.2.3)
     nokogiri (1.4.4)
     rake (0.8.7)
+    redgreen (1.2.2)
     rspec (2.4.0)
       rspec-core (~> 2.4.0)
       rspec-expectations (~> 2.4.0)
@@ -27,7 +26,6 @@ GEM
     rspec-expectations (2.4.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.4.0)
-    test-unit (2.1.2)
 
 PLATFORMS
   ruby
@@ -35,8 +33,7 @@ PLATFORMS
 DEPENDENCIES
   hoe (>= 2.8.0)
   mechanize (>= 1.0.0)
-  mocha (>= 0.9.10)
   mongrel (>= 1.1.5)
   nokogiri (>= 1.4.4)
+  redgreen (>= 1.2.2)
   rspec (>= 2.3.0)
-  test-unit (>= 2.1.2)
