@@ -1,6 +1,7 @@
 class WWW::Impostor::Config
 
   attr_reader :agent
+  attr_reader :topics
 
   def initialize(config)
     @config = config
@@ -41,7 +42,7 @@ class WWW::Impostor::Config
   # Load the topics that the impostor already knows about
 
   def load_topics
-    cache = self.config(:topics_cache) || ""
+    cache = self.topics_cache || ""
     if File::exist?(cache)
       @topics = YAML::load_file(cache)
     else
@@ -53,10 +54,10 @@ class WWW::Impostor::Config
   # Add subject to topics hash
 
   def add_subject(forum, topic, name)
-    if @topics[forum].nil?
-      @topics[forum] = {topic, name}
+    if self.topics[forum].nil?
+      self.topics[forum] = {topic, name}
     else
-      @topics[forum][topic] = name
+      self.topics[forum][topic] = name
     end
   end
 
@@ -64,8 +65,8 @@ class WWW::Impostor::Config
   # Get the topic name (subject) based on forum and topic ids
 
   def get_subject(forum, topic)
-    if @topics && @topics[forum]
-      return @topics[forum][topic]
+    if self.topics && self.topics[forum]
+      return self.topics[forum][topic]
     end
     nil
   end
@@ -74,10 +75,10 @@ class WWW::Impostor::Config
   # Save the topics
 
   def save_topics
-    cache = self.config(:topics_cache) || ""
+    cache = self.topics_cache || ""
     if File::exist?(cache)
       File.open(cache, 'w') do |out|
-        YAML.dump(@topics, out)
+        YAML.dump(self.topics, out)
       end
     end
   end

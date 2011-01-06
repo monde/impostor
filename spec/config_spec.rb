@@ -29,11 +29,20 @@ describe "impostor's configuration" do
     config.agent.should respond_to(:get)
   end
 
-  it "should use tempfile for topics cache when it's not config'd"
+  it "should load a topics cache persisted in a file" do
+    cache = Tempfile.new('foo')
+    topics = {"1" => {"2" => "Hello World"}}
+    cache.write(topics.to_yaml)
+    cache.close
 
-  it "should use tempfile for topics cache when it's not config'd"
+    YAML.should_receive(:load_file).with(cache.path).and_return(topics)
+    config(:topics_cache => cache.path).topics.should == topics
+  end
 
-  it "should load topics"
+  it "should load a topics cache persisted in memory" do
+    YAML.should_not_receive(:load_file)
+    config.topics.should == {}
+  end
 
   it "should add a subject"
 
@@ -46,9 +55,7 @@ describe "impostor's configuration" do
       should == "http://example.com"
   end
 
-  it "should get the topics cache"
-
-  it "should have a topics cache"
+  it "should have a topics cache config entry"
 
   it "should have a username"
 
