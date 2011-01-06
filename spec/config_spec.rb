@@ -58,7 +58,19 @@ describe "impostor's configuration" do
     c.get_subject(1, 2).should == "Hello World"
   end
 
-  it "should save topics"
+  it "should save topics when it has a file to persist to" do
+    cache = Tempfile.new('foo')
+    topics = {"1" => {"2" => "Hello World"}}
+    cache.write(topics.to_yaml)
+    cache.close
+
+    c = config(:topics_cache => cache.path)
+    c.add_subject(1, 3, "Foo Bar")
+    c.save_topics
+
+    YAML::load_file(cache.path).should ==
+      {"1" => {"2" => "Hello World", "3" => "Foo Bar"}}
+  end
 
   it "should have an app root" do
     config(:app_root => "http://example.com").app_root.
