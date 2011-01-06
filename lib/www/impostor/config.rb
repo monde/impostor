@@ -67,10 +67,9 @@ class WWW::Impostor::Config
   # Get the topic name (subject) based on forum and topic ids
 
   def get_subject(forum, topic)
-    if self.topics && self.topics[forum]
-      return self.topics[forum][topic]
-    end
-    nil
+    forum = forum.to_s
+    topic = topic.to_s
+    self.topics[forum] ? self.topics[forum][topic] : nil
   end
 
   ##
