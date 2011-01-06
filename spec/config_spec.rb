@@ -25,13 +25,13 @@ describe "impostor's configuration" do
     config.config("foo").should == "bar"
   end
 
+  it "should set up an agent" do
+    config.agent.should respond_to(:get)
+  end
+
   it "should use tempfile for topics cache when it's not config'd"
 
-  it "should use tempfile for cookie jar when it's not config'd"
-
   it "should use tempfile for topics cache when it's not config'd"
-
-  it "should set up an agent"
 
   it "should load topics"
 

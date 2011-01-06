@@ -1,5 +1,7 @@
 class WWW::Impostor::Config
 
+  attr_reader :agent
+
   def initialize(config)
     @config = config
     validate_keys(:type, :username, :password, :app_root, :login_page)
@@ -24,12 +26,15 @@ class WWW::Impostor::Config
     @config[key.to_sym] || @config[key.to_s]
   end
 
+  ##
+  # Sets up the mechanize agent initialized with cookie jar file specified by
+  # the :cookie_jar configuration parameter if it exists
+
   def setup_agent
     @agent = Mechanize.new
     @agent.user_agent_alias = self.user_agent if self.user_agent
     # jar is a yaml file
     @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
-    @loggedin = false
   end
 
   ##
