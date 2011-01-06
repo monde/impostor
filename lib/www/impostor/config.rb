@@ -54,6 +54,8 @@ class WWW::Impostor::Config
   # Add subject to topics hash
 
   def add_subject(forum, topic, name)
+    forum = forum.to_s
+    topic = topic.to_s
     if self.topics[forum].nil?
       self.topics[forum] = {topic, name}
     else

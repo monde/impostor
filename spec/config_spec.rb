@@ -44,7 +44,12 @@ describe "impostor's configuration" do
     config.topics.should == {}
   end
 
-  it "should add a subject"
+  it "should add a subject" do
+    c = config
+    c.topics.should == {}
+    c.add_subject(1, 2, "Hello World")
+    c.topics.should == {"1" => {"2" => "Hello World"}}
+  end
 
   it "should get a subject"
 
