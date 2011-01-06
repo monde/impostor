@@ -77,7 +77,9 @@ describe "impostor's configuration" do
       should == "http://example.com"
   end
 
-  it "should have a topics cache config entry"
+  it "should have a topics cache config entry" do
+    config(:topics_cache => "/hello/world").topics_cache.should == "/hello/world"
+  end
 
   it "should have a username"
 
