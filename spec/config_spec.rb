@@ -81,12 +81,24 @@ describe "impostor's configuration" do
     config(:topics_cache => "/hello/world").topics_cache.should == "/hello/world"
   end
 
-  it "should have a username"
+  it "should have a username" do
+    config.username.should == "user"
+  end
 
-  it "should have a password"
+  it "should have a password" do
+    config.password.should == "pass"
+  end
 
-  it "should have a user agent"
+  it "should have a default user agent" do
+    config.user_agent.should == "Mechanize"
+  end
 
-  it "should have a cookie jar"
+  it "should have a default user agent" do
+    config(:user_agent => "Linux Mozilla").user_agent.should == "Linux Mozilla"
+  end
+
+  it "should have a cookie jar" do
+    config(:cookie_jar => "/hello/world").cookie_jar.should == "/hello/world"
+  end
 
 end
