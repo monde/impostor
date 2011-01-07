@@ -18,6 +18,22 @@ describe "impostor's authorization routines" do
       )
     end
 
+    it "should raise not implemented error when fetch_login_page called" do
+      auth = self.auth
+      lambda { auth.fetch_login_page }.should raise_error(
+        WWW::Impostor::MissingFactoryMethodError,
+        "Impostor error: fetch_login_page must be implemented (StandardError)"
+      )
+    end
+
+    it "should raise not implemented error when post_login called" do
+      auth = self.auth
+      lambda { auth.post_login(nil, nil) }.should raise_error(
+        WWW::Impostor::MissingFactoryMethodError,
+        "Impostor error: post_login must be implemented (StandardError)"
+      )
+    end
+
   end
 
 end

@@ -23,7 +23,7 @@ class WWW::Impostor::Auth
   end
 
   def fetch_login_page
-    raise WWW::Impostor::MissingFactoryMethodError.new("feetch_login_page must be implemented")
+    raise WWW::Impostor::MissingFactoryMethodError.new("fetch_login_page must be implemented")
   end
 
   def post_login(form, button)
