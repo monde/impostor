@@ -47,9 +47,14 @@ module WWW
     class ThrottledError < ImpostorError; end
 
     ##
-    # An for misconfiguration
+    # An error for misconfiguration
 
     class ConfigError < ImpostorError; end
+
+    ##
+    # An error for factory methods that need to be implemented
+
+    class MissingFactoryMethodError < ImpostorError; end
 
   end
 end

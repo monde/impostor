@@ -19,15 +19,15 @@ class WWW::Impostor::Auth
   end
 
   def logged_in?
-    raise LoginError.new("logged_in? must be implemented")
+    raise WWW::Impostor::MissingFactoryMethodError.new("logged_in? must be implemented")
   end
 
   def fetch_login_page
-    raise LoginError.new("feetch_login_page must be implemented")
+    raise WWW::Impostor::MissingFactoryMethodError.new("feetch_login_page must be implemented")
   end
 
   def post_login(form, button)
-    raise LoginError.new("post_login must be implemented")
+    raise WWW::Impostor::MissingFactoryMethodError.new("post_login must be implemented")
   end
 
 end
