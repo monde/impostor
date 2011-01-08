@@ -85,6 +85,13 @@ class WWW::Impostor::Config
   end
 
   ##
+  # Save the cookie jar
+
+  def save_cookie_jar
+    self.agent.cookie_jar.save_as(self.cookie_jar) if self.cookie_jar
+  end
+
+  ##
   # Gets the application root of the application such as
   # http://example.com/phpbb or http://example.com/forums
 

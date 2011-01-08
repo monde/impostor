@@ -4,6 +4,24 @@ describe "impostor's authorization routines" do
 
   describe "the no-op test impostor without implemented factory methods" do
 
+    it "should logout only if not logged in" do
+      auth = self.auth
+      auth.should_receive(:authenticated?).once.and_return(false)
+      auth.logout.should_not be_true
+    end
+
+    it "should logout" do
+      config = self.config
+      auth = self.auth(config)
+      config.should_receive(:save_topics).once
+      config.should_receive(:save_cookie_jar).once
+      auth.instance_variable_set("@authenticated", true)
+
+      auth.logout.should be_true
+      auth.authenticated?.should_not be_true
+    end
+
+
     it "should login at the server only if not logged in" do
       auth = self.auth
       auth.should_receive(:authenticated?).once.and_return(true)
@@ -71,6 +89,19 @@ describe "impostor's authorization routines" do
          auth.login.should be_true
       }.should_not raise_error
 
+    end
+
+    it "should not login via composed factory methods if already logged in" do
+      auth = self.auth
+      auth.should_receive(:authenticated?).once.and_return(true)
+
+      auth.should_not_receive(:fetch_login_page)
+      auth.should_not_receive(:logged_in?)
+      auth.should_not_receive(:login_form_and_button)
+
+      lambda {
+         auth.login.should be_true
+      }.should_not raise_error
     end
   end
 

@@ -16,7 +16,16 @@ class WWW::Impostor::Auth
     form, button = self.login_form_and_button(page)
     page = self.post_login(form, button)
 
-    self.logged_in?(page)
+    @authenticated = self.logged_in?(page)
+  end
+
+  def logout
+    return false unless self.authenticated?
+
+    @config.save_topics
+    @config.save_cookie_jar
+
+    not ( @authenticated = false )
   end
 
   def logged_in?(page)

@@ -101,4 +101,13 @@ describe "impostor's configuration" do
     config(:cookie_jar => "/hello/world").cookie_jar.should == "/hello/world"
   end
 
+  it "should have a cookie jar" do
+    jar_file = Tempfile.new('cookies')
+    jar_file.close
+    config = self.config(:cookie_jar => jar_file.path)
+    config.agent.cookie_jar.should_receive(:save_as).with(jar_file.path).once
+
+    config.save_cookie_jar
+  end
+
 end
