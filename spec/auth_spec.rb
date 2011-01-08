@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "impostor's authorization routines" do
 
-  describe "the no-op test impostor without implemented factory methods" do
+  describe "the no-op test impostor without implemented template methods" do
 
     it "should logout only if not logged in" do
       auth = self.auth
@@ -28,10 +28,10 @@ describe "impostor's authorization routines" do
       auth.login.should be_true
     end
 
-    it "should not login when factory methods are not implemented" do
+    it "should not login when template methods are not implemented" do
       auth = self.auth
       lambda { auth.login }.should raise_error(
-        WWW::Impostor::MissingFactoryMethodError,
+        WWW::Impostor::MissingTemplateMethodError,
         "Impostor error: fetch_login_page must be implemented (StandardError)"
       )
     end
@@ -39,7 +39,7 @@ describe "impostor's authorization routines" do
     it "should raise not implemented error when logged_in? called" do
       auth = self.auth
       lambda { auth.logged_in?(nil) }.should raise_error(
-        WWW::Impostor::MissingFactoryMethodError,
+        WWW::Impostor::MissingTemplateMethodError,
         "Impostor error: logged_in? must be implemented (StandardError)"
       )
     end
@@ -47,7 +47,7 @@ describe "impostor's authorization routines" do
     it "should raise not implemented error when fetch_login_page called" do
       auth = self.auth
       lambda { auth.fetch_login_page }.should raise_error(
-        WWW::Impostor::MissingFactoryMethodError,
+        WWW::Impostor::MissingTemplateMethodError,
         "Impostor error: fetch_login_page must be implemented (StandardError)"
       )
     end
@@ -55,7 +55,7 @@ describe "impostor's authorization routines" do
     it "should raise not implemented error when login_form_and_button called" do
       auth = self.auth
       lambda { auth.login_form_and_button(nil) }.should raise_error(
-        WWW::Impostor::MissingFactoryMethodError,
+        WWW::Impostor::MissingTemplateMethodError,
         "Impostor error: login_form_and_button must be implemented (StandardError)"
       )
     end
@@ -63,12 +63,12 @@ describe "impostor's authorization routines" do
     it "should raise not implemented error when post_login called" do
       auth = self.auth
       lambda { auth.post_login(nil, nil) }.should raise_error(
-        WWW::Impostor::MissingFactoryMethodError,
+        WWW::Impostor::MissingTemplateMethodError,
         "Impostor error: post_login must be implemented (StandardError)"
       )
     end
 
-    it "should login via composed factory methods" do
+    it "should login via composed template methods" do
 
       auth = self.auth
 
@@ -91,7 +91,7 @@ describe "impostor's authorization routines" do
 
     end
 
-    it "should not login via composed factory methods if already logged in" do
+    it "should not login via composed template methods if already logged in" do
       auth = self.auth
       auth.should_receive(:authenticated?).once.and_return(true)
 

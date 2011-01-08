@@ -52,9 +52,9 @@ module WWW
     class ConfigError < ImpostorError; end
 
     ##
-    # An error for factory methods that need to be implemented
+    # An error for template methods that need to be implemented
 
-    class MissingFactoryMethodError < ImpostorError; end
+    class MissingTemplateMethodError < ImpostorError; end
 
   end
 end
