@@ -23,4 +23,12 @@ module ImpostorSpecHelper
     auth
   end
 
+  def post(config = nil, auth = nil)
+    config ||= self.config
+    auth ||= self.auth
+    post = WWW::Impostor::Post.new(config, auth)
+    post.extend eval("WWW::Impostor::#{config.config(:type).to_s.capitalize}::Post")
+    post
+  end
+
 end
