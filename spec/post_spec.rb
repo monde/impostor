@@ -2,44 +2,55 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "impostor's post routines" do
 
-  describe "the no-op test impostor without implemented template methods" do
+  describe "the no-op test impostor post without implemented template methods" do
 
-    it "should post a message" do
-      impostor.post(formum=1, topic=2, message="Hello World").should == {
-        :forum => 1,
-        :topic => 2,
-        :message => "Hello World",
-        :result => true
-      }
-    end
+    it "should post via composed template methods" do
 
-    it "should have post error when forum is missing for a post" do
-      post = self.post
-      lambda { post.post(nil, 2, "Hello World") }.should raise_error(
-        WWW::Impostor::PostError,
-        "Impostor error: forum not set (StandardError)"
-      )
-    end
+      config = self.config
+      auth = self.auth
+      post = self.post(config, auth)
 
-    it "should have post error when topic is missing for a post" do
-      post = self.post
-      lambda { post.post(1, nil, "Hello World") }.should raise_error(
-        WWW::Impostor::PostError,
-        "Impostor error: topic not set (StandardError)"
-      )
-    end
+      auth.should_receive(:login).once.and_return(true)
 
-    it "should have post error when message is missing for a post" do
-      post = self.post
-      lambda { post.post(1, 2, nil) }.should raise_error(
-        WWW::Impostor::PostError,
-        "Impostor error: message not set (StandardError)"
-      )
+      lambda {
+        post.post(formum=1, topic=2, message="Hello World").should == {
+          :forum => 1,
+          :topic => 2,
+          :message => "Hello World",
+          :result => true
+        }
+      }.should_not raise_error
+
     end
 
   end
 
   describe "the base post template methods" do
+
+    it "should have post error when forum is missing in #validate_post_input" do
+      post = self.post
+      lambda { post.validate_post_input(nil, 2, "Hello World") }.should raise_error(
+        WWW::Impostor::PostError,
+        "Impostor error: forum not set (StandardError)"
+      )
+    end
+
+    it "should have post error when topic is missing in #validate_post_input" do
+      post = self.post
+      lambda { post.validate_post_input(1, nil, "Hello World") }.should raise_error(
+        WWW::Impostor::PostError,
+        "Impostor error: topic not set (StandardError)"
+      )
+    end
+
+    it "should have post error when message is missing in #validate_post_input" do
+      post = self.post
+      lambda { post.validate_post_input(1, 2, nil) }.should raise_error(
+        WWW::Impostor::PostError,
+        "Impostor error: message not set (StandardError)"
+      )
+    end
+
   end
 
 end

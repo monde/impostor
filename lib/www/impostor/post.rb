@@ -1,11 +1,13 @@
 class WWW::Impostor::Post
 
+  attr_reader :auth
+
   ##
   # Post is initialized with the config and auth of the impostor
 
   def initialize(config, auth)
-    @auth = auth
     @config = config
+    @auth = auth
   end
 
   ##
@@ -23,6 +25,7 @@ class WWW::Impostor::Post
 
   def post(forum, topic, message)
     validate_post_input(forum, topic, message)
+    self.auth.login
   end
 
   def validate_post_input(forum, topic, message)

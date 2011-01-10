@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 
 describe "impostor's authorization routines" do
 
-  describe "the no-op test impostor without implemented template methods" do
+  describe "the no-op test impostor auth without implemented template methods" do
 
     it "should logout only if not logged in" do
       auth = self.auth
@@ -86,7 +86,7 @@ describe "impostor's authorization routines" do
       auth.should_receive(:logged_in?).with(logged_in_page).once.and_return(true)
 
       lambda {
-         auth.login.should be_true
+        auth.login.should be_true
       }.should_not raise_error
 
     end
