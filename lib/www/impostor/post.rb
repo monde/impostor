@@ -25,7 +25,7 @@ class WWW::Impostor::Post
 
   def post(forum, topic, message)
     validate_post_input(forum, topic, message)
-    self.auth.login
+    self.auth.login_with_raises
   end
 
   def validate_post_input(forum, topic, message)

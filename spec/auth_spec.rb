@@ -21,7 +21,6 @@ describe "impostor's authorization routines" do
       auth.authenticated?.should_not be_true
     end
 
-
     it "should login at the server only if not logged in" do
       auth = self.auth
       auth.should_receive(:authenticated?).once.and_return(true)

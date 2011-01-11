@@ -14,8 +14,8 @@ module WWW
       ##
       # Creates a new ImpostorError with +message+ and +original_exception+
 
-      def initialize(e)
-        exception = e.class == String ? StandardError.new(e) : e
+      def initialize(e = nil)
+        exception = e.nil? || e.is_a?(String) ? StandardError.new(e) : e
         @original_exception = exception
         message = "Impostor error: #{exception.message} (#{exception.class})"
         super message

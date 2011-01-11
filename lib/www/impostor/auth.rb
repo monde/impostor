@@ -11,8 +11,9 @@ class WWW::Impostor::Auth
   end
 
   ##
-  # login to the impostor's forum
-  # login is comprised of the following template methods to allow
+  # Login to the impostor's forum.  Optional raises parameter will flag to
+  # raise an login error if login fails and raises is true.
+  # #login is comprised of the following template methods to allow
   # implementation for specific forum applications
   #
   # * fetch_login_page
@@ -20,7 +21,7 @@ class WWW::Impostor::Auth
   # * login_form_and_button(page)
   # * post_login(form, button)
 
-  def login
+  def login(raises=false)
     return true if self.authenticated?
 
     page = self.fetch_login_page
@@ -30,6 +31,12 @@ class WWW::Impostor::Auth
     page = self.post_login(form, button)
 
     @authenticated = self.logged_in?(page)
+  end
+
+  def login_with_raises
+    return true if self.login
+
+    raise WWW::Impostor::LoginError.new("not logged in")
   end
 
   ##

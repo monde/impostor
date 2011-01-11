@@ -10,7 +10,7 @@ describe "impostor's post routines" do
       auth = self.auth
       post = self.post(config, auth)
 
-      auth.should_receive(:login).once.and_return(true)
+      auth.should_receive(:login_with_raises).once.and_return(true)
 
       lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
@@ -21,6 +21,19 @@ describe "impostor's post routines" do
         }
       }.should_not raise_error
 
+    end
+
+    it "should have logged in error when posting and not logged in" do
+
+      config = self.config
+      auth = self.auth
+      post = self.post(config, auth)
+
+      auth.should_receive(:login_with_raises).and_raise(WWW::Impostor::LoginError)
+
+      lambda {
+        post.post(formum=1, topic=2, message="Hello World")
+      }.should raise_error( WWW::Impostor::LoginError )
     end
 
   end
