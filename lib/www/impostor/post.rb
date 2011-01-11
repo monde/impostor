@@ -5,8 +5,7 @@ class WWW::Impostor::Post
   ##
   # Post is initialized with the config and auth of the impostor
 
-  def initialize(config, auth)
-    @config = config
+  def initialize(auth)
     @auth = auth
   end
 
@@ -66,7 +65,7 @@ class WWW::Impostor::Post
 
   ##
   # return the form used for posting a message from the reply page
-  j
+
   def get_post_form(page)
     raise WWW::Impostor::MissingTemplateMethodError.new("get_post_form must be implemented")
   end
