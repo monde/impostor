@@ -27,6 +27,21 @@ describe "impostor's authorization routines" do
       auth.login.should be_true
     end
 
+    it "should raise login failure when login fails" do
+      auth = self.auth
+      auth.should_receive(:login).once.and_return(false)
+      lambda { auth.login_with_raises }.should raise_error(
+        WWW::Impostor::LoginError,
+        "Impostor error: not logged in (StandardError)"
+      )
+    end
+
+    it "should not raise login failure when login fails" do
+      auth = self.auth
+      auth.should_receive(:login).once.and_return(true)
+      lambda { auth.login_with_raises }.should_not raise_error
+    end
+
     it "should not login when template methods are not implemented" do
       auth = self.auth
       lambda { auth.login }.should raise_error(
