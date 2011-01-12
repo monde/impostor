@@ -1,55 +1,37 @@
 class WWW::Impostor::Topic
 
-  def initialize(auth, config)
+  attr_reader :auth
+
+  ##
+  # Topic is initialized with the auth of the impostor
+
+  def initialize(auth)
     @auth = auth
-    @config = config
   end
 
   ##
-  # Make a new topic
+  # create a new topic in the forum with the subject title and initial message
+  #
+  # * validate_new_topic_input(forum, subject, message)
+  # * get_new_topic_uri(params)
+  # * get_new_topic_page(uri)
+  # * get_post_form(page)
+  # * set_subject_and_message(form, subject, message)
+  # * post_new_topic(form)
+  # * validate_post_result(page)
 
   def new_topic(forum, subject, message)
-    #       _new_topic_validate_input(forum, subject, message)
-    #uri  = _new_topic_form_query(forum)
-    #page = _new_topic_get_topic_form(uri)
-    #form = _new_topic_validate_topic_form(page)
-    #form = _new_topic_set_subject_and_message(form, subject, message)
-
-    {
-      :forum => 1,
-      :subject => subject,
-      :message => message,
-      :result => true
-    }
+    self.validate_topic_input(forum, subject, message)
   end
 
-  #def _new_topic_set_subject_and_message(form, subject, message)
-  #  raise 'not implemented'
-  #end
+  ##
+  # validate the inputs forum, topic, and message
 
-  #def _new_topic_validate_topic_form(page)
-  #  raise 'not implemented'
-  #end
+  def validate_topic_input(forum, subject, message)
+    raise WWW::Impostor::TopicError.new("forum not set") unless forum
+    raise WWW::Impostor::TopicError.new("subject not set") unless subject
+    raise WWW::Impostor::TopicError.new("message not set") unless message
+    true
+  end
 
-  #def _new_topic_get_topic_form(uri)
-  #  # get the submit form
-  #  begin
-  #    page = @agent.get(uri)
-  #  rescue StandardError => err
-  #    raise PostError.new(err)
-  #  end
-  #end
-
-  #def _new_topic_form_query(forum)
-  #  raise 'not implemented'
-  #end
-
-  #def _new_topic_validate_input(forum, subject, message)
-  #  raise PostError.new("forum not set") unless forum
-  #  raise PostError.new("topic name not given") unless subject
-  #  raise PostError.new("message not set") unless message
-
-  #  login
-  #  raise PostError.new("not logged in") unless @loggedin
-  #end
 end
