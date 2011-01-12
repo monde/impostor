@@ -53,4 +53,53 @@ class WWW::Impostor::Topic
     true
   end
 
+  ##
+  # return a uri used to fetch the new topic page based on the forum, subject,
+  # and message
+
+  def get_new_topic_uri(forum, subject, message)
+    raise WWW::Impostor::MissingTemplateMethodError.new("get_new_topic_uri must be implemented")
+  end
+
+  ##
+  # Get the page that has the form for new topics referenced by the uri
+
+  def get_new_topic_page(uri)
+    raise WWW::Impostor::MissingTemplateMethodError.new("get_new_topic_page must be implemented")
+  end
+
+  ##
+  # Get the the new topic form on the page
+
+  def get_new_topic_form(page)
+    raise WWW::Impostor::MissingTemplateMethodError.new("get_new_topic_form must be implemented")
+  end
+
+  ##
+  # Set the subject and message on the new topic form
+
+  def set_subject_and_message(form, subject, message)
+    raise WWW::Impostor::MissingTemplateMethodError.new("set_subject_and_message must be implemented")
+  end
+
+  ##
+  # Post the new topic that is contained on the form
+
+  def post_new_topic(form)
+    raise WWW::Impostor::MissingTemplateMethodError.new("post_new_topic must be implemented")
+  end
+
+  ##
+  # Validate the result of posting the new topic
+
+  def validate_new_topic_result(page)
+    raise WWW::Impostor::MissingTemplateMethodError.new("validate_new_topic_result must be implemented")
+  end
+
+  ##
+  # Get the new topic identifier from the result page
+
+  def get_topic_from_result(page)
+    raise WWW::Impostor::MissingTemplateMethodError.new("get_topic_from_result must be implemented")
+  end
 end
