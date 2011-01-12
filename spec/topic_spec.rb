@@ -20,6 +20,12 @@ describe "impostor's topic routines" do
 
     it "should have logged in error when creating a new topic and not logged in" do
 
+      config = self.config
+      auth = self.auth
+      topic = self.topic(config, auth)
+
+      auth.should_receive(:login_with_raises).and_raise(WWW::Impostor::LoginError)
+
       lambda {
         topic.new_topic(formum=1, subject="OMG!", message="Hello World")
       }.should raise_error( WWW::Impostor::LoginError )

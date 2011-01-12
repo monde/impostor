@@ -30,9 +30,10 @@ module ImpostorSpecHelper
     post
   end
 
-  def topic(auth = nil)
+  def topic(config = nil, auth = nil)
+    config ||= self.config
     auth ||= self.auth
-    topic = WWW::Impostor::Topic.new(auth)
+    topic = WWW::Impostor::Topic.new(config, auth)
     topic.extend eval("WWW::Impostor::#{config.config(:type).to_s.capitalize}::Topic")
     topic
   end
