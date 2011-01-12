@@ -1,19 +1,19 @@
 module ImpostorSpecHelper
 
+  def sample_config_params
+    { :type => :test,
+      :username => "user",
+      :password => "pass",
+      :app_root => "http://example.com",
+      :login_page => "/login" }
+  end
+
   def impostor(config = {})
-    c = { :type => :test }
-    WWW::Impostor.new(c.merge(config))
+    WWW::Impostor.new(config.merge(sample_config_params))
   end
 
   def config(config = {})
-    c = { :type => :test,
-          :username => "user",
-          :password => "pass",
-          :app_root => "http://example.com",
-          :login_page => "/login"
-    }
-
-    WWW::Impostor::Config.new(c.merge(config))
+    WWW::Impostor::Config.new(config.merge(sample_config_params))
   end
 
   def auth(config = nil)

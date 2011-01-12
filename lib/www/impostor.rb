@@ -58,8 +58,8 @@ module WWW
     def initialize(config={})
       @config = Config.new(config)
       @auth   = Auth.new(@config)
-      @topic  = Topic.new(@auth, @config)
-      @post   = Post.new(@auth, @config)
+      @post   = Post.new(@auth)
+      @topic  = Topic.new(@config, @auth)
 
       type = @config.config(:type)
       raise ConfigError.new("Missing 'type' key in configuration") unless type
