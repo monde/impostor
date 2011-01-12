@@ -15,7 +15,7 @@ class WWW::Impostor::Post
   # implementation for specific forum applications
   #
   # * validate_post_input(forum, topic, message)
-  # * get_reply_uri(params)
+  # * get_reply_uri(forum, topic, message)
   # * get_reply_page(uri)
   # * get_post_form(page)
   # * set_message(form, message)
@@ -34,7 +34,7 @@ class WWW::Impostor::Post
 
     { :forum => forum,
       :topic => topic,
-      :message => "Hello World",
+      :message => message,
       :result => true }
   end
 
