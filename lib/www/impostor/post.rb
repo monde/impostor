@@ -3,7 +3,7 @@ class WWW::Impostor::Post
   attr_reader :auth
 
   ##
-  # Post is initialized with the config and auth of the impostor
+  # Post is initialized with the auth of the impostor
 
   def initialize(auth)
     @auth = auth
