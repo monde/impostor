@@ -18,8 +18,8 @@ class WWW::Impostor::Auth
   #
   # * fetch_login_page
   # * logged_in?(page)
-  # * login_form_and_button(page)
-  # * post_login(form, button)
+  # * get_login_form(page)
+  # * post_login(form)
 
   def login(raises=false)
     return true if self.authenticated?
@@ -27,8 +27,8 @@ class WWW::Impostor::Auth
     page = self.fetch_login_page
     return true if self.logged_in?(page)
 
-    form, button = self.login_form_and_button(page)
-    page = self.post_login(form, button)
+    form = self.get_login_form(page)
+    page = self.post_login(form)
 
     @authenticated = self.logged_in?(page)
   end
@@ -66,16 +66,16 @@ class WWW::Impostor::Auth
   end
 
   ##
-  # returns the login form and its button from the login page
+  # returns the login form from the login page
 
-  def login_form_and_button(page)
-    raise WWW::Impostor::MissingTemplateMethodError.new("login_form_and_button must be implemented")
+  def get_login_form(page)
+    raise WWW::Impostor::MissingTemplateMethodError.new("get_login_form must be implemented")
   end
 
   ##
   # post the login form using it's button
 
-  def post_login(form, button)
+  def post_login(form)
     raise WWW::Impostor::MissingTemplateMethodError.new("post_login must be implemented")
   end
 

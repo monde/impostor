@@ -66,17 +66,17 @@ describe "impostor's authorization routines" do
       )
     end
 
-    it "should raise not implemented error when login_form_and_button called" do
+    it "should raise not implemented error when get_login_form called" do
       auth = self.auth
-      lambda { auth.login_form_and_button(nil) }.should raise_error(
+      lambda { auth.get_login_form(nil) }.should raise_error(
         WWW::Impostor::MissingTemplateMethodError,
-        "Impostor error: login_form_and_button must be implemented (StandardError)"
+        "Impostor error: get_login_form must be implemented (StandardError)"
       )
     end
 
     it "should raise not implemented error when post_login called" do
       auth = self.auth
-      lambda { auth.post_login(nil, nil) }.should raise_error(
+      lambda { auth.post_login(nil) }.should raise_error(
         WWW::Impostor::MissingTemplateMethodError,
         "Impostor error: post_login must be implemented (StandardError)"
       )
@@ -89,14 +89,13 @@ describe "impostor's authorization routines" do
       login_page = mock "page"
       logged_in_page = mock "page"
       form = mock "form"
-      button = mock "button"
 
       auth.should_receive(:authenticated?).once.and_return(false)
       auth.should_receive(:fetch_login_page).once.and_return(login_page)
       auth.should_receive(:logged_in?).with(login_page).once.and_return(false)
-      auth.should_receive(:login_form_and_button).with(login_page).once.and_return([form, button])
+      auth.should_receive(:get_login_form).with(login_page).once.and_return(form)
 
-      auth.should_receive(:post_login).with(form, button).once.and_return(logged_in_page)
+      auth.should_receive(:post_login).with(form).once.and_return(logged_in_page)
       auth.should_receive(:logged_in?).with(logged_in_page).once.and_return(true)
 
       lambda {
@@ -111,7 +110,7 @@ describe "impostor's authorization routines" do
 
       auth.should_not_receive(:fetch_login_page)
       auth.should_not_receive(:logged_in?)
-      auth.should_not_receive(:login_form_and_button)
+      auth.should_not_receive(:login_form)
 
       lambda {
          auth.login.should be_true
