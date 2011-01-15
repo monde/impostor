@@ -9,6 +9,7 @@ class WWW::Impostor::Topic
   def initialize(config, auth)
     @config = config
     @auth = auth
+    self.extend eval("WWW::Impostor::#{config.type.to_s.capitalize}::Topic")
   end
 
   ##

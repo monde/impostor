@@ -136,10 +136,17 @@ class WWW::Impostor::Config
   end
 
   ##
-  # is a yaml file for WWW::Mechanize::CookieJar
+  # is a yaml file for Mechanize::CookieJar
 
   def cookie_jar
     self.config(:cookie_jar)
+  end
+
+  ##
+  # The impostor type, as specified in the config
+
+  def type
+    self.config(:type)
   end
 
 end

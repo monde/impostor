@@ -58,16 +58,13 @@ module WWW
     def initialize(config={})
       @config = Config.new(config)
       @auth   = Auth.new(@config)
-      @post   = Post.new(@auth)
+      @post   = Post.new(@config, @auth)
       @topic  = Topic.new(@config, @auth)
 
-      type = @config.config(:type)
+      type = @config.type
       raise ConfigError.new("Missing 'type' key in configuration") unless type
 
       extend eval("WWW::Impostor::#{type.to_s.capitalize}")
-      @auth.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Auth")
-      @topic.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Topic")
-      @post.extend eval("WWW::Impostor::#{type.to_s.capitalize}::Post")
     end
 
     ##

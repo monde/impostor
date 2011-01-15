@@ -1,12 +1,15 @@
 class WWW::Impostor::Post
 
+  attr_reader :config
   attr_reader :auth
 
   ##
   # Post is initialized with the auth of the impostor
 
-  def initialize(auth)
+  def initialize(config, auth)
+    @config = config
     @auth = auth
+    self.extend eval("WWW::Impostor::#{config.type.to_s.capitalize}::Post")
   end
 
   ##
