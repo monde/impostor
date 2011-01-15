@@ -2,9 +2,9 @@
 # phpBB3 version of the Impostor
 #
 
-class WWW::Impostor
+class Impostor
 
-  class Phpbb3 < WWW::Impostor
+  module Phpbb3
 
     ##
     # Additional configuration parameters for a Phpbb3 compatible agent:

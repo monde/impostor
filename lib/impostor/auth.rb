@@ -1,4 +1,4 @@
-class WWW::Impostor::Auth
+class Impostor::Auth
 
   attr_reader :config
   attr_reader :authenticated
@@ -9,7 +9,7 @@ class WWW::Impostor::Auth
 
   def initialize(config)
     @config = config
-    self.extend eval("WWW::Impostor::#{config.type.to_s.capitalize}::Auth")
+    self.extend eval("Impostor::#{config.type.to_s.capitalize}::Auth")
   end
 
   ##
@@ -38,7 +38,7 @@ class WWW::Impostor::Auth
   def login_with_raises
     return true if self.login
 
-    raise WWW::Impostor::LoginError.new("not logged in")
+    raise Impostor::LoginError.new("not logged in")
   end
 
   ##
@@ -50,42 +50,44 @@ class WWW::Impostor::Auth
     self.config.save_topics
     self.config.save_cookie_jar
 
-    not ( @authenticated = false )
+    @authenticated = false
+
+    not self.authenticated?
   end
 
   ##
   # given the state of the page, are we logged in to the forum?
 
   def logged_in?(page)
-    raise WWW::Impostor::MissingTemplateMethodError.new("logged_in? must be implemented")
+    raise Impostor::MissingTemplateMethodError.new("logged_in? must be implemented")
   end
 
   ##
   # get the page for logging in
 
   def fetch_login_page
-    raise WWW::Impostor::MissingTemplateMethodError.new("fetch_login_page must be implemented")
+    raise Impostor::MissingTemplateMethodError.new("fetch_login_page must be implemented")
   end
 
   ##
   # returns the login form from the login page
 
   def get_login_form(page)
-    raise WWW::Impostor::MissingTemplateMethodError.new("get_login_form must be implemented")
+    raise Impostor::MissingTemplateMethodError.new("get_login_form must be implemented")
   end
 
   ##
   # Sets the user name and pass word on the loing form.
 
   def set_username_and_password(form)
-    raise WWW::Impostor::MissingTemplateMethodError.new("set_username_and_password must be implemented")
+    raise Impostor::MissingTemplateMethodError.new("set_username_and_password must be implemented")
   end
 
   ##
   # post the login form
 
   def post_login(form)
-    raise WWW::Impostor::MissingTemplateMethodError.new("post_login must be implemented")
+    raise Impostor::MissingTemplateMethodError.new("post_login must be implemented")
   end
 
 end

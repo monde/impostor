@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 describe "impostor's configuration" do
 
   it "should have an expected set of keys" do
-    lambda { config }.should_not raise_error(WWW::Impostor::ConfigError)
+    lambda { config }.should_not raise_error(Impostor::ConfigError)
     expected = [:type, :username, :password, :app_root, :login_page]
     expected.each do |key|
       config = { :type => :test,
@@ -14,8 +14,8 @@ describe "impostor's configuration" do
       }
       config.delete(key)
       lambda {
-        WWW::Impostor::Config.new(config)
-      }.should raise_error(WWW::Impostor::ConfigError)
+        Impostor::Config.new(config)
+      }.should raise_error(Impostor::ConfigError)
     end
   end
 

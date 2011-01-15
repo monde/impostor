@@ -23,7 +23,7 @@ Makes automated posts to the following forum applications:
 # be accessed.
 # config can be keyed by symbols or strings
 config = YAML::load_file('conf/impostor.yml')
-post = WWW::Impostor.new(config)
+post = Impostor.new(config)
 message = %q{hello world is to application
 programmers as tea pots are to graphics programmers}
 # your application stores forum and topic ids

@@ -2,7 +2,7 @@
 # Web Wiz Forums version 8.0 of the Impostor
 #
 
-class WWW::Impostor
+class Impostor
   module Wwf80
 
     ##

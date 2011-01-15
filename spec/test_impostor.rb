@@ -1,4 +1,4 @@
-module WWW::Impostor::Test
+module Impostor::Test
 
   module Auth
   end

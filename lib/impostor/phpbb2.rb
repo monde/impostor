@@ -1,23 +1,21 @@
 ##
-# Web Wiz Forums version 7.9 of the Impostor
+# phpBB2 version of the Impostor
 #
 
-class WWW::Impostor
+class Impostor
 
-  class Wwf79 < WWW::Impostor
+  module Phpbb2
 
     ##
-    # Additional configuration parameters for a Wwf79 compatible agent:
+    # Additional configuration parameters for a Phpbb2 compatible agent:
     #
-    # :forum_posts_page
-    # :post_message_page
+    # :posting_page
     #
     # Typical configuration parameters
-    # { :type => :wwf79,
+    # { :type => :phpbb2,
     # :app_root => 'http://example.com/forum/',
-    # :login_page => 'login_user.asp',
-    # :forum_posts_page => 'forum_posts.asp',
-    # :post_message_page => 'post_message_form.asp'
+    # :login_page => 'login.php',
+    # :posting_page => 'posting.php',
     # :user_agent => 'Windows IE 7',
     # :username => 'myuser',
     # :password => 'mypasswd' }
@@ -41,51 +39,58 @@ class WWW::Impostor
 
     def _new_topic_form_query(forum)
       uri = posting_page
-      uri.query = "FID=#{forum}"
+      uri.query = "mode=newtopic&f=#{forum}"
       uri
     end
 
     ##
-    # create a new topic
+    # make a new topic
 
     def new_topic(forum=@forum, subject=@subject, message=@message)
 
       super
 
-      form = page.form('frmAddMessage') rescue nil
-      button = form.buttons.with.name('Submit').first rescue nil
+      form = page.form('post') rescue nil
+      button = form.buttons.with.name('post').first rescue nil
       raise PostError.new("post form not found") unless button && form
 
       # set up the form and submit it
       form.subject = subject
       form.message = message
+      form['disable_html'] = nil
+      form['disable_bbcode'] = 'on'
+      form['disable_smilies'] = 'on'
       begin
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
-      error = page.body =~ /Message Not Posted/
-      if error
+      # if the response is correct there will be a meta link that looks something like
+      # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
+      #
+      # this link needs to be followed, the page it leads to will give us
+      # the topic id that was created for the topic name that we created
+      a = (page.search("//meta[@http-equiv='refresh']").attr('content') rescue nil)
+      a = (/url=(.*)/.match(a)[1] rescue nil)
+      raise PostError.new('unexpected new topic response from refresh') unless a
 
-        # throttled
-        throttled = "You have exceeded the number of posts permitted in the time span"
-        too_many = page.body =~ /#{throttled}/
-        raise ThrottledError.new(throttled) if too_many
+      a = URI.join(app_root, a)
+      page = @agent.get(a)
+      link = (page.search("//link[@rel='prev']").first['href'] rescue nil)
+      raise PostError.new('unexpected new topic response from link prev') unless link
 
-        # general error
-        raise PostError.new("There was an error creating the topic")
-      end
-
-      # look up the new topic id
-      form = page.form('frmAddMessage') rescue nil
-      topic = form['TID'].to_i rescue 0
-      raise PostError.new('unexpected new topic ID') if topic < 1
+      # t=XXX will be our new topic id, i.e.
+      # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
+      u = (URI.parse(link) rescue nil)
+      topic = (CGI::parse(u.query)['t'][0] rescue nil)
+      topic = topic.to_i
+      raise PostError.new('unexpected new topic ID') unless topic > 0
 
       # save new topic id and topic name
       add_subject(forum, topic, subject)
       @forum=forum; @topic=topic; @subject=subject; @message=message
-      return true
+      true
     end
 
     ##
@@ -99,8 +104,8 @@ class WWW::Impostor
       login
       raise PostError.new("not logged in") unless @loggedin
 
-      uri = forum_posts_page
-      uri.query = "TID=#{topic}&TPN=10000"
+      uri = posting_page
+      uri.query = "mode=reply&t=#{topic}"
 
       # get the submit form
       begin
@@ -108,50 +113,47 @@ class WWW::Impostor
       rescue StandardError => err
         raise PostError.new(err)
       end
-      form = page.form('frmAddMessage') rescue nil
-      button = form.buttons.with.name('Submit').first rescue nil
+
+      form = page.form('post') rescue nil
+      button = form.buttons.with.name('post').first rescue nil
       raise PostError.new("post form not found") unless button && form
 
       # set up the form and submit it
       form.message = message
+      form['disable_html'] = nil
+      form['disable_bbcode'] = 'on'
+      form['disable_smilies'] = 'on'
       begin
         page = @agent.submit(form, button)
       rescue StandardError => err
         raise PostError.new(err)
       end
 
-      error = page.body =~ /Message Not Posted/
-      if error
-
-        # throttled
-        throttled = "You have exceeded the number of posts permitted in the time span"
-        too_many = page.body =~ /#{throttled}/
-        raise ThrottledError.new(throttled) if too_many
-
-        # general error
-        raise PostError.new("There was an error making the post")
+      mes = page.search("//span[@class='gen']").last
+      posted = mes.text =~ /Your message has been entered successfully./ rescue false
+      if posted
+        @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+        return true
       end
 
-      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-      return true
+      too_many = (mes.text =~
+        /You cannot make another post so soon after your last; please try again in a short while./ rescue
+        false)
+      raise ThrottledError.new("too many posts in too short amount of time") if too_many
+
+      # false otherwise, should we raise an exception instead?
+      false
     end
 
     ##
-    # Get the new posts page for the application (specific to WWF7.9)
+    # Get the posting page for the application (specific to phpBB2)
 
-    def forum_posts_page
-      URI.join(app_root, config[:forum_posts_page])
+    def posting_page
+      URI.join(app_root, config[:posting_page])
     end
 
     ##
-    # Get the new topic page for the application (specific to WWF7.9)
-
-    def post_message_page
-      URI.join(app_root, config[:post_message_page])
-    end
-
-    ##
-    # does the work of logging into WWF 7.9
+    # does the work of logging into phpbb
 
     def login
       return true if @loggedin
@@ -190,13 +192,14 @@ class WWW::Impostor
     # returns the login form and its button from the login page
 
     def login_form_and_button(page)
-      form = page.forms.with.name('frmLogin').first rescue nil
+      form = page.forms.first rescue nil
       raise LoginError.new("unknown login page format") unless form
 
-      button = Mechanize::Form::Button.new('Submit', 'Forum Login')
-      form.add_button_to_query(button)
-      form['name'] = username
+      button = page.forms.first.buttons.with.name('login').first
+      form['username'] = username
       form['password'] = password
+      form['autologin'] = 'on'
+
       return form, button
     end
 
@@ -215,12 +218,11 @@ class WWW::Impostor
     # Checks if the agent is already logged by stored cookie
 
     def logged_in?(page)
-      mm = page.search("//a[@class='nav']")
-      return false unless mm
-      mm.each do |m|
-        return true if (m.text =~ /Logout \[#{username}\]/ rescue false)
-      end
-      false
+      mm = page.search( "//a" ).detect{|a| a.inner_html =~ /Log out \[ #{username} \]/i}
+      mm ||= page.search( "//a" ).detect{|a| a['href'] =~ /\/login\.php\?logout=true/}
+
+      mm.nil? ? false : true
     end
+
   end
 end

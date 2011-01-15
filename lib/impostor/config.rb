@@ -1,4 +1,4 @@
-class WWW::Impostor::Config
+class Impostor::Config
 
   attr_reader :agent
   attr_reader :topics
@@ -16,7 +16,7 @@ class WWW::Impostor::Config
   def validate_keys(*keys)
     keys.each do |key|
       val = self.config(key)
-      raise WWW::Impostor::ConfigError.new("Missing key '#{key}' in configuration") unless val
+      raise Impostor::ConfigError.new("Missing key '#{key}' in configuration") unless val
     end
   end
 

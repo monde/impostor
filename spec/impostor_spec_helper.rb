@@ -20,30 +20,30 @@ module ImpostorSpecHelper
   end
 
   def impostor(config = {})
-    WWW::Impostor.new(sample_config_params.merge(config))
+    Impostor.new(sample_config_params.merge(config))
   end
 
   def config(config = {})
-    WWW::Impostor::Config.new(sample_config_params.merge(config))
+    Impostor::Config.new(sample_config_params.merge(config))
   end
 
   def auth(config = nil)
     config ||= self.config
-    auth = WWW::Impostor::Auth.new(config)
+    auth = Impostor::Auth.new(config)
     auth
   end
 
   def post(config = nil, auth = nil)
     config ||= self.config
     auth ||= self.auth
-    post = WWW::Impostor::Post.new(config, auth)
+    post = Impostor::Post.new(config, auth)
     post
   end
 
   def topic(config = nil, auth = nil)
     config ||= self.config
     auth ||= self.auth
-    topic = WWW::Impostor::Topic.new(config, auth)
+    topic = Impostor::Topic.new(config, auth)
     topic
   end
 

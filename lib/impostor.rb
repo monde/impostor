@@ -9,7 +9,7 @@ end
 
 Dir.glob(File.join(File.dirname(__FILE__), 'impostor/**/*.rb')).each {|f| require f }
 
-module WWW
+class Impostor
 
   ##
   # imPOSTor posts messages to non-RESTful forums and blogs
@@ -21,7 +21,7 @@ module WWW
   #  # config yaml has options specefic to wwf79, wwf80, phpbb2, etc.
   #  # read the impostor docs for options to the kind of forum in use
   #  # config can be keyed by symbols or strings
-  #  post = WWW::Impostor.new(YAML.load_file('config.yml'))
+  #  post = Impostor.new(YAML.load_file('config.yml'))
   #  message = %q!hello world is to application
   #  programmers as tea pots are to graphics programmers!
   #  # your application store forum and topic ids
@@ -45,48 +45,46 @@ module WWW
   #  parameters that are needed for the specific kind of imPOSTor.  A sample
   #  configuration is provided in the documentation for each.
 
-  class Impostor
 
-    ##
-    # Gem version of Impostor
+  ##
+  # Gem version of Impostor
 
-    VERSION = '0.3.0'
+  VERSION = '0.3.0'
 
-    ##
-    # Pass in a config hash to initialize
+  ##
+  # Pass in a config hash to initialize
 
-    def initialize(config={})
-      @config = Config.new(config)
-      @auth   = Auth.new(@config)
-      @post   = Post.new(@config, @auth)
-      @topic  = Topic.new(@config, @auth)
+  def initialize(config={})
+    @config = Config.new(config)
+    @auth   = Auth.new(@config)
+    @post   = Post.new(@config, @auth)
+    @topic  = Topic.new(@config, @auth)
 
-      type = @config.type
-      raise ConfigError.new("Missing 'type' key in configuration") unless type
+    type = @config.type
+    raise ConfigError.new("Missing 'type' key in configuration") unless type
 
-      extend eval("WWW::Impostor::#{type.to_s.capitalize}")
-    end
-
-    ##
-    # our version
-
-    def version
-      VERSION
-    end
-
-    ##
-    # Post the message
-
-    def post(forum, topic, message)
-      @post.post(forum, topic, message)
-    end
-
-    ##
-    # Make a new topic
-
-    def new_topic(forum, subject, message)
-      @topic.new_topic(forum, subject, message)
-    end
-
+    extend eval("Impostor::#{type.to_s.capitalize}")
   end
+
+  ##
+  # our version
+
+  def version
+    VERSION
+  end
+
+  ##
+  # Post the message
+
+  def post(forum, topic, message)
+    @post.post(forum, topic, message)
+  end
+
+  ##
+  # Make a new topic
+
+  def new_topic(forum, subject, message)
+    @topic.new_topic(forum, subject, message)
+  end
+
 end

@@ -43,7 +43,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
 
       lambda {
         auth.fetch_login_page
-      }.should raise_error( WWW::Impostor::LoginError )
+      }.should raise_error( Impostor::LoginError )
     end
 
     it "should return a login form from get_login_form" do
@@ -63,7 +63,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
 
       lambda {
         auth.get_login_form(page)
-      }.should raise_error( WWW::Impostor::LoginError )
+      }.should raise_error( Impostor::LoginError )
     end
 
     it "should return a logged in page when posting the login" do
@@ -87,7 +87,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
       config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_raise(StandardError)
       lambda {
         auth.post_login(form)
-      }.should raise_error( WWW::Impostor::LoginError )
+      }.should raise_error( Impostor::LoginError )
     end
 
     it "should login" do

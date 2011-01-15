@@ -13,7 +13,7 @@ require 'impostor'
 
 Hoe.plugin :bundler, :git
 Hoe.spec('impostor') do |p|
-  p.version = WWW::Impostor::VERSION
+  p.version = Impostor::VERSION
   p.rubyforge_name = 'impostor'
   p.author = 'Mike Mondragon'
   p.email = 'mikemondragon@gmail.com'
