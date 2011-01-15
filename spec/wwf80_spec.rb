@@ -46,9 +46,25 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should raise_error( WWW::Impostor::LoginError )
     end
 
-    it "should return a login form from get_login_form"
+    it "should return a login form from get_login_form" do
+      config = self.config(sample_wwf80_config_params)
+      auth = self.auth(config)
+      page = load_fixture_page("wwf80-login.html", config.login_page, 200, config.agent)
 
-    it "should raise login error when get_login_form receives a bad page"
+      lambda {
+        auth.get_login_form(page).name.should == 'frmLogin'
+      }.should_not raise_error
+    end
+
+    it "should raise login error when get_login_form receives a bad page" do
+      config = self.config(sample_wwf80_config_params)
+      auth = self.auth(config)
+      page = load_fixture_page("junk.html", config.login_page, 200, config.agent)
+
+      lambda {
+        auth.get_login_form(page)
+      }.should raise_error( WWW::Impostor::LoginError )
+    end
 
     it "should return a logged in page when posting the login"
 
