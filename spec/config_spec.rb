@@ -110,4 +110,8 @@ describe "impostor's configuration" do
     config.save_cookie_jar
   end
 
+  it "should have a type" do
+    config(:type => :foo).type.should == :foo
+  end
+
 end

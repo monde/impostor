@@ -6,8 +6,9 @@ describe "impostor's post routines" do
 
     it "should post via composed template methods" do
 
+      config = self.config
       auth = self.auth
-      post = self.post(auth)
+      post = self.post(config, auth)
 
       reply_uri = mock "reply_uri"
       reply_page = mock "reply page"
@@ -35,8 +36,9 @@ describe "impostor's post routines" do
 
     it "should have logged in error when posting and not logged in" do
 
+      config = self.config
       auth = self.auth
-      post = self.post(auth)
+      post = self.post(config, auth)
 
       auth.should_receive(:login_with_raises).and_raise(WWW::Impostor::LoginError)
 
