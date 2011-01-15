@@ -20,186 +20,159 @@ class Impostor
     # :username => 'myuser',
     # :password => 'mypasswd' }
 
-    ##
-    # clean up the state of the library and log out
+    module Auth
 
-    def logout
-      return false unless @loggedin
+      ##
+      # Checks if the agent is already logged by stored cookie
 
-      @agent.cookie_jar.save_as(cookie_jar) if cookie_jar
-      save_topics
+      def logged_in?(page)
+        mm = page.search( "//a" ).detect{ | a| a.inner_html =~ /Logout \[ #{self.config.username} \]/ } ||
+             page.search( "//a" ).detect{ |a| a['href'] =~ /\.\/ucp\.php\?mode=logout/ }
 
-      @forum = nil
-      @topic = nil
-      @message = nil
-
-      @loggedin = false
-      true
-    end
-
-    def _new_topic_form_query(forum)
-      uri = posting_page
-      uri.query = "mode=newtopic&f=#{forum}"
-      uri
-    end
-
-    ##
-    # make a new topic
-
-    def new_topic(forum=@forum, subject=@subject, message=@message)
-
-      super
-
-      form = page.form('postform') rescue nil
-      raise PostError.new("post form not found") unless form
-      button = form.buttons.detect{|b| b.name == 'post'}
-      raise PostError.new("post form button not found") unless button
-
-      # set up the form and submit it
-      form['subject'] = subject
-      form['message'] = message
-      form['lastclick'] = (form['lastclick'].to_i - 60).to_s
-
-      begin
-        page = @agent.submit(form, button)
-      rescue StandardError => err
-        raise PostError.new(err)
+        not mm.nil?
       end
 
-      # new topic will be current page uri since phpbb3 will 302 to the new
-      # topic page, e.g.
-      # http://example.com/forum/viewtopic.php?f=37&t=52
-      topic = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i rescue 0
-      raise PostError.new('unexpected new topic ID') unless topic > 0
+      ##
+      # fetches the login page
 
-      # save new topic id and topic name
-      add_subject(forum, topic, subject)
-      @forum=forum; @topic=topic; @subject=subject; @message=message
-      true
-    end
-
-    ##
-    # Attempt to post to the forum
-
-    def post(forum = @forum, topic = @topic, message = @message)
-      raise PostError.new("forum not set") unless forum
-      raise PostError.new("topic not set") unless topic
-      raise PostError.new("message not set") unless message
-
-      login
-      raise PostError.new("not logged in") unless @loggedin
-
-      uri = posting_page
-      uri.query = "mode=reply&f=#{forum}&t=#{topic}"
-
-      # get the submit form
-      begin
-        page = @agent.get(uri)
-      rescue StandardError => err
-        raise PostError.new(err)
+      def fetch_login_page
+        begin
+          page = @agent.get(login_page)
+        rescue StandardError => err
+          raise LoginError.new(err)
+        end
       end
 
-      form = page.form('postform') rescue nil
-      button = form.buttons.with.name('post').first rescue nil
-      raise PostError.new("post form not found") unless button && form
+      ##
+      # returns the login form from the login page
 
-      # set up the form and submit it
-      form.message = message
-      form['lastclick'] = (form['lastclick'].to_i - 60).to_s
-
-      begin
-        page = @agent.submit(form, button)
-      rescue StandardError => err
-        raise PostError.new(err)
+      def get_login_form(page)
+        form = page.forms.first rescue nil
+        raise LoginError.new("unknown login page format") unless form
+        form
       end
 
-      # new post will be in current page uri since phpbb3 will 302 to the new
-      # post page post anchor, e.g.
-      # http://example.com/forum/viewtopic.php?f=37&t=52&p=3725#p3725
-      postid = page.uri.query.split('&').detect{|a| a =~ /^p=/}.split('=').last.to_i rescue 0
-      raise PostError.new("message did not post") unless postid > 0
+      ##
+      # Sets the user name and pass word on the loing form.
 
-      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-
-      true
-    end
-
-    ##
-    # Get the posting page for the application (specific to phpBB3)
-
-    def posting_page
-      URI.join(app_root, config[:posting_page])
-    end
-
-    ##
-    # does the work of logging into phpbb
-
-    def login
-      return true if @loggedin
-
-      # get the login page
-      page = fetch_login_page
-
-      # return if we are already logged in from a cookie state
-      return true if logged_in?(page)
-
-      # setup the form and submit
-      form, button = login_form_and_button(page)
-      page = post_login(form, button)
-
-      # set up the rest of the state if we are logged in
-      @loggedin = logged_in?(page)
-      load_topics if @loggedin
-
-      @loggedin
-    end
-
-    protected
-    ##
-    # does the work of posting the login form
-
-    def post_login(form, button)
-      begin
-        page = @agent.submit(form, button)
-      rescue StandardError => err
-        raise LoginError.new(err)
+      def set_username_and_password(form)
+        form['username'] = username
+        form['password'] = password
+        form['autologin'] = 'on'
+        form
       end
-    end
 
-    ##
-    # returns the login form and its button from the login page
+      ##
+      # does the work of posting the login form
 
-    def login_form_and_button(page)
-      form = page.forms.first rescue nil
-      raise LoginError.new("unknown login page format") unless form
-
-      button = form.buttons.with.name('login').first
-      form['username'] = username
-      form['password'] = password
-      form['autologin'] = 'on'
-
-      return form, button
-    end
-
-    ##
-    # fetches the login page
-
-    def fetch_login_page
-      begin
-        page = @agent.get(login_page)
-      rescue StandardError => err
-        raise LoginError.new(err)
+      def post_login(form, button)
+        begin
+          page = @agent.submit(form, button)
+        rescue StandardError => err
+          raise LoginError.new(err)
+        end
       end
+
     end
 
-    ##
-    # Checks if the agent is already logged by stored cookie
+    module Post
+      # ##
+      # # Attempt to post to the forum
 
-    def logged_in?(page)
-      mm = page.search( "//a" ).detect{|a| a.inner_html =~ /Logout \[ #{username} \]/}
-      mm ||= page.search( "//a" ).detect{|a| a['href'] =~ /\.\/ucp.php\?mode=logout/}
+      # def post(forum = @forum, topic = @topic, message = @message)
+      #   raise PostError.new("forum not set") unless forum
+      #   raise PostError.new("topic not set") unless topic
+      #   raise PostError.new("message not set") unless message
 
-      mm.nil? ? false : true
+      #   login
+      #   raise PostError.new("not logged in") unless @loggedin
+
+      #   uri = posting_page
+      #   uri.query = "mode=reply&f=#{forum}&t=#{topic}"
+
+      #   # get the submit form
+      #   begin
+      #     page = @agent.get(uri)
+      #   rescue StandardError => err
+      #     raise PostError.new(err)
+      #   end
+
+      #   form = page.form('postform') rescue nil
+      #   button = form.buttons.with.name('post').first rescue nil
+      #   raise PostError.new("post form not found") unless button && form
+
+      #   # set up the form and submit it
+      #   form.message = message
+      #   form['lastclick'] = (form['lastclick'].to_i - 60).to_s
+
+      #   begin
+      #     page = @agent.submit(form, button)
+      #   rescue StandardError => err
+      #     raise PostError.new(err)
+      #   end
+
+      #   # new post will be in current page uri since phpbb3 will 302 to the new
+      #   # post page post anchor, e.g.
+      #   # http://example.com/forum/viewtopic.php?f=37&t=52&p=3725#p3725
+      #   postid = page.uri.query.split('&').detect{|a| a =~ /^p=/}.split('=').last.to_i rescue 0
+      #   raise PostError.new("message did not post") unless postid > 0
+
+      #   @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+
+      #   true
+      # end
+
+      # ##
+      # # Get the posting page for the application (specific to phpBB3)
+
+      # def posting_page
+      #   URI.join(app_root, config[:posting_page])
+      # end
+    end
+
+    module Topic
+
+      # def _new_topic_form_query(forum)
+      #   uri = posting_page
+      #   uri.query = "mode=newtopic&f=#{forum}"
+      #   uri
+      # end
+
+      # ##
+      # # make a new topic
+
+      # def new_topic(forum=@forum, subject=@subject, message=@message)
+
+      #   super
+
+      #   form = page.form('postform') rescue nil
+      #   raise PostError.new("post form not found") unless form
+      #   button = form.buttons.detect{|b| b.name == 'post'}
+      #   raise PostError.new("post form button not found") unless button
+
+      #   # set up the form and submit it
+      #   form['subject'] = subject
+      #   form['message'] = message
+      #   form['lastclick'] = (form['lastclick'].to_i - 60).to_s
+
+      #   begin
+      #     page = @agent.submit(form, button)
+      #   rescue StandardError => err
+      #     raise PostError.new(err)
+      #   end
+
+      #   # new topic will be current page uri since phpbb3 will 302 to the new
+      #   # topic page, e.g.
+      #   # http://example.com/forum/viewtopic.php?f=37&t=52
+      #   topic = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i rescue 0
+      #   raise PostError.new('unexpected new topic ID') unless topic > 0
+
+      #   # save new topic id and topic name
+      #   add_subject(forum, topic, subject)
+      #   @forum=forum; @topic=topic; @subject=subject; @message=message
+      #   true
+      # end
+
     end
 
   end
