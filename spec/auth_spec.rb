@@ -74,6 +74,14 @@ describe "impostor's authorization routines" do
       )
     end
 
+    it "should raise not implemented error when set_username_and_password called" do
+      auth = self.auth
+      lambda { auth.set_username_and_password(nil) }.should raise_error(
+        WWW::Impostor::MissingTemplateMethodError,
+        "Impostor error: set_username_and_password must be implemented (StandardError)"
+      )
+    end
+
     it "should raise not implemented error when post_login called" do
       auth = self.auth
       lambda { auth.post_login(nil) }.should raise_error(
@@ -94,6 +102,7 @@ describe "impostor's authorization routines" do
       auth.should_receive(:fetch_login_page).once.and_return(login_page)
       auth.should_receive(:logged_in?).with(login_page).once.and_return(false)
       auth.should_receive(:get_login_form).with(login_page).once.and_return(form)
+      auth.should_receive(:set_username_and_password).with(form).once
 
       auth.should_receive(:post_login).with(form).once.and_return(logged_in_page)
       auth.should_receive(:logged_in?).with(logged_in_page).once.and_return(true)

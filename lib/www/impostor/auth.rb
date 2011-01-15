@@ -1,5 +1,6 @@
 class WWW::Impostor::Auth
 
+  attr_reader :config
   attr_reader :authenticated
   alias :authenticated? :authenticated
 
@@ -8,26 +9,27 @@ class WWW::Impostor::Auth
 
   def initialize(config)
     @config = config
+    self.extend eval("WWW::Impostor::#{config.type.to_s.capitalize}::Auth")
   end
 
   ##
-  # Login to the impostor's forum.  Optional raises parameter will flag to
-  # raise an login error if login fails and raises is true.
-  # #login is comprised of the following template methods to allow
-  # implementation for specific forum applications
+  # Login to the impostor's forum.  #login is comprised of the following
+  # template methods to allow implementation for specific forum applications:
   #
   # * fetch_login_page
   # * logged_in?(page)
   # * get_login_form(page)
+  # * set_username_and_password(form)
   # * post_login(form)
 
-  def login(raises=false)
+  def login
     return true if self.authenticated?
 
     page = self.fetch_login_page
     return true if self.logged_in?(page)
 
     form = self.get_login_form(page)
+    self.set_username_and_password(form)
     page = self.post_login(form)
 
     @authenticated = self.logged_in?(page)
@@ -45,8 +47,8 @@ class WWW::Impostor::Auth
   def logout
     return false unless self.authenticated?
 
-    @config.save_topics
-    @config.save_cookie_jar
+    self.config.save_topics
+    self.config.save_cookie_jar
 
     not ( @authenticated = false )
   end
@@ -73,7 +75,14 @@ class WWW::Impostor::Auth
   end
 
   ##
-  # post the login form using it's button
+  # Sets the user name and pass word on the loing form.
+
+  def set_username_and_password(form)
+    raise WWW::Impostor::MissingTemplateMethodError.new("set_username_and_password must be implemented")
+  end
+
+  ##
+  # post the login form
 
   def post_login(form)
     raise WWW::Impostor::MissingTemplateMethodError.new("post_login must be implemented")
