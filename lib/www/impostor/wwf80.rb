@@ -38,7 +38,7 @@ class WWW::Impostor
       # returns the login form from the login page
 
       def get_login_form(page)
-        form = page.forms.with.name('frmLogin').first rescue nil
+        form = page.form('frmLogin')
         raise LoginError.new("unknown login page format") unless form
         form
       end
