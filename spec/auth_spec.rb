@@ -43,10 +43,14 @@ describe "impostor's authorization routines" do
     end
 
     it "should not login when template methods are not implemented" do
-      auth = self.auth
+      config = self.config
+      auth = self.auth(config)
+      login_uri = URI.parse("http://example.com/login")
+      config.agent.should_receive(:get).with(login_uri)
+
       lambda { auth.login }.should raise_error(
         Impostor::MissingTemplateMethodError,
-        "Impostor error: fetch_login_page must be implemented (StandardError)"
+        "Impostor error: logged_in? must be implemented (StandardError)"
       )
     end
 
@@ -58,12 +62,26 @@ describe "impostor's authorization routines" do
       )
     end
 
-    it "should raise not implemented error when fetch_login_page called" do
-      auth = self.auth
-      lambda { auth.fetch_login_page }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: fetch_login_page must be implemented (StandardError)"
-      )
+    it "should return a page from fetch_login_page" do
+      config = self.config
+      auth = self.auth(config)
+      login_uri = URI.parse("http://example.com/login")
+      config.agent.should_receive(:get).with(login_uri)
+
+      lambda {
+        auth.fetch_login_page
+      }.should_not raise_error
+    end
+
+    it "should handle an error in fetch_login_page" do
+      config = self.config
+      auth = self.auth(config)
+      login_uri = URI.parse("http://example.com/login")
+      config.agent.should_receive(:get).with(login_uri).and_raise(StandardError)
+
+      lambda {
+        auth.fetch_login_page
+      }.should raise_error( Impostor::LoginError )
     end
 
     it "should raise not implemented error when get_login_form called" do

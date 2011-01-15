@@ -24,47 +24,47 @@ describe "a phpbb3 impostor" do
       }.should_not raise_error
     end
 
-    #it "should return a page from fetch_login_page" do
-    #  config = self.config(sample_phpbb3_config_params)
-    #  auth = self.auth(config)
-    #  login_uri = URI.parse("http://example.com/forum/login_user.asp")
-    #  config.agent.should_receive(:get).with(login_uri)
+    it "should return a page from fetch_login_page" do
+      config = self.config(sample_phpbb3_config_params)
+      auth = self.auth(config)
+      login_uri = URI.parse("http://example.com/forum/ucp.php?mode=login")
+      config.agent.should_receive(:get).with(login_uri)
 
-    #  lambda {
-    #    auth.fetch_login_page
-    #  }.should_not raise_error
-    #end
+      lambda {
+        auth.fetch_login_page
+      }.should_not raise_error
+    end
 
-    #it "should handle an error in fetch_login_page" do
-    #  config = self.config(sample_phpbb3_config_params)
-    #  auth = self.auth(config)
-    #  login_uri = URI.parse("http://example.com/forum/login_user.asp")
-    #  config.agent.should_receive(:get).with(login_uri).and_raise(StandardError)
+    it "should handle an error in fetch_login_page" do
+      config = self.config(sample_phpbb3_config_params)
+      auth = self.auth(config)
+      login_uri = URI.parse("http://example.com/forum/ucp.php?mode=login")
+      config.agent.should_receive(:get).with(login_uri).and_raise(StandardError)
 
-    #  lambda {
-    #    auth.fetch_login_page
-    #  }.should raise_error( Impostor::LoginError )
-    #end
+      lambda {
+        auth.fetch_login_page
+      }.should raise_error( Impostor::LoginError )
+    end
 
-    #it "should return a login form from get_login_form" do
-    #  config = self.config(sample_phpbb3_config_params)
-    #  auth = self.auth(config)
-    #  page = load_fixture_page("wwf80-login.html", config.login_page, 200, config.agent)
+    it "should return a login form from get_login_form" do
+      config = self.config(sample_phpbb3_config_params)
+      auth = self.auth(config)
+      page = load_fixture_page("phpbb3-login.html", config.login_page, 200, config.agent)
 
-    #  lambda {
-    #    auth.get_login_form(page).name.should == 'frmLogin'
-    #  }.should_not raise_error
-    #end
+      lambda {
+        auth.get_login_form(page).action.should match(/\/ucp\.php\?mode=login/)
+      }.should_not raise_error
+    end
 
-    #it "should raise login error when get_login_form receives a bad page" do
-    #  config = self.config(sample_phpbb3_config_params)
-    #  auth = self.auth(config)
-    #  page = load_fixture_page("junk.html", config.login_page, 200, config.agent)
+    it "should raise login error when get_login_form receives a bad page" do
+      config = self.config(sample_phpbb3_config_params)
+      auth = self.auth(config)
+      page = load_fixture_page("junk.html", config.login_page, 200, config.agent)
 
-    #  lambda {
-    #    auth.get_login_form(page)
-    #  }.should raise_error( Impostor::LoginError )
-    #end
+      lambda {
+        auth.get_login_form(page)
+      }.should raise_error( Impostor::LoginError )
+    end
 
     #it "should return a logged in page when posting the login" do
     #  config = self.config(sample_phpbb3_config_params)

@@ -33,22 +33,11 @@ class Impostor
       end
 
       ##
-      # fetches the login page
-
-      def fetch_login_page
-        begin
-          page = @agent.get(login_page)
-        rescue StandardError => err
-          raise LoginError.new(err)
-        end
-      end
-
-      ##
       # returns the login form from the login page
 
       def get_login_form(page)
-        form = page.forms.first rescue nil
-        raise LoginError.new("unknown login page format") unless form
+        form = page.forms.detect { |form| form.action =~ /\/ucp\.php\?mode=login/ }
+        raise Impostor::LoginError.new("unknown login page format") unless form
         form
       end
 
@@ -69,7 +58,7 @@ class Impostor
         begin
           page = @agent.submit(form, button)
         rescue StandardError => err
-          raise LoginError.new(err)
+          raise Impostor::LoginError.new(err)
         end
       end
 

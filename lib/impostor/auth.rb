@@ -66,7 +66,11 @@ class Impostor::Auth
   # get the page for logging in
 
   def fetch_login_page
-    raise Impostor::MissingTemplateMethodError.new("fetch_login_page must be implemented")
+    begin
+      self.config.agent.get(self.config.login_page)
+    rescue StandardError => err
+      raise Impostor::LoginError.new(err)
+    end
   end
 
   ##

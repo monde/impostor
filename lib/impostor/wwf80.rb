@@ -24,17 +24,6 @@ class Impostor
     module Auth
 
       ##
-      # fetches the login page
-
-      def fetch_login_page
-        begin
-          page = self.config.agent.get(self.config.login_page)
-        rescue StandardError => err
-          raise LoginError.new(err)
-        end
-      end
-
-      ##
       # returns the login form from the login page
 
       def get_login_form(page)
