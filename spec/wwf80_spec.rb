@@ -81,7 +81,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
       config = self.config(sample_wwf80_config_params)
       auth = self.auth(config)
       login_page = load_fixture_page("wwf80-login.html", config.login_page, 200, config.agent)
-      form = login_page.form('frmLogin')
+      form = auth.get_login_form(login_page)
       logged_in_page = load_fixture_page("wwf80-logged-in.html", config.app_root, 200, config.agent)
       config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
       lambda {
