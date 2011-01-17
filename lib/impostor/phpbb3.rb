@@ -51,17 +51,6 @@ class Impostor
         form
       end
 
-      ##
-      # does the work of posting the login form
-
-      def post_login(form)
-        begin
-          page = form.submit
-        rescue StandardError => err
-          raise LoginError.new(err)
-        end
-      end
-
     end
 
     module Post

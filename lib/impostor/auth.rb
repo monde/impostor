@@ -88,10 +88,15 @@ class Impostor::Auth
   end
 
   ##
-  # post the login form
+  # does the work of posting the login form
 
   def post_login(form)
-    raise Impostor::MissingTemplateMethodError.new("post_login must be implemented")
+    begin
+      page = form.submit
+    rescue StandardError => err
+      raise Impostor::LoginError.new(err)
+    end
   end
+
 
 end

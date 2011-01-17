@@ -102,10 +102,10 @@ describe "impostor's authorization routines" do
 
     it "should raise not implemented error when post_login called" do
       auth = self.auth
-      lambda { auth.post_login(nil) }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: post_login must be implemented (StandardError)"
-      )
+      form = mock "form"
+      page = mock "page"
+      form.should_receive(:submit).and_return(page)
+      lambda { auth.post_login(form).should == page }.should_not raise_error
     end
 
     it "should login via composed template methods" do

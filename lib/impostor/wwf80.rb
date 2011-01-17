@@ -28,7 +28,7 @@ class Impostor
 
       def get_login_form(page)
         form = page.form('frmLogin')
-        raise LoginError.new("unknown login page format") unless form
+        raise Impostor::LoginError.new("unknown login page format") unless form
         form
       end
 
@@ -41,46 +41,12 @@ class Impostor
       end
 
       ##
-      # post the login form
-
-      def post_login(form)
-        begin
-          page = form.submit
-        rescue StandardError => err
-          raise LoginError.new(err)
-        end
-      end
-
-      ##
       # given the state of the page, are we logged in to the forum?
 
       def logged_in?(page)
         mm = page.search("//a[@class='nav']")
         !! mm.detect { |m| m.text =~ /Logout \[#{self.config.username}\]/ }
       end
-
-      #  ##
-      #  # does the work of logging into WWF 8.0
-
-      #  def login
-      #    return true if @loggedin
-
-      #    # get the login page
-      #    page = fetch_login_page
-
-      #    # return if we are already logged in from a cookie state
-      #    return true if logged_in?(page)
-
-      #    # setup the form and submit
-      #    form, button = login_form_and_button(page)
-      #    page = post_login(form, button)
-
-      #    # set up the rest of the state if we are logged in
-      #    @loggedin = logged_in?(page)
-      #    load_topics if @loggedin
-
-      #    @loggedin
-      #  end
 
       #  ##
       #  # clean up the state of the library and log out
