@@ -45,8 +45,8 @@ class Impostor
       # Sets the user name and pass word on the loing form.
 
       def set_username_and_password(form)
-        form['username'] = username
-        form['password'] = password
+        form['username'] = self.config.username
+        form['password'] = self.config.password
         form['autologin'] = 'on'
         form
       end

@@ -66,6 +66,17 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should raise_error( Impostor::LoginError )
     end
 
+    it "should setup login form in set_username_and_password" do
+      config = self.config(sample_wwf80_config_params)
+      auth = self.auth(config)
+      form = mock "login form"
+      form.should_receive(:[]=).with("name", "tester")
+      form.should_receive(:[]=).with("password", "pass")
+      lambda {
+        auth.set_username_and_password(form).should == form
+      }.should_not raise_error
+    end
+
     it "should return a logged in page when posting the login" do
       config = self.config(sample_wwf80_config_params)
       auth = self.auth(config)
