@@ -54,11 +54,11 @@ class Impostor
       ##
       # does the work of posting the login form
 
-      def post_login(form, button)
+      def post_login(form)
         begin
-          page = @agent.submit(form, button)
+          page = form.submit
         rescue StandardError => err
-          raise Impostor::LoginError.new(err)
+          raise LoginError.new(err)
         end
       end
 

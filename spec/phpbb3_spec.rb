@@ -78,17 +78,17 @@ describe "a phpbb3 impostor" do
       }.should_not raise_error
     end
 
-    #it "should return a logged in page when posting the login" do
-    #  config = self.config(sample_phpbb3_config_params)
-    #  auth = self.auth(config)
-    #  login_page = load_fixture_page("wwf80-login.html", config.login_page, 200, config.agent)
-    #  form = login_page.form('frmLogin')
-    #  logged_in_page = load_fixture_page("wwf80-logged-in.html", config.app_root, 200, config.agent)
-    #  config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
-    #  lambda {
-    #    auth.post_login(form).should == logged_in_page
-    #  }.should_not raise_error
-    #end
+    it "should return a logged in page when posting the login" do
+      config = self.config(sample_phpbb3_config_params)
+      auth = self.auth(config)
+      login_page = load_fixture_page("phpbb3-login.html", config.login_page, 200, config.agent)
+      form = auth.get_login_form(login_page)
+      logged_in_page = load_fixture_page("phpbb3-logged-in.html", config.app_root, 200, config.agent)
+      config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
+      lambda {
+        auth.post_login(form).should == logged_in_page
+      }.should_not raise_error
+    end
 
     #it "should raise a login error when posting has an underlying exception" do
     #  config = self.config(sample_phpbb3_config_params)
