@@ -48,22 +48,6 @@ class Impostor
         !! mm.detect { |m| m.text =~ /Logout \[#{self.config.username}\]/ }
       end
 
-      #  ##
-      #  # clean up the state of the library and log out
-
-      #  def logout
-      #    return false unless @loggedin
-
-      #    @agent.cookie_jar.save_as(cookie_jar) if cookie_jar
-      #    save_topics
-
-      #    @forum = nil
-      #    @topic = nil
-      #    @message = nil
-
-      #    @loggedin = false
-      #    true
-      #  end
     end
 
     module Post

@@ -4,6 +4,23 @@ describe "a phpbb3 impostor" do
 
   describe "authentication routines" do
 
+    it "should logout only if not logged in" do
+      auth = self.auth
+      auth.should_receive(:authenticated?).once.and_return(false)
+      auth.logout.should_not be_true
+    end
+
+    it "should logout" do
+      config = self.config
+      auth = self.auth(config)
+      config.should_receive(:save_topics).once
+      config.should_receive(:save_cookie_jar).once
+      auth.instance_variable_set("@authenticated", true)
+
+      auth.logout.should be_true
+      auth.authenticated?.should_not be_true
+    end
+
     it "should be logged_in? when phpbb3 displays the user name" do
       config = self.config(sample_phpbb3_config_params)
       auth = self.auth(config)
