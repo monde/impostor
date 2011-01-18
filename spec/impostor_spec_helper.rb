@@ -21,6 +21,17 @@ module ImpostorSpecHelper
       :password => 'pass' }
   end
 
+  def sample_wwf79_config_params
+    { :type => :wwf79,
+      :app_root => 'http://example.com/forum/',
+      :login_page => 'login_user.asp',
+      :forum_posts_page => 'forum_posts.asp',
+      :post_message_page => 'post_message_form.asp',
+      :user_agent => 'Windows IE 7',
+      :username => 'tester',
+      :password => 'pass' }
+  end
+
   def sample_config_params
     { :type => :test,
       :username => "user",
