@@ -10,6 +10,16 @@ module ImpostorSpecHelper
       :password => 'pass' }
   end
 
+  def sample_phpbb2_config_params
+    { :type => :phpbb2,
+      :app_root => 'http://example.com/forum/',
+      :login_page => 'login.php',
+      :posting_page => 'posting.php',
+      :user_agent => 'Windows IE 7',
+      :username => 'tester',
+      :password => 'pass' }
+  end
+
   def sample_wwf80_config_params
     { :type => :wwf80,
       :app_root => 'http://example.com/forum/',
