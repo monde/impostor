@@ -157,9 +157,22 @@ describe "a Web Wiz Forum 8.0 impostor" do
       config = self.config(sample_wwf80_config_params)
       auth = self.auth(config)
       post = self.post(config, auth)
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp")
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
       lambda {
         post.get_reply_uri(1,2).should == reply_uri
+      }.should_not raise_error
+    end
+
+    it "should get_reply_page(uri)" do
+      config = self.config(sample_wwf80_config_params)
+      auth = self.auth(config)
+      post = self.post(config, auth)
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_page = load_fixture_page("wwf80-new_reply_form.html", reply_uri, 200, config.agent)
+
+      config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
+      lambda {
+        post.get_reply_page(reply_uri).should == reply_page
       }.should_not raise_error
     end
 

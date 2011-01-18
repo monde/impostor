@@ -3,6 +3,7 @@
 #
 
 class Impostor
+
   module Wwf80
 
     ##
@@ -57,7 +58,20 @@ class Impostor
       # message
 
       def get_reply_uri(forum, topic)
-        URI.join(self.config.app_root, self.config.config(:new_reply_page))
+        uri = URI.join(self.config.app_root, self.config.config(:new_reply_page))
+        uri.query = "TID=#{topic}"
+        uri
+      end
+
+      ##
+      # return the reply page that is fetched with the reply uri
+
+      def get_reply_page(uri)
+        begin
+          page = self.config.agent.get(uri)
+        rescue StandardError => err
+          raise PostError.new(err)
+        end
       end
 
       #  ##
