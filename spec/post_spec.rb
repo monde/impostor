@@ -16,7 +16,7 @@ describe "impostor's post routines" do
       result_page = mock "result page"
 
       auth.should_receive(:login_with_raises).once.and_return(true)
-      post.should_receive(:get_reply_uri).with(1,2,"Hello World").once.and_return(reply_uri)
+      post.should_receive(:get_reply_uri).with(1,2).once.and_return(reply_uri)
       post.should_receive(:get_reply_page).with(reply_uri).once.and_return(reply_page)
       post.should_receive(:get_post_form).with(reply_page).once.and_return(reply_form)
       post.should_receive(:set_message).with(reply_form, "Hello World").once
@@ -73,7 +73,7 @@ describe "impostor's post routines" do
     end
 
     it "should raise not implemented error when get_reply_uri called" do
-      lambda { post.get_reply_uri(nil, nil, nil) }.should raise_error(
+      lambda { post.get_reply_uri(nil, nil) }.should raise_error(
         Impostor::MissingTemplateMethodError,
         "Impostor error: get_reply_uri must be implemented (StandardError)"
       )

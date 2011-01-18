@@ -52,6 +52,14 @@ class Impostor
 
     module Post
 
+      ##
+      # return a uri used to fetch the reply page based on the forum, topic, and
+      # message
+
+      def get_reply_uri(forum, topic)
+        URI.join(self.config.app_root, self.config.config(:new_reply_page))
+      end
+
       #  ##
       #  # Attempt to post to the forum
 

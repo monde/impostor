@@ -132,6 +132,47 @@ describe "a Web Wiz Forum 8.0 impostor" do
         auth.login.should be_true
       }.should_not raise_error
     end
+
+  end
+
+  describe "posting routines" do
+
+    it "should post a message in the topic of a forum" do
+      config = self.config(sample_wwf80_config_params)
+      auth = self.auth(config)
+      post = self.post(config, auth)
+      auth.should_receive(:login_with_raises)
+
+      lambda {
+        post.post(formum=1, topic=2, message="Hello World").should == {
+          :forum => 1,
+          :topic => 2,
+          :message => "Hello World",
+          :result => true
+        }
+      }.should_not raise_error
+    end
+
+    it "should get a reply uri from get_reply_uri(forum, topic)" do
+      config = self.config(sample_wwf80_config_params)
+      auth = self.auth(config)
+      post = self.post(config, auth)
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp")
+      lambda {
+        post.get_reply_uri(1,2).should == reply_uri
+      }.should_not raise_error
+    end
+
+    it "should get_reply_page(uri)"
+
+    it "should get_post_form(page)"
+
+    it "should set_message(form, message)"
+
+    it "should post_message(form)"
+
+    it "should validate_post_result(page)"
+
   end
 
 end

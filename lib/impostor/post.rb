@@ -18,7 +18,7 @@ class Impostor::Post
   # implementation for specific forum applications
   #
   # * validate_post_input(forum, topic, message)
-  # * get_reply_uri(forum, topic, message)
+  # * get_reply_uri(forum, topic)
   # * get_reply_page(uri)
   # * get_post_form(page)
   # * set_message(form, message)
@@ -28,7 +28,7 @@ class Impostor::Post
   def post(forum, topic, message)
     self.validate_post_input(forum, topic, message)
     self.auth.login_with_raises
-    uri = self.get_reply_uri(forum, topic, message)
+    uri = self.get_reply_uri(forum, topic)
     page = get_reply_page(uri)
     form = get_post_form(page)
     set_message(form, message)
@@ -55,7 +55,7 @@ class Impostor::Post
   # return a uri used to fetch the reply page based on the forum, topic, and
   # message
 
-  def get_reply_uri(forum, topic, message)
+  def get_reply_uri(forum, topic)
     raise Impostor::MissingTemplateMethodError.new("get_reply_uri must be implemented")
   end
 
