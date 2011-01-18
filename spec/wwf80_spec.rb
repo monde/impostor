@@ -138,10 +138,8 @@ describe "a Web Wiz Forum 8.0 impostor" do
   describe "posting routines" do
 
     it "should post a message in the topic of a forum" do
-      config = self.config(sample_wwf80_config_params)
-      auth = self.auth(config)
-      post = self.post(config, auth)
-      auth.should_receive(:login_with_raises)
+      post = self.wwf80_post
+      post.auth.should_receive(:login_with_raises)
 
       lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
@@ -154,9 +152,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
     end
 
     it "should get a reply uri from get_reply_uri(forum, topic)" do
-      config = self.config(sample_wwf80_config_params)
-      auth = self.auth(config)
-      post = self.post(config, auth)
+      post = self.wwf80_post
       reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
       lambda {
         post.get_reply_uri(1,2).should == reply_uri
@@ -164,21 +160,35 @@ describe "a Web Wiz Forum 8.0 impostor" do
     end
 
     it "should get_reply_page(uri)" do
-      config = self.config(sample_wwf80_config_params)
-      auth = self.auth(config)
-      post = self.post(config, auth)
+      post = self.wwf80_post
       reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
-      reply_page = load_fixture_page("wwf80-new_reply_form.html", reply_uri, 200, config.agent)
+      reply_page = load_fixture_page("wwf80-new_reply_form.html", reply_uri, 200, post.config.agent)
 
-      config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
+      post.config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
       lambda {
         post.get_reply_page(reply_uri).should == reply_page
       }.should_not raise_error
     end
 
-    it "should get_reply_page(uri)"
+    it "should return reply from with get_post_form(page)" do
+      post = self.wwf80_post
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_page = load_fixture_page("wwf80-new_reply_form.html", reply_uri, 200, post.config.agent)
+      lambda {
+        post.get_post_form(reply_page).name.should == 'frmMessageForm'
+      }.should_not raise_error
+    end
 
-    it "should get_post_form(page)"
+    it "should raise error when page to get_post_form(page) receives a bad page" do
+      post = self.wwf80_post
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+
+      page = load_fixture_page("junk.html", reply_uri, 200, post.config.agent)
+
+      lambda {
+        post.get_post_form(page)
+      }.should raise_error( Impostor::PostError )
+    end
 
     it "should set_message(form, message)"
 

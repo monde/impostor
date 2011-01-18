@@ -74,6 +74,15 @@ class Impostor
         end
       end
 
+      ##
+      # return the form used for posting a message from the reply page
+
+      def get_post_form(page)
+        form = page.form('frmMessageForm')
+        raise Impostor::PostError.new("unknown reply page format") unless form
+        form
+      end
+
       #  ##
       #  # Attempt to post to the forum
 
