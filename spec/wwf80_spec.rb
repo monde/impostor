@@ -129,15 +129,20 @@ describe "a Web Wiz Forum 8.0 impostor" do
     it "should post a message in the topic of a forum" do
       post = wwf80_post
       post.auth.should_receive(:login_with_raises)
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_page = load_fixture_page("wwf80-new_reply_form.html", reply_uri, 200, post.config.agent)
+      post.config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
+      good_post_page = load_fixture_page("wwf80-post-reply-good-response.html", post.config.app_root, 200, post.config.agent)
+      post.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(good_post_page)
 
-      lambda {
+      #lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
           :forum => 1,
           :topic => 2,
           :message => "Hello World",
           :result => true
         }
-      }.should_not raise_error
+      #}.should_not raise_error
     end
 
     it "should get a reply uri from get_reply_uri(forum, topic)" do

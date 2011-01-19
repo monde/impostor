@@ -125,51 +125,6 @@ class Impostor
          true
       end
 
-      #  ##
-      #  # Attempt to post to the forum
-
-      #  def post(forum = @forum, topic = @topic, message = @message)
-      #    raise PostError.new("forum not set") unless forum
-      #    raise PostError.new("topic not set") unless topic
-      #    raise PostError.new("message not set") unless message
-
-      #    login
-      #    raise PostError.new("not logged in") unless @loggedin
-
-      #    uri = new_reply_page
-      #    uri.query = "TID=#{topic}"
-
-      #    # get the submit form
-      #    begin
-      #      page = @agent.get(uri)
-      #    rescue StandardError => err
-      #      raise PostError.new(err)
-      #    end
-      #    check_and_raise_if_error(page)
-
-      #    form = page.form('frmMessageForm') rescue nil
-      #    button = form.buttons.with.name('Submit').first rescue nil
-      #    raise PostError.new("post form not found") unless button && form
-
-      #    # set up the form and submit it
-      #    form.message = message
-      #    begin
-      #      page = @agent.submit(form, button)
-      #    rescue StandardError => err
-      #      raise PostError.new(err)
-      #    end
-      #    check_and_raise_if_error(page)
-
-      #    @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-      #    return true
-      #  end
-
-      #  ##
-      #  # Get the new reply page for the application (specific to WWF8.0)
-
-      #  def new_reply_page
-      #    URI.join(app_root, config(:new_reply_page))
-      #  end
     end
 
     module Topic
