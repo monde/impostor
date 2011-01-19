@@ -56,6 +56,12 @@ module ImpostorSpecHelper
     auth
   end
 
+  def phpbb3_auth
+    config = self.config(sample_phpbb3_config_params)
+    auth = self.auth(config)
+    auth
+  end
+
   def wwf80_post
     config = self.config(sample_wwf80_config_params)
     auth = self.auth(config)

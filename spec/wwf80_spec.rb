@@ -5,7 +5,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
   describe "authentication routines" do
 
     it "should logout only if not logged in" do
-      auth = self.auth
+      auth = wwf80_auth
       auth.should_receive(:authenticated?).once.and_return(false)
       auth.logout.should_not be_true
     end
