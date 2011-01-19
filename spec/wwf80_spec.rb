@@ -135,14 +135,14 @@ describe "a Web Wiz Forum 8.0 impostor" do
       good_post_page = load_fixture_page("wwf80-post-reply-good-response.html", post.config.app_root, 200, post.config.agent)
       post.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(good_post_page)
 
-      #lambda {
+      lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
           :forum => 1,
           :topic => 2,
           :message => "Hello World",
           :result => true
         }
-      #}.should_not raise_error
+      }.should_not raise_error
     end
 
     it "should get a reply uri from get_reply_uri(forum, topic)" do

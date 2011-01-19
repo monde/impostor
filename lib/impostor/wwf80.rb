@@ -14,13 +14,13 @@ class Impostor
     #
     # Typical configuration parameters
     # { :type => :wwf80,
-    # :app_root => 'http://example.com/forum/',
-    # :login_page => 'login_user.asp',
-    # :new_reply_page => 'new_reply_form.asp',
-    # :new_topic_page => 'new_topic_form.asp',
-    # :user_agent => 'Windows IE 7',
-    # :username => 'myuser',
-    # :password => 'mypasswd' }
+    #   :app_root => 'http://example.com/forum/',
+    #   :login_page => 'login_user.asp',
+    #   :new_reply_page => 'new_reply_form.asp',
+    #   :new_topic_page => 'new_topic_form.asp',
+    #   :user_agent => 'Windows IE 7',
+    #   :username => 'myuser',
+    #   :password => 'mypasswd' }
 
     module Auth
 
@@ -64,17 +64,6 @@ class Impostor
       end
 
       ##
-      # return the reply page that is fetched with the reply uri
-
-      def get_reply_page(uri)
-        begin
-          page = self.config.agent.get(uri)
-        rescue StandardError => err
-          raise PostError.new(err)
-        end
-      end
-
-      ##
       # return the form used for posting a message from the reply page
 
       def get_post_form(page)
@@ -89,17 +78,6 @@ class Impostor
       def set_message(form, message)
         form.message = message
         form
-      end
-
-      ##
-      # post the message form
-
-      def post_message(form)
-        begin
-          form.submit
-        rescue StandardError => err
-          raise PostError.new(err)
-        end
       end
 
       ##

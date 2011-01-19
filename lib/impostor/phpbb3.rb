@@ -13,12 +13,12 @@ class Impostor
     #
     # Typical configuration parameters
     # { :type => :phpbb3,
-    # :app_root => 'http://example.com/forum/',
-    # :login_page => 'ucp.php?mode=login',
-    # :posting_page => 'posting.php',
-    # :user_agent => 'Windows IE 7',
-    # :username => 'myuser',
-    # :password => 'mypasswd' }
+    #   :app_root => 'http://example.com/forum/',
+    #   :login_page => 'ucp.php?mode=login',
+    #   :posting_page => 'posting.php',
+    #   :user_agent => 'Windows IE 7',
+    #   :username => 'myuser',
+    #   :password => 'mypasswd' }
 
     module Auth
 
@@ -54,58 +54,48 @@ class Impostor
     end
 
     module Post
-      # ##
-      # # Attempt to post to the forum
 
-      # def post(forum = @forum, topic = @topic, message = @message)
-      #   raise PostError.new("forum not set") unless forum
-      #   raise PostError.new("topic not set") unless topic
-      #   raise PostError.new("message not set") unless message
+      ##
+      # return a uri used to fetch the reply page based on the forum, topic, and
+      # message
 
-      #   login
-      #   raise PostError.new("not logged in") unless @loggedin
+      def get_reply_uri(forum, topic)
+        uri = URI.join(self.config.app_root, self.config.config(:posting_page))
+        uri.query = "mode=reply&f=#{forum}&t=#{topic}"
+        uri
+      end
 
-      #   uri = posting_page
-      #   uri.query = "mode=reply&f=#{forum}&t=#{topic}"
+      ##
+      # return the form used for posting a message from the reply page
 
-      #   # get the submit form
-      #   begin
-      #     page = @agent.get(uri)
-      #   rescue StandardError => err
-      #     raise PostError.new(err)
-      #   end
+      def get_post_form(page)
+        form = page.form('postform')
+        raise Impostor::PostError.new("unknown reply page format") unless form
+        form
+      end
 
-      #   form = page.form('postform') rescue nil
-      #   button = form.buttons.with.name('post').first rescue nil
-      #   raise PostError.new("post form not found") unless button && form
+      ##
+      # set the message to reply with on the reply form
 
-      #   # set up the form and submit it
-      #   form.message = message
-      #   form['lastclick'] = (form['lastclick'].to_i - 60).to_s
+      def set_message(form, message)
+        form.message = message
+        form
+      end
 
-      #   begin
-      #     page = @agent.submit(form, button)
-      #   rescue StandardError => err
-      #     raise PostError.new(err)
-      #   end
+      ##
+      # validate the result of posting the message form
 
-      #   # new post will be in current page uri since phpbb3 will 302 to the new
-      #   # post page post anchor, e.g.
-      #   # http://example.com/forum/viewtopic.php?f=37&t=52&p=3725#p3725
-      #   postid = page.uri.query.split('&').detect{|a| a =~ /^p=/}.split('=').last.to_i rescue 0
-      #   raise PostError.new("message did not post") unless postid > 0
+      def validate_post_result(page)
+        begin
 
-      #   @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
+          postid = page.uri.query.split('&').detect{ |a| a =~ /^p=/ }.split('=').last.to_i
+          raise StandardError.new("message did not post") unless postid > 0
+        rescue StandardError => err
+          raise Impostor::PostError.new(err)
+        end
+        postid
+      end
 
-      #   true
-      # end
-
-      # ##
-      # # Get the posting page for the application (specific to phpBB3)
-
-      # def posting_page
-      #   URI.join(app_root, config[:posting_page])
-      # end
     end
 
     module Topic

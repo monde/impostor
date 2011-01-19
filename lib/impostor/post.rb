@@ -63,7 +63,11 @@ class Impostor::Post
   # return the reply page that is fetched with the reply uri
 
   def get_reply_page(uri)
-    raise Impostor::MissingTemplateMethodError.new("get_reply_page must be implemented")
+    begin
+      page = self.config.agent.get(uri)
+    rescue StandardError => err
+      raise Impostor::PostError.new(err)
+    end
   end
 
   ##
@@ -84,7 +88,11 @@ class Impostor::Post
   # post the message form
 
   def post_message(form)
-    raise Impostor::MissingTemplateMethodError.new("post_message must be implemented")
+    begin
+      form.submit
+    rescue StandardError => err
+      raise Impostor::PostError.new(err)
+    end
   end
 
   ##

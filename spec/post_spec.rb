@@ -79,11 +79,13 @@ describe "impostor's post routines" do
       )
     end
 
-    it "should raise not implemented error when get_reply_page called" do
-      lambda { post.get_reply_page(nil) }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: get_reply_page must be implemented (StandardError)"
-      )
+    it "should get_reply_page" do
+      post = self.post
+      uri = mock "uri"
+      post.config.agent.should_receive(:get).with(uri)
+      lambda {
+        post.get_reply_page(uri)
+      }.should_not raise_error
     end
 
     it "should raise not implemented error when get_post_form called" do
@@ -100,11 +102,13 @@ describe "impostor's post routines" do
       )
     end
 
-    it "should raise not implemented error when post_message called" do
-      lambda { post.post_message(nil) }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: post_message must be implemented (StandardError)"
-      )
+    it "should post_message" do
+      post = self.post
+      form = mock "post form"
+      form.should_receive(:submit).and_raise( Impostor::PostError )
+      lambda {
+        post.post_message(form)
+      }.should raise_error( Impostor::PostError )
     end
 
     it "should raise not implemented error when validate_post_result called" do

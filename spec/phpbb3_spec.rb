@@ -129,25 +129,29 @@ describe "a phpbb3 impostor" do
     it "should post a message in the topic of a forum" do
       post = phpbb3_post
       post.auth.should_receive(:login_with_raises)
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_uri = URI.parse("http://example.com/forum/posting.php?mode=reply&f=1&t=2")
       reply_page = load_fixture_page("phpbb3-get-reply-form-good-response.html", reply_uri, 200, post.config.agent)
       post.config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
-      good_post_page = load_fixture_page("phpbb3-post-reply-good-response.html", post.config.app_root, 200, post.config.agent)
-      post.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(good_post_page)
+      response_uri = URI.parse(post.config.app_root)
+      response_uri.path = "/forum/viewtopic.php"
+      response_uri.query = "f=1&t=2&p=3725"
+      response_uri.fragment = "p3725"
+      response_page = load_fixture_page("phpbb3-post-reply-good-response.html", response_uri, 200, post.config.agent)
+      post.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(response_page)
 
-      #lambda {
+      lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
           :forum => 1,
           :topic => 2,
           :message => "Hello World",
           :result => true
         }
-      #}.should_not raise_error
+      }.should_not raise_error
     end
 
     it "should get a reply uri from get_reply_uri(forum, topic)" do
       post = phpbb3_post
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_uri = URI.parse("http://example.com/forum/posting.php?mode=reply&f=1&t=2")
       lambda {
         post.get_reply_uri(1,2).should == reply_uri
       }.should_not raise_error
@@ -169,7 +173,7 @@ describe "a phpbb3 impostor" do
       reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
       reply_page = load_fixture_page("phpbb3-get-reply-form-good-response.html", reply_uri, 200, post.config.agent)
       lambda {
-        post.get_post_form(reply_page).name.should == 'frmMessageForm'
+        post.get_post_form(reply_page).name.should == 'postform'
       }.should_not raise_error
     end
 
@@ -216,9 +220,14 @@ describe "a phpbb3 impostor" do
 
     it "should not raise post error on valid reply validate_post_result(page)" do
       post = phpbb3_post
-      page = load_fixture_page("phpbb3-post-reply-good-response.html", post.config.app_root, 200, post.config.agent)
+      response_uri = URI.parse(post.config.app_root)
+      response_uri.path = "/forum/viewtopic.php"
+      response_uri.query = "f=1&t=2&p=3725"
+      response_uri.fragment = "p3725"
+
+      page = load_fixture_page("phpbb3-post-reply-good-response.html", response_uri, 200, post.config.agent)
       lambda {
-        post.validate_post_result(page).should be_true
+        post.validate_post_result(page).should == 3725
       }.should_not raise_error
     end
 
