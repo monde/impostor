@@ -91,6 +91,40 @@ class Impostor
         form
       end
 
+      ##
+      # post the message form
+
+      def post_message(form)
+        begin
+          form.submit
+        rescue StandardError => err
+          raise PostError.new(err)
+        end
+      end
+
+      ##
+      # validate the result of posting the message form
+
+      def validate_post_result(page)
+         error = page.search("//table[@class='errorTable']")
+         if error
+           msgs = error.search("//td")
+
+           # throttled
+           too_many = (msgs.last.text =~
+           /You have exceeded the number of posts permitted in the time span/ rescue
+           false)
+           raise ThrottledError.new(msgs.last.text.gsub(/\s+/m,' ').strip) if too_many
+
+           # general error
+           had_error = (error.last.text =~
+           /Error: Message Not Posted/ rescue
+           false)
+           raise PostError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
+         end
+         true
+      end
+
       #  ##
       #  # Attempt to post to the forum
 

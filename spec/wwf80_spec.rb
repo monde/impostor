@@ -190,9 +190,40 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should_not raise_error
     end
 
-    it "should post_message(form)"
+    it "should return response page from post_message(form)" do
+      post = wwf80_post
+      form = mock "post form"
+      reply_page = mock "reply page"
+      form.should_receive(:submit).and_return reply_page
+      lambda {
+        post.post_message(form).should == reply_page
+      }.should_not raise_error
+    end
 
-    it "should validate_post_result(page)"
+    it "should raise post error when post_form fails" do
+      post = wwf80_post
+      form = mock "post form"
+      form.should_receive(:submit).and_raise( Impostor::PostError )
+      lambda {
+        post.post_message(form)
+      }.should raise_error( Impostor::PostError )
+    end
+
+    it "should not raise post error on valid reply validate_post_result(page)" do
+      post = wwf80_post
+      page = load_fixture_page("wwf80-post-reply-good-response.html", post.config.app_root, 200, post.config.agent)
+      lambda {
+        post.validate_post_result(page).should be_true
+      }.should_not raise_error
+    end
+
+    it "should raise post error on invalid reply validate_post_result(page)" do
+      post = wwf80_post
+      page = load_fixture_page("wwf80-general-posting-error.html", post.config.app_root, 200, post.config.agent)
+      lambda {
+        post.validate_post_result(page)
+      }.should raise_error( Impostor::PostError )
+    end
 
   end
 
