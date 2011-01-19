@@ -62,6 +62,12 @@ module ImpostorSpecHelper
     auth
   end
 
+  def wwf79_auth
+    config = self.config(sample_wwf79_config_params)
+    auth = self.auth(config)
+    auth
+  end
+
   def wwf80_post
     config = self.config(sample_wwf80_config_params)
     auth = self.auth(config)
