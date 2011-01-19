@@ -5,16 +5,15 @@ describe "a phpbb2 impostor" do
   describe "authentication routines" do
 
     it "should logout only if not logged in" do
-      auth = self.auth
+      auth = phpbb2_auth
       auth.should_receive(:authenticated?).once.and_return(false)
       auth.logout.should_not be_true
     end
 
     it "should logout" do
-      config = self.config
-      auth = self.auth(config)
-      config.should_receive(:save_topics).once
-      config.should_receive(:save_cookie_jar).once
+      auth = phpbb2_auth
+      auth.config.should_receive(:save_topics).once
+      auth.config.should_receive(:save_cookie_jar).once
       auth.instance_variable_set("@authenticated", true)
 
       auth.logout.should be_true
@@ -22,9 +21,8 @@ describe "a phpbb2 impostor" do
     end
 
     it "should be logged_in? when phpbb2 displays the user name" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      page = load_fixture_page("phpbb2-logged-in.html", config.app_root, 200, config.agent)
+      auth = phpbb2_auth
+      page = load_fixture_page("phpbb2-logged-in.html", auth.config.app_root, 200, auth.config.agent)
 
       lambda {
         auth.logged_in?(page).should be_true
@@ -32,9 +30,8 @@ describe "a phpbb2 impostor" do
     end
 
     it "should not be logged_in? when phpbb2 does not display the user name" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      page = load_fixture_page("phpbb2-not-logged-in.html", config.app_root, 200, config.agent)
+      auth = phpbb2_auth
+      page = load_fixture_page("phpbb2-not-logged-in.html", auth.config.app_root, 200, auth.config.agent)
 
       lambda {
         auth.logged_in?(page).should_not be_true
@@ -42,10 +39,9 @@ describe "a phpbb2 impostor" do
     end
 
     it "should return a page from fetch_login_page" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
+      auth = phpbb2_auth
       login_uri = URI.parse("http://example.com/forum/login.php")
-      config.agent.should_receive(:get).with(login_uri)
+      auth.config.agent.should_receive(:get).with(login_uri)
 
       lambda {
         auth.fetch_login_page
@@ -53,10 +49,9 @@ describe "a phpbb2 impostor" do
     end
 
     it "should handle an error in fetch_login_page" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
+      auth = phpbb2_auth
       login_uri = URI.parse("http://example.com/forum/login.php")
-      config.agent.should_receive(:get).with(login_uri).and_raise(StandardError)
+      auth.config.agent.should_receive(:get).with(login_uri).and_raise(StandardError)
 
       lambda {
         auth.fetch_login_page
@@ -64,9 +59,8 @@ describe "a phpbb2 impostor" do
     end
 
     it "should return a login form from get_login_form" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      page = load_fixture_page("phpbb2-login.html", config.login_page, 200, config.agent)
+      auth = phpbb2_auth
+      page = load_fixture_page("phpbb2-login.html", auth.config.login_page, 200, auth.config.agent)
 
       lambda {
         auth.get_login_form(page).action.should match(/login\.php/)
@@ -74,9 +68,8 @@ describe "a phpbb2 impostor" do
     end
 
     it "should raise login error when get_login_form receives a bad page" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      page = load_fixture_page("junk.html", config.login_page, 200, config.agent)
+      auth = phpbb2_auth
+      page = load_fixture_page("junk.html", auth.config.login_page, 200, auth.config.agent)
 
       lambda {
         auth.get_login_form(page)
@@ -84,8 +77,7 @@ describe "a phpbb2 impostor" do
     end
 
     it "should setup login form in set_username_and_password" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
+      auth = phpbb2_auth
       form = mock "login form"
       form.should_receive(:[]=).with("username", "tester")
       form.should_receive(:[]=).with("password", "pass")
@@ -96,38 +88,35 @@ describe "a phpbb2 impostor" do
     end
 
     it "should return a logged in page when posting the login" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      login_page = load_fixture_page("phpbb2-login.html", config.login_page, 200, config.agent)
+      auth = phpbb2_auth
+      login_page = load_fixture_page("phpbb2-login.html", auth.config.login_page, 200, auth.config.agent)
       form = auth.get_login_form(login_page)
-      logged_in_page = load_fixture_page("phpbb2-logged-in.html", config.app_root, 200, config.agent)
-      config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
+      logged_in_page = load_fixture_page("phpbb2-logged-in.html", auth.config.app_root, 200, auth.config.agent)
+      auth.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
       lambda {
         auth.post_login(form).should == logged_in_page
       }.should_not raise_error
     end
 
     it "should raise a login error when posting has an underlying exception" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      login_page = load_fixture_page("phpbb2-login.html", config.login_page, 200, config.agent)
+      auth = phpbb2_auth
+      login_page = load_fixture_page("phpbb2-login.html", auth.config.login_page, 200, auth.config.agent)
       form = auth.get_login_form(login_page)
-      logged_in_page = load_fixture_page("phpbb2-logged-in.html", config.app_root, 200, config.agent)
-      config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_raise(StandardError)
+      logged_in_page = load_fixture_page("phpbb2-logged-in.html", auth.config.app_root, 200, auth.config.agent)
+      auth.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_raise(StandardError)
       lambda {
         auth.post_login(form)
       }.should raise_error( Impostor::LoginError )
     end
 
     it "should login" do
-      config = self.config(sample_phpbb2_config_params)
-      auth = self.auth(config)
-      login_page = load_fixture_page("phpbb2-login.html", config.login_page, 200, config.agent)
-      logged_in_page = load_fixture_page("phpbb2-logged-in.html", config.app_root, 200, config.agent)
+      auth = phpbb2_auth
+      login_page = load_fixture_page("phpbb2-login.html", auth.config.login_page, 200, auth.config.agent)
+      logged_in_page = load_fixture_page("phpbb2-logged-in.html", auth.config.app_root, 200, auth.config.agent)
       login_uri = URI.parse("http://example.com/forum/login.php")
 
-      config.agent.should_receive(:get).with(login_uri).and_return(login_page)
-      config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
+      auth.config.agent.should_receive(:get).with(login_uri).and_return(login_page)
+      auth.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(logged_in_page)
 
       lambda {
         auth.login.should be_true
