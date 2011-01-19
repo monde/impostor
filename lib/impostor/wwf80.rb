@@ -83,6 +83,14 @@ class Impostor
         form
       end
 
+      ##
+      # set the message to reply with on the reply form
+
+      def set_message(form, message)
+        form.message = message
+        form
+      end
+
       #  ##
       #  # Attempt to post to the forum
 

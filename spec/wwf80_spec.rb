@@ -179,7 +179,16 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should raise_error( Impostor::PostError )
     end
 
-    it "should set_message(form, message)"
+    it "should set_message(form, message)" do
+      post = wwf80_post
+      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_page = load_fixture_page("wwf80-new_reply_form.html", reply_uri, 200, post.config.agent)
+      form = post.get_post_form(reply_page)
+      form.should_receive(:message=, "Hello World")
+      lambda {
+        post.set_message(form, "Hello World")
+      }.should_not raise_error
+    end
 
     it "should post_message(form)"
 
