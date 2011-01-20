@@ -96,10 +96,11 @@ describe "impostor's post routines" do
     end
 
     it "should raise not implemented error when set_message called" do
-      lambda { post.set_message(nil, nil) }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: set_message must be implemented (StandardError)"
-      )
+      form = mock "form"
+      form.should_receive(:message=).with("Hello World")
+      lambda {
+        post.set_message(form, "Hello World").should == form
+      }.should_not raise_error
     end
 
     it "should post_message" do

@@ -80,11 +80,18 @@ module ImpostorSpecHelper
     self.post(config, auth)
   end
 
+  def wwf79_post
+    config = self.config(sample_wwf79_config_params)
+    auth = self.auth(config)
+    self.post(config, auth)
+  end
+
   def phpbb3_post
     config = self.config(sample_phpbb3_config_params)
     auth = self.auth(config)
     self.post(config, auth)
   end
+
   def phpbb2_post
     config = self.config(sample_phpbb2_config_params)
     auth = self.auth(config)

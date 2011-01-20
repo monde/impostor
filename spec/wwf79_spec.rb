@@ -126,5 +126,113 @@ describe "a Web Wiz Forum 7.9 impostor" do
     end
   end
 
+  describe "posting routines" do
+
+    it "should post a message in the topic of a forum" do
+      post = wwf79_post
+      post.auth.should_receive(:login_with_raises)
+      reply_uri = URI.parse("http://example.com/forum/forum_posts.asp?TID=2&TPN=10000")
+      reply_page = load_fixture_page("wwf79-forum_posts.html", reply_uri, 200, post.config.agent)
+      post.config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
+      good_post_page = load_fixture_page("wwf79-good-post-forum_posts.html", post.config.app_root, 200, post.config.agent)
+      post.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(good_post_page)
+
+      lambda {
+        post.post(formum=1, topic=2, message="Hello World").should == {
+          :forum => 1,
+          :topic => 2,
+          :message => "Hello World",
+          :result => true
+        }
+      }.should_not raise_error
+    end
+
+    it "should get a reply uri from get_reply_uri(forum, topic)" do
+      post = wwf79_post
+      reply_uri = URI.parse("http://example.com/forum/forum_posts.asp?TID=2&TPN=10000")
+      lambda {
+        post.get_reply_uri(1,2).should == reply_uri
+      }.should_not raise_error
+    end
+
+    it "should get_reply_page(uri)" do
+      post = wwf79_post
+      reply_uri = URI.parse("http://example.com/forum/forum_posts.asp?TID=2&TPN=10000")
+      reply_page = load_fixture_page("wwf79-good-post-forum_posts.html", reply_uri, 200, post.config.agent)
+
+      post.config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
+      lambda {
+        post.get_reply_page(reply_uri).should == reply_page
+      }.should_not raise_error
+    end
+
+    it "should return reply from with get_post_form(page)" do
+      post = wwf79_post
+      reply_uri = URI.parse("http://example.com/forum/forum_posts.asp?TID=2&TPN=10000")
+      reply_page = load_fixture_page("wwf79-good-post-forum_posts.html", reply_uri, 200, post.config.agent)
+      lambda {
+        post.get_post_form(reply_page).name.should == 'frmAddMessage'
+      }.should_not raise_error
+    end
+
+    it "should raise error when page to get_post_form(page) receives a bad page" do
+      post = wwf79_post
+      reply_uri = URI.parse("http://example.com/forum/forum_posts.asp?TID=2&TPN=10000")
+
+      page = load_fixture_page("junk.html", reply_uri, 200, post.config.agent)
+
+      lambda {
+        post.get_post_form(page)
+      }.should raise_error( Impostor::PostError )
+    end
+
+    it "should set_message(form, message)" do
+      post = wwf79_post
+      reply_uri = URI.parse("http://example.com/forum/forum_posts.asp?TID=2&TPN=10000")
+      reply_page = load_fixture_page("wwf79-good-post-forum_posts.html", reply_uri, 200, post.config.agent)
+      form = post.get_post_form(reply_page)
+      form.should_receive(:message=, "Hello World")
+      lambda {
+        post.set_message(form, "Hello World")
+      }.should_not raise_error
+    end
+
+    it "should return response page from post_message(form)" do
+      post = wwf79_post
+      form = mock "post form"
+      reply_page = mock "reply page"
+      form.should_receive(:submit).and_return reply_page
+      lambda {
+        post.post_message(form).should == reply_page
+      }.should_not raise_error
+    end
+
+    it "should raise post error when post_form fails" do
+      post = wwf79_post
+      form = mock "post form"
+      form.should_receive(:submit).and_raise( Impostor::PostError )
+      lambda {
+        post.post_message(form)
+      }.should raise_error( Impostor::PostError )
+    end
+
+    it "should not raise post error on valid reply validate_post_result(page)" do
+      post = wwf79_post
+      page = load_fixture_page("wwf79-good-post-forum_posts.html", post.config.app_root, 200, post.config.agent)
+      lambda {
+        post.validate_post_result(page).should be_true
+      }.should_not raise_error
+    end
+
+    it "should raise post error on invalid reply validate_post_result(page)" do
+      post = wwf79_post
+      page = load_fixture_page("wwf79-general-posting-error.html", post.config.app_root, 200, post.config.agent)
+      lambda {
+        post.validate_post_result(page)
+      }.should raise_error( Impostor::PostError )
+    end
+
+  end
+
 end
 

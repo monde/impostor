@@ -81,7 +81,8 @@ class Impostor::Post
   # set the message to reply with on the reply form
 
   def set_message(form, message)
-    raise Impostor::MissingTemplateMethodError.new("set_message must be implemented")
+    form.message = message
+    form
   end
 
   ##

@@ -14,13 +14,13 @@ class Impostor
     #
     # Typical configuration parameters
     # { :type => :wwf79,
-    # :app_root => 'http://example.com/forum/',
-    # :login_page => 'login_user.asp',
-    # :forum_posts_page => 'forum_posts.asp',
-    # :post_message_page => 'post_message_form.asp'
-    # :user_agent => 'Windows IE 7',
-    # :username => 'myuser',
-    # :password => 'mypasswd' }
+    #   :app_root => 'http://example.com/forum/',
+    #   :login_page => 'login_user.asp',
+    #   :forum_posts_page => 'forum_posts.asp',
+    #   :post_message_page => 'post_message_form.asp'
+    #   :user_agent => 'Windows IE 7',
+    #   :username => 'myuser',
+    #   :password => 'mypasswd' }
 
     module Auth
 
@@ -54,6 +54,45 @@ class Impostor
     end
 
     module Post
+
+      ##
+      # return a uri used to fetch the reply page based on the forum, topic, and
+      # message
+
+      def get_reply_uri(forum, topic)
+        uri = URI.join(self.config.app_root, self.config.config(:forum_posts_page))
+        uri.query = "TID=#{topic}&TPN=10000"
+        uri
+      end
+
+      ##
+      # return the form used for posting a message from the reply page
+
+      def get_post_form(page)
+        form = page.form('frmAddMessage')
+        raise Impostor::PostError.new("unknown reply page format") unless form
+        form
+      end
+
+      ##
+      # validate the result of posting the message form
+
+      def validate_post_result(page)
+        error = page.body =~ /Message Not Posted/
+        if error
+
+          # throttled
+          throttled = "You have exceeded the number of posts permitted in the time span"
+          too_many = page.body =~ /#{throttled}/
+          raise Impostor::ThrottledError.new(throttled) if too_many
+
+          # general error
+          raise Impostor::PostError.new("There was an error making the post")
+        end
+
+        true
+      end
+
     end
 
     module Topic
@@ -100,68 +139,6 @@ class Impostor
     #    add_subject(forum, topic, subject)
     #    @forum=forum; @topic=topic; @subject=subject; @message=message
     #    return true
-    #  end
-
-    #  ##
-    #  # Attempt to post to the forum
-
-    #  def post(forum = @forum, topic = @topic, message = @message)
-    #    raise PostError.new("forum not set") unless forum
-    #    raise PostError.new("topic not set") unless topic
-    #    raise PostError.new("message not set") unless message
-
-    #    login
-    #    raise PostError.new("not logged in") unless @loggedin
-
-    #    uri = forum_posts_page
-    #    uri.query = "TID=#{topic}&TPN=10000"
-
-    #    # get the submit form
-    #    begin
-    #      page = @agent.get(uri)
-    #    rescue StandardError => err
-    #      raise PostError.new(err)
-    #    end
-    #    form = page.form('frmAddMessage') rescue nil
-    #    button = form.buttons.with.name('Submit').first rescue nil
-    #    raise PostError.new("post form not found") unless button && form
-
-    #    # set up the form and submit it
-    #    form.message = message
-    #    begin
-    #      page = @agent.submit(form, button)
-    #    rescue StandardError => err
-    #      raise PostError.new(err)
-    #    end
-
-    #    error = page.body =~ /Message Not Posted/
-    #    if error
-
-    #      # throttled
-    #      throttled = "You have exceeded the number of posts permitted in the time span"
-    #      too_many = page.body =~ /#{throttled}/
-    #      raise ThrottledError.new(throttled) if too_many
-
-    #      # general error
-    #      raise PostError.new("There was an error making the post")
-    #    end
-
-    #    @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-    #    return true
-    #  end
-
-    #  ##
-    #  # Get the new posts page for the application (specific to WWF7.9)
-
-    #  def forum_posts_page
-    #    URI.join(app_root, config[:forum_posts_page])
-    #  end
-
-    #  ##
-    #  # Get the new topic page for the application (specific to WWF7.9)
-
-    #  def post_message_page
-    #    URI.join(app_root, config[:post_message_page])
     #  end
 
   end

@@ -75,14 +75,6 @@ class Impostor
       end
 
       ##
-      # set the message to reply with on the reply form
-
-      def set_message(form, message)
-        form.message = message
-        form
-      end
-
-      ##
       # validate the result of posting the message form
 
       def validate_post_result(page)
