@@ -98,6 +98,27 @@ class Impostor
     end
 
     module Topic
+      ##
+      # return a uri used to fetch the new topic page based on the forum, subject,
+      # and message
+
+      def get_new_topic_uri(forum, subject, message)
+        uri = URI.join(self.config.app_root, self.config.config(:new_topic_page))
+        uri.query = "FID=#{forum}"
+        uri
+      end
+
+      ##
+      # Get the page that has the form for new topics referenced by the uri
+
+      def get_new_topic_page(uri)
+        begin
+          self.config.agent.get(uri)
+        rescue StandardError => err
+          raise Impostor::PostError.new(err)
+        end
+      end
+
       #  def _new_topic_form_query(forum)
       #    uri = new_topic_page
       #    uri.query = "FID=#{forum}"

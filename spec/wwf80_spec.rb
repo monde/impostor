@@ -232,5 +232,65 @@ describe "a Web Wiz Forum 8.0 impostor" do
 
   end
 
-end
+  describe "wwf 80 topic methods" do
 
+    it "should return new topic uri when get_new_topic_uri called" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      lambda {
+        topic.get_new_topic_uri(1, "OMG!", "Hello World").should == new_topic_uri
+      }.should_not raise_error
+    end
+
+    it "should return new topic page when get_new_topic_page called" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, post.config.agent)
+
+      topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
+
+      lambda {
+        new_topic_uri = topic.get_new_topic_uri(1, "OMG!", "Hello World")
+        topic.get_new_topic_page(new_topic_uri)
+      }.should_not raise_error
+    end
+
+    #it "should raise not implemented error when get_new_topic_form called" do
+    #  lambda { topic.get_new_topic_form(nil) }.should raise_error(
+    #    Impostor::MissingTemplateMethodError,
+    #    "Impostor error: get_new_topic_form must be implemented (StandardError)"
+    #  )
+    #end
+
+    #it "should raise not implemented error when set_subject_and_message called" do
+    #  lambda { topic.set_subject_and_message(nil, nil, nil) }.should raise_error(
+    #    Impostor::MissingTemplateMethodError,
+    #    "Impostor error: set_subject_and_message must be implemented (StandardError)"
+    #  )
+    #end
+
+    #it "should raise not implemented error when post_new_topic called" do
+    #  lambda { topic.post_new_topic(nil) }.should raise_error(
+    #    Impostor::MissingTemplateMethodError,
+    #    "Impostor error: post_new_topic must be implemented (StandardError)"
+    #  )
+    #end
+
+    #it "should raise not implemented error when validate_new_topic_result called" do
+    #  lambda { topic.validate_new_topic_result(nil) }.should raise_error(
+    #    Impostor::MissingTemplateMethodError,
+    #    "Impostor error: validate_new_topic_result must be implemented (StandardError)"
+    #  )
+    #end
+
+    #it "should raise not implemented error when get_topic_from_result called" do
+    #  lambda { topic.get_topic_from_result(nil) }.should raise_error(
+    #    Impostor::MissingTemplateMethodError,
+    #    "Impostor error: get_topic_from_result must be implemented (StandardError)"
+    #  )
+    #end
+
+  end
+
+end
