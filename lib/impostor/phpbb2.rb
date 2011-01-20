@@ -13,12 +13,12 @@ class Impostor
     #
     # Typical configuration parameters
     # { :type => :phpbb2,
-    # :app_root => 'http://example.com/forum/',
-    # :login_page => 'login.php',
-    # :posting_page => 'posting.php',
-    # :user_agent => 'Windows IE 7',
-    # :username => 'myuser',
-    # :password => 'mypasswd' }
+    #   :app_root => 'http://example.com/forum/',
+    #   :login_page => 'login.php',
+    #   :posting_page => 'posting.php',
+    #   :user_agent => 'Windows IE 7',
+    #   :username => 'myuser',
+    #   :password => 'mypasswd' }
 
     module Auth
 
@@ -54,6 +54,52 @@ class Impostor
     end
 
     module Post
+
+      ##
+      # return a uri used to fetch the reply page based on the forum, topic, and
+      # message
+
+      def get_reply_uri(forum, topic)
+        uri = URI.join(self.config.app_root, self.config.config(:posting_page))
+        uri.query = "mode=reply&t=#{topic}"
+        uri
+      end
+
+      ##
+      # return the form used for posting a message from the reply page
+
+      def get_post_form(page)
+        form = page.form('post')
+        raise Impostor::PostError.new("unknown reply page format") unless form
+        form
+      end
+
+      ##
+      # set the message to reply with on the reply form
+
+      def set_message(form, message)
+        form.message = message
+        form
+      end
+
+      ##
+      # validate the result of posting the message form
+
+      def validate_post_result(page)
+        message = page.search("//span[@class='gen']").last
+        success = message.text =~ /Your message has been entered successfully./ rescue false
+        return true if success
+
+        too_many = (message.text =~
+          /You cannot make another post so soon after your last/ rescue false)
+
+        if too_many
+          raise Impostor::ThrottledError.new("too many posts in too short amount of time")
+        else
+          raise Impostor::PostError.new("message did not post")
+        end
+      end
+
     end
 
     module Topic
@@ -114,68 +160,6 @@ class Impostor
     #    @forum=forum; @topic=topic; @subject=subject; @message=message
     #    true
     #  end
-
-    #  ##
-    #  # Attempt to post to the forum
-
-    #  def post(forum = @forum, topic = @topic, message = @message)
-    #    raise PostError.new("forum not set") unless forum
-    #    raise PostError.new("topic not set") unless topic
-    #    raise PostError.new("message not set") unless message
-
-    #    login
-    #    raise PostError.new("not logged in") unless @loggedin
-
-    #    uri = posting_page
-    #    uri.query = "mode=reply&t=#{topic}"
-
-    #    # get the submit form
-    #    begin
-    #      page = @agent.get(uri)
-    #    rescue StandardError => err
-    #      raise PostError.new(err)
-    #    end
-
-    #    form = page.form('post') rescue nil
-    #    button = form.buttons.with.name('post').first rescue nil
-    #    raise PostError.new("post form not found") unless button && form
-
-    #    # set up the form and submit it
-    #    form.message = message
-    #    form['disable_html'] = nil
-    #    form['disable_bbcode'] = 'on'
-    #    form['disable_smilies'] = 'on'
-    #    begin
-    #      page = @agent.submit(form, button)
-    #    rescue StandardError => err
-    #      raise PostError.new(err)
-    #    end
-
-    #    mes = page.search("//span[@class='gen']").last
-    #    posted = mes.text =~ /Your message has been entered successfully./ rescue false
-    #    if posted
-    #      @forum=forum; @topic=topic; @subject=get_subject(forum,topic); @message=message
-    #      return true
-    #    end
-
-    #    too_many = (mes.text =~
-    #      /You cannot make another post so soon after your last; please try again in a short while./ rescue
-    #      false)
-    #    raise ThrottledError.new("too many posts in too short amount of time") if too_many
-
-    #    # false otherwise, should we raise an exception instead?
-    #    false
-    #  end
-
-    #  ##
-    #  # Get the posting page for the application (specific to phpBB2)
-
-    #  def posting_page
-    #    URI.join(app_root, config[:posting_page])
-    #  end
-
-    #  ##
-    #  # returns the login form and its button from the login page
 
   end
 end

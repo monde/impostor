@@ -85,6 +85,11 @@ module ImpostorSpecHelper
     auth = self.auth(config)
     self.post(config, auth)
   end
+  def phpbb2_post
+    config = self.config(sample_phpbb2_config_params)
+    auth = self.auth(config)
+    self.post(config, auth)
+  end
 
   def impostor(config = {})
     Impostor.new(sample_config_params.merge(config))

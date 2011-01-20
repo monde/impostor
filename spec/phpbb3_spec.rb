@@ -159,7 +159,7 @@ describe "a phpbb3 impostor" do
 
     it "should get_reply_page(uri)" do
       post = phpbb3_post
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_uri = URI.parse("http://example.com/forum/posting.php")
       reply_page = load_fixture_page("phpbb3-get-reply-form-good-response.html", reply_uri, 200, post.config.agent)
 
       post.config.agent.should_receive(:get).with(reply_uri).and_return(reply_page)
@@ -170,7 +170,7 @@ describe "a phpbb3 impostor" do
 
     it "should return reply from with get_post_form(page)" do
       post = phpbb3_post
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_uri = URI.parse("http://example.com/forum/posting.php")
       reply_page = load_fixture_page("phpbb3-get-reply-form-good-response.html", reply_uri, 200, post.config.agent)
       lambda {
         post.get_post_form(reply_page).name.should == 'postform'
@@ -179,7 +179,7 @@ describe "a phpbb3 impostor" do
 
     it "should raise error when page to get_post_form(page) receives a bad page" do
       post = phpbb3_post
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_uri = URI.parse("http://example.com/forum/posting.php")
 
       page = load_fixture_page("junk.html", reply_uri, 200, post.config.agent)
 
@@ -190,7 +190,7 @@ describe "a phpbb3 impostor" do
 
     it "should set_message(form, message)" do
       post = phpbb3_post
-      reply_uri = URI.parse("http://example.com/forum/new_reply_form.asp?TID=2")
+      reply_uri = URI.parse("http://example.com/forum/posting.php")
       reply_page = load_fixture_page("phpbb3-get-reply-form-good-response.html", reply_uri, 200, post.config.agent)
       form = post.get_post_form(reply_page)
       form.should_receive(:message=, "Hello World")
