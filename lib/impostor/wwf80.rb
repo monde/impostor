@@ -128,6 +128,15 @@ class Impostor
         form
       end
 
+      ##
+      # Set the subject and message on the new topic form
+
+      def set_subject_and_message(form, subject, message)
+        form.subject = subject
+        form.message = message
+        form
+      end
+
       #  def _new_topic_form_query(forum)
       #    uri = new_topic_page
       #    uri.query = "FID=#{forum}"

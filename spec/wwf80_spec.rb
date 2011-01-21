@@ -275,12 +275,15 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should raise_error( Impostor::TopicError )
     end
 
-    #it "should raise not implemented error when set_subject_and_message called" do
-    #  lambda { topic.set_subject_and_message(nil, nil, nil) }.should raise_error(
-    #    Impostor::MissingTemplateMethodError,
-    #    "Impostor error: set_subject_and_message must be implemented (StandardError)"
-    #  )
-    #end
+    it "should set subject and message on a form when set_subject_and_message called" do
+      topic = wwf80_topic
+      form = mock "wwf80 topic form"
+      form.should_receive(:subject=).with("OMG!")
+      form.should_receive(:message=).with("Hello World")
+      lambda {
+        topic.set_subject_and_message(form, "OMG!", "Hello World")
+      }.should_not raise_error
+    end
 
     #it "should raise not implemented error when post_new_topic called" do
     #  lambda { topic.post_new_topic(nil) }.should raise_error(
