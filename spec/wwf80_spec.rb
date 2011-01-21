@@ -256,12 +256,24 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should_not raise_error
     end
 
-    #it "should raise not implemented error when get_new_topic_form called" do
-    #  lambda { topic.get_new_topic_form(nil) }.should raise_error(
-    #    Impostor::MissingTemplateMethodError,
-    #    "Impostor error: get_new_topic_form must be implemented (StandardError)"
-    #  )
-    #end
+    it "should return new topic form when get_new_topic_form called" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, post.config.agent)
+      lambda {
+        topic.get_new_topic_form(new_topic_page).name.should == 'frmMessageForm'
+      }.should_not raise_error
+    end
+
+    it "should raise topic error when get_new_topic_form has error" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, post.config.agent)
+      new_topic_page.should_receive(:form).with("frmMessageForm").and_return nil
+      lambda {
+        topic.get_new_topic_form(new_topic_page)
+      }.should raise_error( Impostor::TopicError )
+    end
 
     #it "should raise not implemented error when set_subject_and_message called" do
     #  lambda { topic.set_subject_and_message(nil, nil, nil) }.should raise_error(

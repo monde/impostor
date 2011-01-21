@@ -33,8 +33,7 @@ class Impostor
   class PostError < ImpostorError; end
 
   ##
-  # An error for impostor when a topic id can't be found based on a
-  # name/title.
+  # An error for impostor when a topic failure
 
   class TopicError < ImpostorError; end
 

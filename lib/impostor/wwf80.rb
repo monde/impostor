@@ -115,8 +115,17 @@ class Impostor
         begin
           self.config.agent.get(uri)
         rescue StandardError => err
-          raise Impostor::PostError.new(err)
+          raise Impostor::TopicError.new(err)
         end
+      end
+
+      ##
+      # Get the the new topic form on the page
+
+      def get_new_topic_form(page)
+        form = page.form('frmMessageForm')
+        raise Impostor::TopicError.new("unknown new topic page format") unless form
+        form
       end
 
       #  def _new_topic_form_query(forum)
@@ -132,7 +141,7 @@ class Impostor
       #  def _new_topic_validate_topic_form(page)
       #    form = page.form('frmMessageForm') rescue nil
       #    button = form.buttons.with.name('Submit').first rescue nil
-      #    raise PostError.new("post form not found") unless button && form
+      #    raise TopicError.new("post form not found") unless button && form
       #    form
       #  end
 
@@ -151,14 +160,14 @@ class Impostor
       #    begin
       #      page = @agent.submit(form, button)
       #    rescue StandardError => err
-      #      raise PostError.new(err)
+      #      raise TopicError.new(err)
       #    end
       #    check_and_raise_if_error(page)
 
       #    # look up the new topic id
       #    form = page.form('frmMessageForm') rescue nil
       #    topic = form['TID'].to_i rescue 0
-      #    raise PostError.new('unexpected new topic ID') if topic < 1
+      #    raise TopicError.new('unexpected new topic ID') if topic < 1
 
       #    # save new topic id and topic name
       #    add_subject(forum, topic, subject)
@@ -195,7 +204,7 @@ class Impostor
       #      had_error = (error.last.text =~
       #      /Error: Message Not Posted/ rescue
       #      false)
-      #      raise PostError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
+      #      raise TopicError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
       #    end
       #  end
   end
