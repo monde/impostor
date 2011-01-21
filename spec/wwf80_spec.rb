@@ -306,12 +306,21 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should raise_error( Impostor::TopicError )
     end
 
-    #it "should raise not implemented error when validate_new_topic_result called" do
-    #  lambda { topic.validate_new_topic_result(nil) }.should raise_error(
-    #    Impostor::MissingTemplateMethodError,
-    #    "Impostor error: validate_new_topic_result must be implemented (StandardError)"
-    #  )
-    #end
+    it "should not raise topic error on valid reply validate_new_topic_result(page)" do
+      topic = wwf80_topic
+      page = load_fixture_page("wwf80-post-new_topic-good-response.html", topic.config.app_root, 200, topic.config.agent)
+      lambda {
+        topic.validate_new_topic_result(page).should be_true
+      }.should_not raise_error
+    end
+
+    it "should raise topic error on invalid reply validate_new_topic_result(page)" do
+      topic = wwf80_topic
+      page = load_fixture_page("wwf80-general-posting-error.html", topic.config.app_root, 200, topic.config.agent)
+      lambda {
+        topic.validate_new_topic_result(page)
+      }.should raise_error( Impostor::TopicError )
+    end
 
     #it "should raise not implemented error when get_topic_from_result called" do
     #  lambda { topic.get_topic_from_result(nil) }.should raise_error(
