@@ -246,7 +246,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
       topic = wwf80_topic
       new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
 
-      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, post.config.agent)
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
 
       topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
 
@@ -259,7 +259,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
     it "should return new topic form when get_new_topic_form called" do
       topic = wwf80_topic
       new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, post.config.agent)
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
       lambda {
         topic.get_new_topic_form(new_topic_page).name.should == 'frmMessageForm'
       }.should_not raise_error
@@ -268,7 +268,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
     it "should raise topic error when get_new_topic_form has error" do
       topic = wwf80_topic
       new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, post.config.agent)
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
       new_topic_page.should_receive(:form).with("frmMessageForm").and_return nil
       lambda {
         topic.get_new_topic_form(new_topic_page)
@@ -285,12 +285,26 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should_not raise_error
     end
 
-    #it "should raise not implemented error when post_new_topic called" do
-    #  lambda { topic.post_new_topic(nil) }.should raise_error(
-    #    Impostor::MissingTemplateMethodError,
-    #    "Impostor error: post_new_topic must be implemented (StandardError)"
-    #  )
-    #end
+    it "should post new topic with form when post_new_topic called" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_result = load_fixture_page("wwf80-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+      topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+      new_topic_form = topic.get_new_topic_form(new_topic_page)
+      lambda {
+        topic.post_new_topic(new_topic_form)
+      }.should_not raise_error
+    end
+
+    it "should raise topic error when posting_new_topic has an error" do
+      topic = wwf80_topic
+      form = mock "a wwf80 form"
+      form.should_receive(:submit).and_raise(StandardError)
+      lambda {
+        topic.post_new_topic(form)
+      }.should raise_error( Impostor::TopicError )
+    end
 
     #it "should raise not implemented error when validate_new_topic_result called" do
     #  lambda { topic.validate_new_topic_result(nil) }.should raise_error(

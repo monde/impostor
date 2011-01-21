@@ -137,26 +137,16 @@ class Impostor
         form
       end
 
-      #  def _new_topic_form_query(forum)
-      #    uri = new_topic_page
-      #    uri.query = "FID=#{forum}"
-      #    uri
-      #  end
+      ##
+      # Post the new topic that is contained on the form
 
-      #  def _new_topic_check_topic_form(page)
-      #    check_and_raise_if_error(page)
-      #  end
-
-      #  def _new_topic_validate_topic_form(page)
-      #    form = page.form('frmMessageForm') rescue nil
-      #    button = form.buttons.with.name('Submit').first rescue nil
-      #    raise TopicError.new("post form not found") unless button && form
-      #    form
-      #  end
-
-      #  def _new_topic_set_subject_and_message(form, subject, message)
-      #    raise 'not implemented'
-      #  end
+      def post_new_topic(form)
+        begin
+          form.submit
+        rescue StandardError => err
+          raise Impostor::TopicError.new(err)
+        end
+      end
 
       #  def new_topic(forum=@forum, subject=@subject, message=@message)
 
