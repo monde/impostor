@@ -241,5 +241,128 @@ describe "a phpbb3 impostor" do
 
   end
 
+  describe "phpbb3 topic methods" do
+
+    it "should return new topic uri when get_new_topic_uri called" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      lambda {
+        topic.get_new_topic_uri(1, "OMG!", "Hello World").should == new_topic_uri
+      }.should_not raise_error
+    end
+
+    it "should return new topic page when get_new_topic_page called" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+
+      new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+
+      topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
+
+      lambda {
+        new_topic_uri = topic.get_new_topic_uri(1, "OMG!", "Hello World")
+        topic.get_new_topic_page(new_topic_uri)
+      }.should_not raise_error
+    end
+
+    it "should return new topic form when get_new_topic_form called" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+      lambda {
+        topic.get_new_topic_form(new_topic_page).name.should == 'frmMessageForm'
+      }.should_not raise_error
+    end
+
+    it "should raise topic error when get_new_topic_form has error" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+      new_topic_page.should_receive(:form).with("frmMessageForm").and_return nil
+      lambda {
+        topic.get_new_topic_form(new_topic_page)
+      }.should raise_error( Impostor::TopicError )
+    end
+
+    it "should set subject and message on a form when set_subject_and_message called" do
+      topic = phpbb3_topic
+      form = mock "phpbb3 topic form"
+      form.should_receive(:subject=).with("OMG!")
+      form.should_receive(:message=).with("Hello World")
+      lambda {
+        topic.set_subject_and_message(form, "OMG!", "Hello World")
+      }.should_not raise_error
+    end
+
+    it "should post new topic with form when post_new_topic called" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+      topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
+      new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+      new_topic_form = topic.get_new_topic_form(new_topic_page)
+      lambda {
+        topic.post_new_topic(new_topic_form)
+      }.should_not raise_error
+    end
+
+    it "should raise topic error when posting_new_topic has an error" do
+      topic = phpbb3_topic
+      form = mock "a phpbb3 form"
+      form.should_receive(:submit).and_raise(StandardError)
+      lambda {
+        topic.post_new_topic(form)
+      }.should raise_error( Impostor::TopicError )
+    end
+
+    it "should not raise topic error on valid reply validate_new_topic_result(page)" do
+      topic = phpbb3_topic
+      page = load_fixture_page("phpbb3-post-new_topic-good-response.html", topic.config.app_root, 200, topic.config.agent)
+      lambda {
+        topic.validate_new_topic_result(page).should be_true
+      }.should_not raise_error
+    end
+
+    it "should raise topic error on invalid reply validate_new_topic_result(page)" do
+      topic = phpbb3_topic
+      #FIXME need a real posting error sample
+      page = load_fixture_page("phpbb3-not-logged-in.html", topic.config.app_root, 200, topic.config.agent)
+      lambda {
+        topic.validate_new_topic_result(page)
+      }.should raise_error( Impostor::TopicError )
+    end
+
+    it "should return the created topic id from get_topic_from_result" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+      lambda {
+        topic.get_topic_from_result(new_topic_result).should == 2
+      }.should_not raise_error
+    end
+
+    it "should create new topic" do
+      topic = phpbb3_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+
+      topic.auth.should_receive(:login_with_raises)
+      topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
+      topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
+      topic.config.should_receive(:add_subject).with(1, 2, "OMG!")
+
+      lambda {
+        topic.new_topic(formum=1, subject="OMG!", message="Hello World").should == {
+          :forum => 1,
+          :topic => 2,
+          :subject => "OMG!",
+          :message => "Hello World",
+          :result => true
+        }
+      }.should_not raise_error
+    end
+  end
+
 end
 
