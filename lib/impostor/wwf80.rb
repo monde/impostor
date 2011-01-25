@@ -186,5 +186,7 @@ class Impostor
         end
       end
 
+    end
+
   end
 end
