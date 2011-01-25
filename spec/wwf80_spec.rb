@@ -322,13 +322,36 @@ describe "a Web Wiz Forum 8.0 impostor" do
       }.should raise_error( Impostor::TopicError )
     end
 
-    #it "should raise not implemented error when get_topic_from_result called" do
-    #  lambda { topic.get_topic_from_result(nil) }.should raise_error(
-    #    Impostor::MissingTemplateMethodError,
-    #    "Impostor error: get_topic_from_result must be implemented (StandardError)"
-    #  )
-    #end
+    it "should return the created topic id from get_topic_from_result" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_result = load_fixture_page("wwf80-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+      lambda {
+        topic.get_topic_from_result(new_topic_result).should == 2
+      }.should_not raise_error
+    end
 
+    it "should create new topic" do
+      topic = wwf80_topic
+      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_page = load_fixture_page("wwf80-get-new_topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
+      new_topic_result = load_fixture_page("wwf80-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+
+      topic.auth.should_receive(:login_with_raises)
+      topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
+      topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
+      topic.config.should_receive(:add_subject).with(1, 2, "OMG!")
+
+      lambda {
+        topic.new_topic(formum=1, subject="OMG!", message="Hello World").should == {
+          :forum => 1,
+          :topic => 2,
+          :subject => "OMG!",
+          :message => "Hello World",
+          :result => true
+        }
+      }.should_not raise_error
+    end
   end
 
 end

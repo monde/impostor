@@ -173,6 +173,19 @@ class Impostor
          true
       end
 
+      ##
+      # Get the new topic identifier from the result page
+
+      def get_topic_from_result(page)
+        begin
+          tid = page.form('frmMessageForm')['TID'].to_i
+          raise StandardError.new("new topic id not found") if tid.zero?
+          tid
+        rescue StandardError => err
+          raise Impostor::TopicError.new(err)
+        end
+      end
+
       #  def new_topic(forum=@forum, subject=@subject, message=@message)
 
       #    super
