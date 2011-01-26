@@ -245,7 +245,7 @@ describe "a phpbb3 impostor" do
 
     it "should return new topic uri when get_new_topic_uri called" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       lambda {
         topic.get_new_topic_uri(1, "OMG!", "Hello World").should == new_topic_uri
       }.should_not raise_error

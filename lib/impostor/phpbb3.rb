@@ -92,11 +92,15 @@ class Impostor
 
     module Topic
 
-      # def _new_topic_form_query(forum)
-      #   uri = posting_page
-      #   uri.query = "mode=newtopic&f=#{forum}"
-      #   uri
-      # end
+      ##
+      # return a uri used to fetch the new topic page based on the forum, subject,
+      # and message
+
+      def get_new_topic_uri(forum, subject, message)
+        uri = URI.join(self.config.app_root, self.config.config(:posting_page))
+        uri.query = "mode=newtopic&f=#{forum}"
+        uri
+      end
 
       # ##
       # # make a new topic
