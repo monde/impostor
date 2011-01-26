@@ -129,40 +129,18 @@ class Impostor
         true
       end
 
-      # ##
-      # # make a new topic
+      ##
+      # Get the new topic identifier from the result page
 
-      # def new_topic(forum=@forum, subject=@subject, message=@message)
-
-      #   super
-
-      #   form = page.form('postform') rescue nil
-      #   raise PostError.new("post form not found") unless form
-      #   button = form.buttons.detect{|b| b.name == 'post'}
-      #   raise PostError.new("post form button not found") unless button
-
-      #   # set up the form and submit it
-      #   form['subject'] = subject
-      #   form['message'] = message
-      #   form['lastclick'] = (form['lastclick'].to_i - 60).to_s
-
-      #   begin
-      #     page = @agent.submit(form, button)
-      #   rescue StandardError => err
-      #     raise PostError.new(err)
-      #   end
-
-      #   # new topic will be current page uri since phpbb3 will 302 to the new
-      #   # topic page, e.g.
-      #   # http://example.com/forum/viewtopic.php?f=37&t=52
-      #   topic = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i rescue 0
-      #   raise PostError.new('unexpected new topic ID') unless topic > 0
-
-      #   # save new topic id and topic name
-      #   add_subject(forum, topic, subject)
-      #   @forum=forum; @topic=topic; @subject=subject; @message=message
-      #   true
-      # end
+      def get_topic_from_result(page)
+        begin
+          tid = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i
+          raise StandardError.new("new topic id not found") if tid.zero?
+          tid
+        rescue NoMethodError, StandardError => err
+          raise Impostor::TopicError.new(err)
+        end
+      end
 
     end
 

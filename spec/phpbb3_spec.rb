@@ -326,18 +326,14 @@ describe "a phpbb3 impostor" do
     end
 
     it "should raise topic error on invalid reply validate_new_topic_result(page)" do
-      topic = phpbb3_topic
-      #FIXME need a real posting error sample
-      page = load_fixture_page("phpbb3-not-logged-in.html", topic.config.app_root, 200, topic.config.agent)
-      lambda {
-        topic.validate_new_topic_result(page)
-      }.should raise_error( Impostor::TopicError )
+      pending "needs a real fixture to implement against"
     end
 
     it "should return the created topic id from get_topic_from_result" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
-      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+      result_uri = URI.parse("http://example.com/forum/viewtopic.php?f=1&t=2&p=325")
+      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", result_uri, 200, topic.config.agent)
+
       lambda {
         topic.get_topic_from_result(new_topic_result).should == 2
       }.should_not raise_error
@@ -347,7 +343,8 @@ describe "a phpbb3 impostor" do
       topic = phpbb3_topic
       new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
-      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
+      result_uri = URI.parse("http://example.com/forum/viewtopic.php?f=1&t=2&p=325")
+      new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", result_uri, 200, topic.config.agent)
 
       topic.auth.should_receive(:login_with_raises)
       topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
