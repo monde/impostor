@@ -121,6 +121,14 @@ class Impostor
         form
       end
 
+      ##
+      # Validate the result of posting the new topic
+
+      def validate_new_topic_result(page)
+        #NOOP in phpbb3
+        true
+      end
+
       # ##
       # # make a new topic
 

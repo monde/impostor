@@ -106,6 +106,15 @@ describe "impostor's post routines" do
     it "should post_message" do
       post = self.post
       form = mock "post form"
+      form.should_receive(:submit)
+      lambda {
+        post.post_message(form)
+      }.should_not raise_error
+    end
+
+    it "should bubble up post errors when underlying errors occur in post_message" do
+      post = self.post
+      form = mock "post form"
       form.should_receive(:submit).and_raise( Impostor::PostError )
       lambda {
         post.post_message(form)

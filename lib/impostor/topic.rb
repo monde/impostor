@@ -91,7 +91,11 @@ class Impostor::Topic
   # Post the new topic that is contained on the form
 
   def post_new_topic(form)
-    raise Impostor::MissingTemplateMethodError.new("post_new_topic must be implemented")
+    begin
+      form.submit
+    rescue StandardError => err
+      raise Impostor::TopicError.new(err)
+    end
   end
 
   ##

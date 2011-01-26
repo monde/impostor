@@ -129,17 +129,6 @@ class Impostor
       end
 
       ##
-      # Post the new topic that is contained on the form
-
-      def post_new_topic(form)
-        begin
-          form.submit
-        rescue StandardError => err
-          raise Impostor::TopicError.new(err)
-        end
-      end
-
-      ##
       # Validate the result of posting the new topic
       # FIXME this validation is copied into post module as well
 

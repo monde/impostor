@@ -106,11 +106,22 @@ describe "impostor's topic routines" do
       )
     end
 
-    it "should raise not implemented error when post_new_topic called" do
-      lambda { topic.post_new_topic(nil) }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: post_new_topic must be implemented (StandardError)"
-      )
+    it "should post_new_topic" do
+      topic = self.topic
+      form = mock "topic form"
+      form.should_receive(:submit)
+      lambda {
+        topic.post_new_topic(form)
+      }.should_not raise_error
+    end
+
+    it "should bubble topic errors when underlying errors occur in post_new_topic" do
+      topic = self.topic
+      form = mock "topic form"
+      form.should_receive(:submit).and_raise( StandardError )
+      lambda {
+        topic.post_new_topic(form)
+      }.should raise_error( Impostor::TopicError )
     end
 
     it "should raise not implemented error when validate_new_topic_result called" do
