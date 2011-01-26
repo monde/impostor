@@ -102,6 +102,15 @@ class Impostor
         uri
       end
 
+      ##
+      # Get the the new topic form on the page
+
+      def get_new_topic_form(page)
+        form = page.form('postform')
+        raise Impostor::TopicError.new("unknown new topic page format") unless form
+        form
+      end
+
       # ##
       # # make a new topic
 

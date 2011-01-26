@@ -267,18 +267,18 @@ describe "a phpbb3 impostor" do
 
     it "should return new topic form when get_new_topic_form called" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
       lambda {
-        topic.get_new_topic_form(new_topic_page).name.should == 'frmMessageForm'
+        topic.get_new_topic_form(new_topic_page).name.should == 'postform'
       }.should_not raise_error
     end
 
     it "should raise topic error when get_new_topic_form has error" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
-      new_topic_page.should_receive(:form).with("frmMessageForm").and_return nil
+      new_topic_page.should_receive(:form).with("postform").and_return nil
       lambda {
         topic.get_new_topic_form(new_topic_page)
       }.should raise_error( Impostor::TopicError )
@@ -296,7 +296,7 @@ describe "a phpbb3 impostor" do
 
     it "should post new topic with form when post_new_topic called" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
       topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
       new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
@@ -334,7 +334,7 @@ describe "a phpbb3 impostor" do
 
     it "should return the created topic id from get_topic_from_result" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
       lambda {
         topic.get_topic_from_result(new_topic_result).should == 2
@@ -343,7 +343,7 @@ describe "a phpbb3 impostor" do
 
     it "should create new topic" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
       new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
       new_topic_result = load_fixture_page("phpbb3-post-new_topic-good-response.html", new_topic_uri, 200, topic.config.agent)
 
