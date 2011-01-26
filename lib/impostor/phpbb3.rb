@@ -111,6 +111,16 @@ class Impostor
         form
       end
 
+      ##
+      # Set the subject and message on the new topic form
+
+      def set_subject_and_message(form, subject, message)
+        form.subject = subject
+        form.message = message
+        form.lastclick = (form.lastclick.to_i - 60).to_s
+        form
+      end
+
       # ##
       # # make a new topic
 

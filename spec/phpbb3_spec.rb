@@ -287,8 +287,10 @@ describe "a phpbb3 impostor" do
     it "should set subject and message on a form when set_subject_and_message called" do
       topic = phpbb3_topic
       form = mock "phpbb3 topic form"
+      form.should_receive(:lastclick).and_return("100")
       form.should_receive(:subject=).with("OMG!")
       form.should_receive(:message=).with("Hello World")
+      form.should_receive(:lastclick=).with("40")
       lambda {
         topic.set_subject_and_message(form, "OMG!", "Hello World")
       }.should_not raise_error
