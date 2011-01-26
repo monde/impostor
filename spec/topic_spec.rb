@@ -84,10 +84,12 @@ describe "impostor's topic routines" do
     end
 
     it "should raise not implemented error when get_new_topic_page called" do
-      lambda { topic.get_new_topic_page(nil) }.should raise_error(
-        Impostor::MissingTemplateMethodError,
-        "Impostor error: get_new_topic_page must be implemented (StandardError)"
-      )
+      topic = self.topic
+      uri = mock "uri"
+      topic.config.agent.should_receive(:get).with(uri)
+      lambda {
+        topic.get_new_topic_page(uri)
+      }.should_not raise_error
     end
 
     it "should raise not implemented error when get_new_topic_form called" do

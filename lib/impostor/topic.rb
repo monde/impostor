@@ -66,7 +66,11 @@ class Impostor::Topic
   # Get the page that has the form for new topics referenced by the uri
 
   def get_new_topic_page(uri)
-    raise Impostor::MissingTemplateMethodError.new("get_new_topic_page must be implemented")
+    begin
+      self.config.agent.get(uri)
+    rescue StandardError => err
+      raise Impostor::TopicError.new(err)
+    end
   end
 
   ##

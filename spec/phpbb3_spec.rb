@@ -253,7 +253,7 @@ describe "a phpbb3 impostor" do
 
     it "should return new topic page when get_new_topic_page called" do
       topic = phpbb3_topic
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
+      new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
 
       new_topic_page = load_fixture_page("phpbb3-get-new-topic-form-good-response.html", new_topic_uri, 200, topic.config.agent)
 
