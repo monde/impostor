@@ -76,6 +76,7 @@ class Impostor
 
       ##
       # validate the result of posting the message form
+      # FIXME this validation is copied into topic module as well
 
       def validate_post_result(page)
         error = page.body =~ /Message Not Posted/
@@ -96,50 +97,69 @@ class Impostor
     end
 
     module Topic
+
+      ##
+      # return a uri used to fetch the new topic page based on the forum, subject,
+      # and message
+
+      def get_new_topic_uri(forum, subject, message)
+        uri = URI.join(self.config.app_root, self.config.config(:post_message_page))
+        uri.query = "FID=#{forum}"
+        uri
+      end
+
+      ##
+      # Get the the new topic form on the page
+
+      def get_new_topic_form(page)
+        form = page.form('frmAddMessage')
+        raise Impostor::TopicError.new("unknown new topic page format") unless form
+        form
+      end
+
+      ##
+      # Set the subject and message on the new topic form
+
+      def set_subject_and_message(form, subject, message)
+        form.subject = subject
+        form.message = message
+        form
+      end
+
+      ##
+      # validate the result of posting the message form
+      # FIXME this validation is copied into post module as well
+
+      def validate_new_topic_result(page)
+        error = page.body =~ /Message Not Posted/
+        if error
+
+          # throttled
+          throttled = "You have exceeded the number of posts permitted in the time span"
+          too_many = page.body =~ /#{throttled}/
+          raise Impostor::ThrottledError.new(throttled) if too_many
+
+          # general error
+          raise Impostor::TopicError.new("There was an error making the post")
+        end
+
+        true
+      end
+
+      ##
+      # Get the new topic identifier from the result page
+
+      def get_topic_from_result(page)
+        begin
+          tid = page.form('frmAddMessage')['TID'].to_i
+          raise StandardError.new("new topic id not found") if tid.zero?
+          tid
+        rescue StandardError => err
+          raise Impostor::TopicError.new(err)
+        end
+      end
+
     end
-
-    #  ##
-    #  # create a new topic
-
-    #  def new_topic(forum=@forum, subject=@subject, message=@message)
-
-    #    super
-
-    #    form = page.form('frmAddMessage') rescue nil
-    #    button = form.buttons.with.name('Submit').first rescue nil
-    #    raise PostError.new("post form not found") unless button && form
-
-    #    # set up the form and submit it
-    #    form.subject = subject
-    #    form.message = message
-    #    begin
-    #      page = @agent.submit(form, button)
-    #    rescue StandardError => err
-    #      raise PostError.new(err)
-    #    end
-
-    #    error = page.body =~ /Message Not Posted/
-    #    if error
-
-    #      # throttled
-    #      throttled = "You have exceeded the number of posts permitted in the time span"
-    #      too_many = page.body =~ /#{throttled}/
-    #      raise ThrottledError.new(throttled) if too_many
-
-    #      # general error
-    #      raise PostError.new("There was an error creating the topic")
-    #    end
-
-    #    # look up the new topic id
-    #    form = page.form('frmAddMessage') rescue nil
-    #    topic = form['TID'].to_i rescue 0
-    #    raise PostError.new('unexpected new topic ID') if topic < 1
-
-    #    # save new topic id and topic name
-    #    add_subject(forum, topic, subject)
-    #    @forum=forum; @topic=topic; @subject=subject; @message=message
-    #    return true
-    #  end
 
   end
 end

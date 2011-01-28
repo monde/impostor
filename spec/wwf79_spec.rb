@@ -229,21 +229,33 @@ describe "a Web Wiz Forum 7.9 impostor" do
 
     before do
       @topic = wwf79_topic
+
+      @new_topic_uri = URI.parse("http://example.com/forum/post_message_form.asp?FID=1")
+
+      @new_topic_page = load_fixture_page(
+        "wwf79-new-topic-post_message_form.html",
+        @new_topic_uri, 200, @topic.config.agent
+      )
+
+      @new_topic_result = load_fixture_page(
+        "wwf79-good-post-forum_posts.html",
+        @new_topic_uri, 200, @topic.config.agent
+      )
+
+      @posting_error_page = load_fixture_page(
+        "wwf79-general-posting-error.html",
+        @topic.config.app_root, 200, @topic.config.agent
+      )
     end
 
     it "should return new topic uri when get_new_topic_uri called" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
       lambda {
-        @topic.get_new_topic_uri(1, "OMG!", "Hello World").should == new_topic_uri
+        @topic.get_new_topic_uri(1, "OMG!", "Hello World").should == @new_topic_uri
       }.should_not raise_error
     end
 
     it "should return new topic page when get_new_topic_page called" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-
-      new_topic_page = load_fixture_page("wwf79-get-new_topic-form-good-response.html", new_topic_uri, 200, @topic.config.agent)
-
-      @topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
+      @topic.config.agent.should_receive(:get).with(@new_topic_uri).and_return(@new_topic_page)
 
       lambda {
         new_topic_uri = @topic.get_new_topic_uri(1, "OMG!", "Hello World")
@@ -252,19 +264,15 @@ describe "a Web Wiz Forum 7.9 impostor" do
     end
 
     it "should return new topic form when get_new_topic_form called" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_page = load_fixture_page("wwf79-get-new_topic-form-good-response.html", new_topic_uri, 200, @topic.config.agent)
       lambda {
-        @topic.get_new_topic_form(new_topic_page).name.should == 'frmMessageForm'
+        @topic.get_new_topic_form(@new_topic_page).name.should == 'frmAddMessage'
       }.should_not raise_error
     end
 
     it "should raise topic error when get_new_topic_form has error" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_page = load_fixture_page("wwf79-get-new_topic-form-good-response.html", new_topic_uri, 200, @topic.config.agent)
-      new_topic_page.should_receive(:form).with("frmMessageForm").and_return nil
+      @new_topic_page.should_receive(:form).with("frmAddMessage").and_return nil
       lambda {
-        @topic.get_new_topic_form(new_topic_page)
+        @topic.get_new_topic_form(@new_topic_page)
       }.should raise_error( Impostor::TopicError )
     end
 
@@ -278,11 +286,8 @@ describe "a Web Wiz Forum 7.9 impostor" do
     end
 
     it "should post new topic with form when post_new_topic called" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_result = load_fixture_page("wwf79-post-new_topic-good-response.html", new_topic_uri, 200, @topic.config.agent)
-      @topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
-      new_topic_page = load_fixture_page("wwf79-get-new_topic-form-good-response.html", new_topic_uri, 200, @topic.config.agent)
-      new_topic_form = @topic.get_new_topic_form(new_topic_page)
+      @topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(@new_topic_result)
+      new_topic_form = @topic.get_new_topic_form(@new_topic_page)
       lambda {
         @topic.post_new_topic(new_topic_form)
       }.should_not raise_error
@@ -297,35 +302,28 @@ describe "a Web Wiz Forum 7.9 impostor" do
     end
 
     it "should not raise topic error on valid reply validate_new_topic_result(page)" do
-      page = load_fixture_page("wwf79-post-new_topic-good-response.html", @topic.config.app_root, 200, @topic.config.agent)
       lambda {
-        @topic.validate_new_topic_result(page).should be_true
+        @topic.validate_new_topic_result(@new_topic_result).should be_true
       }.should_not raise_error
     end
 
     it "should raise topic error on invalid reply validate_new_topic_result(page)" do
-      page = load_fixture_page("wwf79-general-posting-error.html", @topic.config.app_root, 200, @topic.config.agent)
       lambda {
-        @topic.validate_new_topic_result(page)
+        @topic.validate_new_topic_result(@posting_error_page)
       }.should raise_error( Impostor::TopicError )
     end
 
     it "should return the created topic id from get_topic_from_result" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_result = load_fixture_page("wwf79-post-new_topic-good-response.html", new_topic_uri, 200, @topic.config.agent)
-      lambda {
-        @topic.get_topic_from_result(new_topic_result).should == 2
-      }.should_not raise_error
+      #lambda {
+        @topic.get_topic_from_result(@new_topic_result).should == 2
+      #}.should_not raise_error
     end
 
     it "should create new topic" do
-      new_topic_uri = URI.parse("http://example.com/forum/new_topic_form.asp?FID=1")
-      new_topic_page = load_fixture_page("wwf79-get-new_topic-form-good-response.html", new_topic_uri, 200, @topic.config.agent)
-      new_topic_result = load_fixture_page("wwf79-post-new_topic-good-response.html", new_topic_uri, 200, @topic.config.agent)
 
       @topic.auth.should_receive(:login_with_raises)
-      @topic.config.agent.should_receive(:get).with(new_topic_uri).and_return(new_topic_page)
-      @topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(new_topic_result)
+      @topic.config.agent.should_receive(:get).with(@new_topic_uri).and_return(@new_topic_page)
+      @topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(@new_topic_result)
       @topic.config.should_receive(:add_subject).with(1, 2, "OMG!")
 
       lambda {

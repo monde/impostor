@@ -110,6 +110,12 @@ module ImpostorSpecHelper
     self.topic(config, auth)
   end
 
+  def wwf79_topic
+    config = self.config(sample_wwf79_config_params)
+    auth = self.auth(config)
+    self.topic(config, auth)
+  end
+
   def impostor(config = {})
     Impostor.new(sample_config_params.merge(config))
   end
