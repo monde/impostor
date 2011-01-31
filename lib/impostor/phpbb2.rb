@@ -95,63 +95,76 @@ class Impostor
     end
 
     module Topic
+
+      ##
+      # return a uri used to fetch the new topic page based on the forum, subject,
+      # and message
+
+      def get_new_topic_uri(forum, subject, message)
+        uri = URI.join(self.config.app_root, self.config.config(:posting_page))
+        uri.query = "mode=newtopic&f=#{forum}"
+        uri
+      end
+
+      ##
+      # Get the the new topic form on the page
+
+      def get_new_topic_form(page)
+        form = page.form('post')
+        raise Impostor::TopicError.new("unknown new topic page format") unless form
+        form
+      end
+
+      ##
+      # Set the subject and message on the new topic form
+
+      def set_subject_and_message(form, subject, message)
+        form.subject = subject
+        form.message = message
+        form.disable_html = nil
+        form.disable_bbcode = 'on'
+        form.disable_smilies = 'on'
+        form
+      end
+
+      ##
+      # Validate the result of posting the new topic
+
+      def validate_new_topic_result(page)
+        #NOOP in phpbb2, #get_topic_from_result is the validation
+        true
+      end
+
+      ##
+      # Get the new topic identifier from the result page
+
+      def get_topic_from_result(page)
+        # if the response is correct there will be a meta link that looks something like
+        # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
+        # this link needs to be followed, the page it leads to will give us
+        # the topic id that was created for the topic name that we created
+        begin
+          url = page.search("//meta[@http-equiv='refresh']").attr('content')
+          url = /url=(.*)/.match(url)[1]
+          raise StandardError.new('unexpected new topic response from refresh') unless url
+
+          url = URI.join(self.config.app_root, url)
+          page = self.config.agent.get(url)
+          link = page.search("//link[@rel='prev']").first['href']
+          raise StandardError.new('unexpected new topic response from link prev') unless link
+
+          # t=XXX will be our new topic id, i.e.
+          # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
+          href = URI.parse(link)
+          topic = CGI::parse(href.query)['t'].first.to_i
+          raise StandardError.new('unexpected new topic ID') unless topic > 0
+          topic
+        rescue NoMethodError, StandardError => err
+          raise Impostor::TopicError.new(err)
+        end
+      end
+
     end
-
-    #  def _new_topic_form_query(forum)
-    #    uri = posting_page
-    #    uri.query = "mode=newtopic&f=#{forum}"
-    #    uri
-    #  end
-
-    #  ##
-    #  # make a new topic
-
-    #  def new_topic(forum=@forum, subject=@subject, message=@message)
-
-    #    super
-
-    #    form = page.form('post') rescue nil
-    #    button = form.buttons.with.name('post').first rescue nil
-    #    raise PostError.new("post form not found") unless button && form
-
-    #    # set up the form and submit it
-    #    form.subject = subject
-    #    form.message = message
-    #    form['disable_html'] = nil
-    #    form['disable_bbcode'] = 'on'
-    #    form['disable_smilies'] = 'on'
-    #    begin
-    #      page = @agent.submit(form, button)
-    #    rescue StandardError => err
-    #      raise PostError.new(err)
-    #    end
-
-    #    # if the response is correct there will be a meta link that looks something like
-    #    # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
-    #    #
-    #    # this link needs to be followed, the page it leads to will give us
-    #    # the topic id that was created for the topic name that we created
-    #    a = (page.search("//meta[@http-equiv='refresh']").attr('content') rescue nil)
-    #    a = (/url=(.*)/.match(a)[1] rescue nil)
-    #    raise PostError.new('unexpected new topic response from refresh') unless a
-
-    #    a = URI.join(app_root, a)
-    #    page = @agent.get(a)
-    #    link = (page.search("//link[@rel='prev']").first['href'] rescue nil)
-    #    raise PostError.new('unexpected new topic response from link prev') unless link
-
-    #    # t=XXX will be our new topic id, i.e.
-    #    # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
-    #    u = (URI.parse(link) rescue nil)
-    #    topic = (CGI::parse(u.query)['t'][0] rescue nil)
-    #    topic = topic.to_i
-    #    raise PostError.new('unexpected new topic ID') unless topic > 0
-
-    #    # save new topic id and topic name
-    #    add_subject(forum, topic, subject)
-    #    @forum=forum; @topic=topic; @subject=subject; @message=message
-    #    true
-    #  end
 
   end
 end

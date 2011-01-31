@@ -125,7 +125,7 @@ class Impostor
       # Validate the result of posting the new topic
 
       def validate_new_topic_result(page)
-        #NOOP in phpbb3
+        #NOOP in phpbb3, #get_topic_from_result is the validation
         true
       end
 
@@ -134,9 +134,9 @@ class Impostor
 
       def get_topic_from_result(page)
         begin
-          tid = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i
-          raise StandardError.new("new topic id not found") if tid.zero?
-          tid
+          topic = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i
+          raise StandardError.new("new topic id not found") if topic.zero?
+          topic
         rescue NoMethodError, StandardError => err
           raise Impostor::TopicError.new(err)
         end
