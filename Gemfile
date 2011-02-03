@@ -10,6 +10,8 @@ group :development, :test do
   gem "mongrel", ">=1.1.5"
   gem "rspec", ">= 2.3.0"
   gem "redgreen", ">=1.2.2"
+  gem "vcr", ">=1.5.1"
+  gem "webmock", ">=1.6.2"
 end
 
 # vim: syntax=ruby
