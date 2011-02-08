@@ -32,7 +32,17 @@ class Impostor::Config
   # the :cookie_jar configuration parameter if it exists
 
   def setup_agent
-    @agent = Mechanize.new
+    @agent = Mechanize.new do |mechanize|
+      if logger = self.config(:logger)
+        if File.exist?(logger.to_s)
+          mechanize.log = Logger.new(logger.to_s)
+        elsif logger == "STDOUT"
+          mechanize.log = Logger.new(STDOUT)
+        else
+          mechanize.log = logger
+        end
+      end
+    end
     @agent.user_agent_alias = self.user_agent if self.user_agent
     # jar is a yaml file
     @agent.cookie_jar.load(cookie_jar) if cookie_jar && File.exist?(cookie_jar)
