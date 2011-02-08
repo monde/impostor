@@ -1,13 +1,13 @@
 module ImpostorSpecHelper
 
-  def sample_phpbb3_config_params
+  def sample_phpbb3_config_params(config = {})
     { :type => :phpbb3,
       :app_root => 'http://example.com/forum/',
       :login_page => 'ucp.php?mode=login',
       :posting_page => 'posting.php',
       :user_agent => 'Windows IE 7',
       :username => 'tester',
-      :password => 'pass' }
+      :password => 'password' }.merge(config)
   end
 
   def sample_phpbb2_config_params
@@ -17,7 +17,7 @@ module ImpostorSpecHelper
       :posting_page => 'posting.php',
       :user_agent => 'Windows IE 7',
       :username => 'tester',
-      :password => 'pass' }
+      :password => 'password' }
   end
 
   def sample_wwf80_config_params
@@ -28,7 +28,7 @@ module ImpostorSpecHelper
       :new_topic_page => 'new_topic_form.asp',
       :user_agent => 'Windows IE 7',
       :username => 'tester',
-      :password => 'pass' }
+      :password => 'password' }
   end
 
   def sample_wwf79_config_params
@@ -39,7 +39,7 @@ module ImpostorSpecHelper
       :post_message_page => 'post_message_form.asp',
       :user_agent => 'Windows IE 7',
       :username => 'tester',
-      :password => 'pass' }
+      :password => 'password' }
   end
 
   def sample_config_params
@@ -56,8 +56,8 @@ module ImpostorSpecHelper
     auth
   end
 
-  def phpbb3_auth
-    config = self.config(sample_phpbb3_config_params)
+  def phpbb3_auth(config = {})
+    config = self.config(sample_phpbb3_config_params(config))
     auth = self.auth(config)
     auth
   end
