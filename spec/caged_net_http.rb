@@ -12,10 +12,17 @@ module Net #:nodoc:
              :port => self.port, :path => query[0]}
       opts[:query] = query[1] if query[1]
       uri = uri_cls.build(opts)
-      raise ArgumentError.new("#{req.method} method to #{uri} not being handled in testing")
+      if uri.to_s =~ /^http:\/\/localhost\//
+        old_net_http_request(req, body, &block)
+      else
+        raise ArgumentError.new("#{req.method} method to #{uri} not being handled in testing")
+      end
     end
 
     def connect
+      if address.to_s == "localhost"
+        old_net_http_connect
+      end
     end
 
   end
