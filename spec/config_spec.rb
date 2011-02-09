@@ -8,7 +8,7 @@ describe "impostor's configuration" do
     expected.each do |key|
       config = { :type => :test,
             :username => "user",
-            :password => "pass",
+            :password => "password",
             :app_root => "http://example.com",
             :login_page => "/login"
       }
@@ -86,7 +86,7 @@ describe "impostor's configuration" do
   end
 
   it "should have a password" do
-    config.password.should == "pass"
+    config.password.should == "password"
   end
 
   it "should have a default user agent" do

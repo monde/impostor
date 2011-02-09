@@ -86,7 +86,7 @@ describe "a Web Wiz Forum 8.0 impostor" do
     it "should setup login form in set_username_and_password" do
       form = mock "login form"
       form.should_receive(:[]=).with("name", "tester")
-      form.should_receive(:[]=).with("password", "pass")
+      form.should_receive(:[]=).with("password", "password")
       lambda {
         @auth.set_username_and_password(form).should == form
       }.should_not raise_error

@@ -88,7 +88,7 @@ describe "a Web Wiz Forum 7.9 impostor" do
       button = mock "submit button"
       Mechanize::Form::Button.should_receive(:new).and_return(button)
       form.should_receive(:[]=).with("name", "tester")
-      form.should_receive(:[]=).with("password", "pass")
+      form.should_receive(:[]=).with("password", "password")
       form.should_receive(:add_button_to_query).with(button)
       lambda {
         @auth.set_username_and_password(form).should == form

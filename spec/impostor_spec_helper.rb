@@ -45,7 +45,7 @@ module ImpostorSpecHelper
   def sample_config_params
     { :type => :test,
       :username => "user",
-      :password => "pass",
+      :password => "password",
       :app_root => "http://example.com",
       :login_page => "/login" }
   end
