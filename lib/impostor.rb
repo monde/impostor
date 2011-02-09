@@ -6,6 +6,7 @@
     require g
   end
 end
+require 'logger'
 
 Dir.glob(File.join(File.dirname(__FILE__), 'impostor/**/*.rb')).each {|f| require f }
 
@@ -85,6 +86,13 @@ class Impostor
 
   def new_topic(forum, subject, message)
     @topic.new_topic(forum, subject, message)
+  end
+
+  ##
+  # Login
+
+  def login
+    @auth.login
   end
 
 end

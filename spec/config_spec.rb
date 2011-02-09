@@ -101,6 +101,17 @@ describe "impostor's configuration" do
     config(:cookie_jar => "/hello/world").cookie_jar.should == "/hello/world"
   end
 
+  it "should have a logger" do
+    log_file = Tempfile.new('log')
+    mechanize = mock "mechanize"
+    logger = mock "logger"
+    mechanize.should_receive(:log=).with(logger)
+    mechanize.should_receive(:user_agent_alias=).with("Mechanize")
+    Mechanize.should_receive(:new).and_yield(mechanize).and_return(mechanize)
+    Logger.should_receive(:new).with(log_file.path).and_return(logger)
+    self.config(:logger => log_file.path)
+  end
+
   it "should have a cookie jar" do
     jar_file = Tempfile.new('cookies')
     jar_file.close
