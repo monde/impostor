@@ -26,7 +26,16 @@ describe "a phpbb3 impostor" do
   end
 
   it "should post a message" do
-    pending
+    VCR.use_cassette('phpbb3-should-post', :record => :new_episodes) do
+      conf = self.sample_phpbb3_config_params(
+        :app_root => 'http://localhost/forum/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      impostor.post(forum=2, topic=3, message='Hello World').should == {
+        :forum => 2, :topic => 3, :post => 10, :message => "Hello World", :result => true
+      }
+    end
   end
 
   it "should fail posting a message" do
