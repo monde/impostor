@@ -10,14 +10,14 @@ module ImpostorSpecHelper
       :password => 'password' }.merge(config)
   end
 
-  def sample_phpbb2_config_params
+  def sample_phpbb2_config_params(config = {})
     { :type => :phpbb2,
       :app_root => 'http://example.com/forum/',
       :login_page => 'login.php',
       :posting_page => 'posting.php',
       :user_agent => 'Windows IE 7',
       :username => 'tester',
-      :password => 'password' }
+      :password => 'password' }.merge(config)
   end
 
   def sample_wwf80_config_params
