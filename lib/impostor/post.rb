@@ -33,10 +33,11 @@ class Impostor::Post
     form = get_post_form(page)
     set_message(form, message)
     page = post_message(form)
-    validate_post_result(page)
+    postid = validate_post_result(page)
 
     { :forum => forum,
       :topic => topic,
+      :post => postid,
       :message => message,
       :result => true }
   end
@@ -90,6 +91,7 @@ class Impostor::Post
 
   def post_message(form)
     begin
+      config.sleep_before_post
       form.submit
     rescue StandardError => err
       raise Impostor::PostError.new(err)

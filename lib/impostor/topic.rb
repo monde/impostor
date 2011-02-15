@@ -92,6 +92,7 @@ class Impostor::Topic
 
   def post_new_topic(form)
     begin
+      config.sleep_before_post
       form.submit
     rescue StandardError => err
       raise Impostor::TopicError.new(err)
