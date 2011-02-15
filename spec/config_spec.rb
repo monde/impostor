@@ -101,6 +101,14 @@ describe "impostor's configuration" do
     config(:cookie_jar => "/hello/world").cookie_jar.should == "/hello/world"
   end
 
+  it "should have zero for sleep setting" do
+    config.sleep_before_post.should be_zero
+  end
+
+  it "should have for sleep setting" do
+    config(:sleep_before_post => 1).sleep_before_post.should == 1
+  end
+
   it "should have a logger" do
     log_file = Tempfile.new('log')
     mechanize = mock "mechanize"

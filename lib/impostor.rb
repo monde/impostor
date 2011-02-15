@@ -33,14 +33,16 @@ class Impostor
   #
   #  keys and values that can be set in the impostor configuration
   #
-  #  :type           - kind of imPOSTor, :phpbb2, :wwf79, :wwf80, etc.
-  #  :username       - forum username
-  #  :password       - forum password
-  #  :topics_cache   - cache of forum topics
-  #  :user_agent     - Mechanize browser user-agent
-  #  :cookie_jar     - saved cookies from Mechanize browser
-  #  :app_root       - url to forum
-  #  :login_page     - forum login page
+  #  :type              - kind of imPOSTor, :phpbb2, :wwf79, :wwf80, etc.
+  #  :username          - forum username
+  #  :password          - forum password
+  #  :topics_cache      - cache of forum topics
+  #  :user_agent        - Mechanize browser user-agent
+  #  :cookie_jar        - saved cookies from Mechanize browser
+  #  :app_root          - url to forum
+  #  :login_page        - forum login page
+  #  :logger            - A logger object or path ot a logger file.
+  #  :sleep_before_post - Number of seconds delay before posting to forum
   #
   #  See documentation for each type of imPOSTor for additional configuration
   #  parameters that are needed for the specific kind of imPOSTor.  A sample

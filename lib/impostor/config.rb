@@ -159,5 +159,13 @@ class Impostor::Config
     self.config(:type)
   end
 
+  ##
+  # Some forums require a bit of delay before posting to not have the post be
+  # considered coming from a bot.
+
+  def sleep_before_post
+    sleep self.config(:sleep_before_post).to_i
+  end
+
 end
 
