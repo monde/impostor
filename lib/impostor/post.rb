@@ -24,6 +24,9 @@ class Impostor::Post
   # * set_message(form, message)
   # * post_message(form)
   # * validate_post_result(page)
+  #
+  # A hash of results is returned, having keys to the :forum, :topic, new :post
+  # id, :message, and :result
 
   def post(forum, topic, message)
     self.validate_post_input(forum, topic, message)
@@ -33,11 +36,11 @@ class Impostor::Post
     form = get_post_form(page)
     set_message(form, message)
     page = post_message(form)
-    postid = validate_post_result(page)
+    post = validate_post_result(page)
 
     { :forum => forum,
       :topic => topic,
-      :post => postid,
+      :post => post,
       :message => message,
       :result => true }
   end

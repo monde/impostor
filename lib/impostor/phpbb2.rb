@@ -79,11 +79,17 @@ class Impostor
 
       def validate_post_result(page)
         message = page.search("//span[@class='gen']").last
-        success = message.text =~ /Your message has been entered successfully./ rescue false
-        return true if success
+        if message && message.text && message.text =~ /Your message has been entered successfully./
+          kv = page.links.collect{ |l| l.uri }.compact.
+                          collect{ |l| l.query }.compact.
+                          collect{ |q| q.split('&')}.flatten.
+                          detect{|kv| kv =~ /^p=/ }
+          postid = URI.unescape(kv).split('#').first.split('=').last.to_i
+          raise Impostor::PostError.new("Message did not post.") if postid.zero?
+          return postid
+        end
 
-        too_many = (message.text =~
-          /You cannot make another post so soon after your last/ rescue false)
+        too_many = message && message.text && message.text =~ /You cannot make another post so soon after your last/
 
         if too_many
           raise Impostor::ThrottledError.new("too many posts in too short amount of time")

@@ -77,29 +77,26 @@ class Impostor
       # FIXME this validation is copied into topic module as well
 
       def validate_post_result(page)
-         error = page.search("//table[@class='errorTable']")
-         if error
-           msgs = error.search("//td")
+        error = page.search("//table[@class='errorTable']")
+        if error
+          msgs = error.search("//td")
 
-           # throttled
-           too_many = (msgs.last.text =~
-           /You have exceeded the number of posts permitted in the time span/ rescue
-           false)
-           raise ThrottledError.new(msgs.last.text.gsub(/\s+/m,' ').strip) if too_many
+          # throttled
+          too_many = msgs.last && msgs.last.text && msgs.last.text =~ /You have exceeded the number of posts permitted in the time span/
+          raise ThrottledError.new(msgs.last.text.gsub(/\s+/m,' ').strip) if too_many
 
-           # general error
-           had_error = (error.last.text =~
-           /Error: Message Not Posted/ rescue
-           false)
-           raise PostError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
-         end
-         kv = page.links.collect{ |l| l.uri }.compact.
-                         collect{ |l| l.query }.compact.
-                         collect{ |q| q.split('&')}.flatten.
-                         detect{|kv| kv =~ /^PID=/ }
-         postid = URI.unescape(kv).split('#').first.split('=').last.to_i
-         raise StandardError.new("Message did not post.") if postid.zero?
-         postid
+          # general error
+          had_error = error.last && error.last.text && error.last.text =~ /Error: Message Not Posted/
+          raise Impostor::PostError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
+        end
+
+        kv = page.links.collect{ |l| l.uri }.compact.
+                        collect{ |l| l.query }.compact.
+                        collect{ |q| q.split('&')}.flatten.
+                        detect{|kv| kv =~ /^PID=/ }
+        postid = URI.unescape(kv).split('#').first.split('=').last.to_i
+        raise Impostor::PostError.new("Message did not post.") if postid.zero?
+        postid
       end
 
     end
