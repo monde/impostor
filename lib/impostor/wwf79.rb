@@ -91,7 +91,13 @@ class Impostor
           raise Impostor::PostError.new("There was an error making the post")
         end
 
-        true
+        kv = page.links.collect{ |l| l.uri }.compact.
+                        collect{ |l| l.query }.compact.
+                        collect{ |q| q.split('&')}.flatten.
+                        detect{|kv| kv =~ /^PID=/ }
+        postid = URI.unescape(kv).split('#').first.split('=').last.to_i
+        raise Impostor::PostError.new("Message did not post.") if postid.zero?
+        postid
       end
 
     end

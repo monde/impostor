@@ -156,6 +156,7 @@ describe "a Web Wiz Forum 7.9 impostor" do
         @post.post(formum=1, topic=2, message="Hello World").should == {
           :forum => 1,
           :topic => 2,
+          :post => 1203,
           :message => "Hello World",
           :result => true
         }
