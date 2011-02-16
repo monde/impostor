@@ -93,7 +93,13 @@ class Impostor
            false)
            raise PostError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
          end
-         true
+         kv = page.links.collect{ |l| l.uri }.compact.
+                         collect{ |l| l.query }.compact.
+                         collect{ |q| q.split('&')}.flatten.
+                         detect{|kv| kv =~ /^PID=/ }
+         postid = URI.unescape(kv).split('#').first.split('=').last.to_i
+         raise StandardError.new("Message did not post.") if postid.zero?
+         postid
       end
 
     end
