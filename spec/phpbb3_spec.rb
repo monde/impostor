@@ -129,7 +129,7 @@ describe "a phpbb3 impostor" do
 
       @reply_uri = URI.parse("http://example.com/forum/posting.php?mode=reply&f=1&t=2")
 
-      @response_uri = URI.parse("http://example.com/forum/viewtopic.php?f=1&t=2&p=3725#p3725")
+      @response_uri = URI.parse("http://example.com/forum/viewtopic.php?f=1&t=2&p=355#p355")
 
       @reply_page = load_fixture_page(
         "phpbb3-get-reply-form-good-response.html",
@@ -155,6 +155,7 @@ describe "a phpbb3 impostor" do
         @post.post(formum=1, topic=2, message="Hello World").should == {
           :forum => 1,
           :topic => 2,
+          :post => 355,
           :message => "Hello World",
           :result => true
         }
@@ -212,7 +213,7 @@ describe "a phpbb3 impostor" do
 
     it "should not raise post error on valid reply validate_post_result(page)" do
       lambda {
-        @post.validate_post_result(@good_response_page).should == 3725
+        @post.validate_post_result(@good_response_page).should == 355
       }.should_not raise_error
     end
 

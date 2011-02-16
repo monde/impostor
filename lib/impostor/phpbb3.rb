@@ -70,8 +70,19 @@ class Impostor
       # return the form used for posting a message from the reply page
 
       def get_post_form(page)
-        form = page.form('postform')
+        form = page.forms.detect { |form| form.action =~ /#{Regexp.escape(self.config.config(:posting_page))}/ }
         raise Impostor::PostError.new("unknown reply page format") unless form
+        form
+      end
+
+      ##
+      # set the message to reply with on the reply form
+
+      def set_message(form, message)
+        form.message = message
+        form["post"] = "Submit"
+        lastclick = form.lastclick || 60
+        form["lastclick"] = (lastclick.to_i - 60).to_s
         form
       end
 
@@ -80,13 +91,26 @@ class Impostor
 
       def validate_post_result(page)
         begin
-
-          postid = page.uri.query.split('&').detect{ |a| a =~ /^p=/ }.split('=').last.to_i
-          raise StandardError.new("message did not post") unless postid > 0
+          error_message = page_error_message(page)
+          unless error_message.empty?
+            raise StandardError.new("Message did not post, #{error_message}")
+          end
+          kv = page.links.collect{ |l| l.uri }.compact.
+                          collect{ |l| l.query }.compact.
+                          collect{ |q| q.split('&')}.flatten.
+                          detect{|kv| kv =~ /^p=/ }
+          postid = URI.unescape(kv).split('#').first.split('=').last.to_i
+          raise StandardError.new("Message did not post.") if postid.zero?
+          postid
         rescue StandardError => err
           raise Impostor::PostError.new(err)
         end
-        postid
+      end
+
+      ##
+      # Extract the error from a page
+      def page_error_message(page)
+        page.search(".//p[@class='error']").text
       end
 
     end
