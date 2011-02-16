@@ -21,12 +21,13 @@ describe "impostor's post routines" do
       post.should_receive(:get_post_form).with(reply_page).once.and_return(reply_form)
       post.should_receive(:set_message).with(reply_form, "Hello World").once
       post.should_receive(:post_message).with(reply_form).once.and_return(result_page)
-      post.should_receive(:validate_post_result).with(result_page).once
+      post.should_receive(:validate_post_result).with(result_page).once.and_return(3)
 
       lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
           :forum => 1,
           :topic => 2,
+          :post => 3,
           :message => "Hello World",
           :result => true
         }
