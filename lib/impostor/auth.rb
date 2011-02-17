@@ -92,6 +92,7 @@ class Impostor::Auth
 
   def post_login(form)
     begin
+      config.sleep_before_post
       page = form.submit
     rescue StandardError => err
       raise Impostor::LoginError.new(err)

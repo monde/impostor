@@ -48,6 +48,7 @@ class Impostor
         form['username'] = self.config.username
         form['password'] = self.config.password
         form['autologin'] = 'on'
+        form['login'] = 'Log in'
         form
       end
 
@@ -69,8 +70,17 @@ class Impostor
       # return the form used for posting a message from the reply page
 
       def get_post_form(page)
-        form = page.form('post')
+        form = page.forms.detect { |form| form.action =~ /#{Regexp.escape(self.config.config(:posting_page))}/ }
         raise Impostor::PostError.new("unknown reply page format") unless form
+        form
+      end
+
+      ##
+      # set the message to reply with on the reply form
+
+      def set_message(form, message)
+        form.message = message
+        form["post"] = "Submit"
         form
       end
 

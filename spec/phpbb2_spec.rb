@@ -88,6 +88,7 @@ describe "a phpbb2 impostor" do
       form.should_receive(:[]=).with("username", "tester")
       form.should_receive(:[]=).with("password", "password")
       form.should_receive(:[]=).with("autologin", "on")
+      form.should_receive(:[]=).with("login", "Log in")
       lambda {
         @auth.set_username_and_password(form).should == form
       }.should_not raise_error
