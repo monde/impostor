@@ -71,7 +71,7 @@ class Impostor
 
       def get_post_form(page)
         form = page.forms.detect { |form| form.action =~ /#{Regexp.escape(self.config.config(:posting_page))}/ }
-        raise Impostor::PostError.new("unknown reply page format") unless form
+        raise Impostor::PostError.new("unknown reply page format#{page_message(page, ', ')}") unless form
         form
       end
 
@@ -88,8 +88,8 @@ class Impostor
       # validate the result of posting the message form
 
       def validate_post_result(page)
-        message = page.search("//span[@class='gen']").last
-        if message && message.text && message.text =~ /Your message has been entered successfully./
+        message = page_message(page)
+        if message =~ /Your message has been entered successfully./
           kv = page.links.collect{ |l| l.uri }.compact.
                           collect{ |l| l.query }.compact.
                           collect{ |q| q.split('&')}.flatten.
@@ -99,7 +99,7 @@ class Impostor
           return postid
         end
 
-        too_many = message && message.text && message.text =~ /You cannot make another post so soon after your last/
+        too_many = message =~ /You cannot make another post so soon after your last/
 
         if too_many
           raise Impostor::ThrottledError.new("too many posts in too short amount of time")
@@ -108,6 +108,10 @@ class Impostor
         end
       end
 
+      def page_message(page, prepend = '')
+        message = page.search("//span[@class='gen']").last.text
+        "#{prepend}#{message}"
+      end
     end
 
     module Topic

@@ -41,7 +41,16 @@ describe "a phpbb2 impostor" do
   end
 
   it "should fail posting a message" do
-    pending
+    VCR.use_cassette('phpbb2-should-not-post', :record => :new_episodes) do
+      conf = self.sample_phpbb2_config_params(
+        :app_root => 'http://localhost/phpbb2/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      lambda {
+        impostor.post(forum=99, topic=99, message='Hello World')
+      }.should raise_error( Impostor::PostError )
+    end
   end
 
   it "should fail posting a message because of over limit" do
