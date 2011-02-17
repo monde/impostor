@@ -5,7 +5,7 @@ describe "a phpbb3 impostor" do
   it "should login" do
     VCR.use_cassette('phpbb3-should-login', :record => :new_episodes) do
       conf = self.sample_phpbb3_config_params(
-        :app_root => 'http://localhost/forum/'
+        :app_root => 'http://localhost/phpbb3/'
       )
       config = Impostor::Config.new(conf)
       auth = Impostor::Auth.new(config)
@@ -16,7 +16,7 @@ describe "a phpbb3 impostor" do
   it "should fail login" do
     VCR.use_cassette('phpbb3-should-not-login', :record => :new_episodes) do
       conf = self.sample_phpbb3_config_params(
-        :app_root => 'http://localhost/forum/',
+        :app_root => 'http://localhost/phpbb3/',
         :password => 'junk'
       )
       config = Impostor::Config.new(conf)
@@ -28,12 +28,12 @@ describe "a phpbb3 impostor" do
   it "should post a message" do
     VCR.use_cassette('phpbb3-should-post', :record => :new_episodes) do
       conf = self.sample_phpbb3_config_params(
-        :app_root => 'http://localhost/forum/',
+        :app_root => 'http://localhost/phpbb3/',
         :sleep_before_post => 1
       )
       impostor = Impostor.new(conf)
       impostor.post(forum=2, topic=3, message='Hello World').should == {
-        :forum => 2, :topic => 3, :post => 10, :message => "Hello World", :result => true
+        :forum => 2, :topic => 3, :post => 8, :message => "Hello World", :result => true
       }
     end
   end
