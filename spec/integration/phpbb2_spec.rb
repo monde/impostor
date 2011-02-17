@@ -54,7 +54,17 @@ describe "a phpbb2 impostor" do
   end
 
   it "should fail posting a message because of over limit" do
-    pending
+    VCR.use_cassette('phpbb2-should-overlimit-error-post', :record => :new_episodes) do
+      conf = self.sample_phpbb2_config_params(
+        :app_root => 'http://localhost/phpbb2/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      lambda {
+        impostor.post(forum=1, topic=2, message='one')
+        impostor.post(forum=1, topic=2, message='two')
+      }.should raise_error( Impostor::ThrottledError )
+    end
   end
 
   it "should create a new topic and message" do

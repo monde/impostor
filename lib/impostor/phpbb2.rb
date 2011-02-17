@@ -109,7 +109,9 @@ class Impostor
       end
 
       def page_message(page, prepend = '')
-        message = page.search("//span[@class='gen']").last.text
+        message = page.search("//span[@class='gen']").last || ''
+        message = message.text if message.respond_to?(:text)
+        prepend = '' if message.empty?
         "#{prepend}#{message}"
       end
     end

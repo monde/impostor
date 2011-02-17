@@ -90,11 +90,14 @@ class Impostor
       # validate the result of posting the message form
 
       def validate_post_result(page)
+        error_message = page_error_message(page)
+        if error_message =~ /You cannot make another post so soon after your last/
+          raise Impostor::ThrottledError.new("too many posts in too short amount of time, #{error_message}")
+        elsif !error_message.empty?
+          raise Impostor::PostError.new(error_message)
+        end
+
         begin
-          error_message = page_error_message(page)
-          unless error_message.empty?
-            raise StandardError.new("Message did not post, #{error_message}")
-          end
           kv = page.links.collect{ |l| l.uri }.compact.
                           collect{ |l| l.query }.compact.
                           collect{ |q| q.split('&')}.flatten.
@@ -109,8 +112,11 @@ class Impostor
 
       ##
       # Extract the error from a page
-      def page_error_message(page)
-        page.search(".//p[@class='error']").text
+      def page_error_message(page, prepend='')
+        message = page.search(".//p[@class='error']").last || ''
+        message = message.text if message.respond_to?(:text)
+        prepend = '' if message.empty?
+        "#{prepend}#{message}"
       end
 
     end

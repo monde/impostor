@@ -61,7 +61,7 @@ describe "a phpbb3 impostor" do
       lambda {
         impostor.post(forum=2, topic=3, message='one')
         impostor.post(forum=2, topic=3, message='two')
-      }.should raise_error( Impostor::PostError )
+      }.should raise_error( Impostor::ThrottledError )
     end
   end
 
