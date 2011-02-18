@@ -24,6 +24,11 @@ class Impostor
 
     module Auth
 
+      def login # :nodoc:
+        Impostor.not_tested("Impostor::Wwf80::Auth", "login")
+        super
+      end
+
       ##
       # returns the login form from the login page
 
@@ -52,6 +57,11 @@ class Impostor
     end
 
     module Post
+
+      def post(forum, topic, message) # :nodoc:
+        Impostor.not_tested("Impostor::Wwf80::Post", "post")
+        super
+      end
 
       ##
       # return a uri used to fetch the reply page based on the forum, topic, and
@@ -102,6 +112,11 @@ class Impostor
     end
 
     module Topic
+
+      def new_topic(forum, subject, message) # :nodoc:
+        Impostor.not_tested("Impostor::Wwf80::Topic", "new_topic")
+        super
+      end
 
       ##
       # return a uri used to fetch the new topic page based on the forum, subject,

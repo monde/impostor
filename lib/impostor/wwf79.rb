@@ -24,6 +24,11 @@ class Impostor
 
     module Auth
 
+      def login # :nodoc:
+        Impostor.not_tested("Impostor::Wwf79::Auth", "login")
+        super
+      end
+
       ##
       # Checks if the agent is already logged by stored cookie
 
@@ -54,6 +59,11 @@ class Impostor
     end
 
     module Post
+
+      def post(forum, topic, message) # :nodoc:
+        Impostor.not_tested("Impostor::Wwf79::Post", "post")
+        super
+      end
 
       ##
       # return a uri used to fetch the reply page based on the forum, topic, and
@@ -103,6 +113,11 @@ class Impostor
     end
 
     module Topic
+
+      def new_topic(forum, subject, message) # :nodoc:
+        Impostor.not_tested("Impostor::Wwf79::Topic", "new_topic")
+        super
+      end
 
       ##
       # return a uri used to fetch the new topic page based on the forum, subject,

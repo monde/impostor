@@ -97,4 +97,13 @@ class Impostor
     @auth.login
   end
 
+  def self.not_tested(who, what)
+    warn <<WARNMSG
+!!!!! IMPLEMENTATION WARNING !!!!!
+#{who}##{what} did not have real integration test data to work against in the
+refactoring of Impostor from version 0.2.1 to 1.0.0.  Please contact the author
+to help supply live data allowing real integration tests for this method.
+WARNMSG
+  end
+
 end
