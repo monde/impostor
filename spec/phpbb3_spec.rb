@@ -230,7 +230,7 @@ describe "a phpbb3 impostor" do
     before do
       @topic = phpbb3_topic
 
-      @new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=newtopic&f=1")
+      @new_topic_uri = URI.parse("http://example.com/forum/posting.php?mode=post&f=1")
 
       @new_topic_page = load_fixture_page(
         "phpbb3-get-new-topic-form-good-response.html",
@@ -266,7 +266,7 @@ describe "a phpbb3 impostor" do
     end
 
     it "should raise topic error when get_new_topic_form has error" do
-      @new_topic_page.should_receive(:form).with("postform").and_return nil
+      @new_topic_page.should_receive(:forms).and_return []
       lambda {
         @topic.get_new_topic_form(@new_topic_page)
       }.should raise_error( Impostor::TopicError )
@@ -277,7 +277,8 @@ describe "a phpbb3 impostor" do
       form.should_receive(:lastclick).and_return("100")
       form.should_receive(:subject=).with("OMG!")
       form.should_receive(:message=).with("Hello World")
-      form.should_receive(:lastclick=).with("40")
+      form.should_receive(:[]=).with("lastclick", "40")
+      form.should_receive(:[]=).with("post", "Submit")
       lambda {
         @topic.set_subject_and_message(form, "OMG!", "Hello World")
       }.should_not raise_error
@@ -311,7 +312,7 @@ describe "a phpbb3 impostor" do
 
     it "should return the created topic id from get_topic_from_result" do
       lambda {
-        @topic.get_topic_from_result(@new_topic_good_result).should == 2
+        @topic.get_topic_from_result(@new_topic_good_result).should == 205
       }.should_not raise_error
     end
 
@@ -319,12 +320,12 @@ describe "a phpbb3 impostor" do
       @topic.auth.should_receive(:login_with_raises)
       @topic.config.agent.should_receive(:get).with(@new_topic_uri).and_return(@new_topic_page)
       @topic.config.agent.should_receive(:submit).with(instance_of(Mechanize::Form), nil, {}).and_return(@new_topic_good_result)
-      @topic.config.should_receive(:add_subject).with(1, 2, "OMG!")
+      @topic.config.should_receive(:add_subject).with(1, 205, "OMG!")
 
       lambda {
         @topic.new_topic(formum=1, subject="OMG!", message="Hello World").should == {
           :forum => 1,
-          :topic => 2,
+          :topic => 205,
           :subject => "OMG!",
           :message => "Hello World",
           :result => true

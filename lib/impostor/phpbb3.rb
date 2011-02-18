@@ -112,6 +112,7 @@ class Impostor
 
       ##
       # Extract the error from a page
+
       def page_error_message(page, prepend='')
         message = page.search(".//p[@class='error']").last || ''
         message = message.text if message.respond_to?(:text)
@@ -129,7 +130,7 @@ class Impostor
 
       def get_new_topic_uri(forum, subject, message)
         uri = URI.join(self.config.app_root, self.config.config(:posting_page))
-        uri.query = "mode=newtopic&f=#{forum}"
+        uri.query = "mode=post&f=#{forum}"
         uri
       end
 
@@ -137,7 +138,7 @@ class Impostor
       # Get the the new topic form on the page
 
       def get_new_topic_form(page)
-        form = page.form('postform')
+        form = page.forms.detect { |form| form.action =~ /#{Regexp.escape(self.config.config(:posting_page))}/ }
         raise Impostor::TopicError.new("unknown new topic page format") unless form
         form
       end
@@ -148,7 +149,9 @@ class Impostor
       def set_subject_and_message(form, subject, message)
         form.subject = subject
         form.message = message
-        form.lastclick = (form.lastclick.to_i - 60).to_s
+        form["post"] = "Submit"
+        lastclick = form.lastclick || 60
+        form["lastclick"] = (lastclick.to_i - 60).to_s
         form
       end
 
@@ -164,13 +167,24 @@ class Impostor
       # Get the new topic identifier from the result page
 
       def get_topic_from_result(page)
-        begin
-          topic = page.uri.query.split('&').detect{|a| a =~ /^t=/}.split('=').last.to_i
-          raise StandardError.new("new topic id not found") if topic.zero?
-          topic
-        rescue NoMethodError, StandardError => err
-          raise Impostor::TopicError.new(err)
-        end
+        link = page.links.detect{ |l| l.text =~ /View your submitted message/i }
+        link ||= page.links.detect{ |l| l.href =~ /viewtopic\.php/ }
+        raise Impostor::TopicError.new("new topic did not post") unless link
+        topic = link.uri.query.split('&').detect{|a| a =~ /^t=/}
+        raise Impostor::TopicError.new("new topic did not post") unless topic
+        topic = topic.split('=').last.to_i
+        raise Impostor::TopicError.new("new topic did not post") if topic.zero?
+        topic
+      end
+
+      ##
+      # Extract the error from a page
+
+      def page_error_message(page, prepend='')
+        message = page.search(".//p[@class='error']").last || ''
+        message = message.text if message.respond_to?(:text)
+        prepend = '' if message.empty?
+        "#{prepend}#{message}"
       end
 
     end
