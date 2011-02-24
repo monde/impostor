@@ -302,12 +302,8 @@ describe "a phpbb3 impostor" do
 
     it "should not raise topic error on valid reply validate_new_topic_result(page)" do
       lambda {
-        @topic.validate_new_topic_result(@new_topic_good_result).should be_true
+        @topic.validate_new_topic_result(@new_topic_good_result).should == @new_topic_good_result
       }.should_not raise_error
-    end
-
-    it "should raise topic error on invalid reply validate_new_topic_result(page)" do
-      pending "needs a real fixture to implement against"
     end
 
     it "should return the created topic id from get_topic_from_result" do

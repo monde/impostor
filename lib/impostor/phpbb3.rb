@@ -159,13 +159,6 @@ class Impostor
       # Validate the result of posting the new topic
 
       def validate_new_topic_result(page)
-        page
-      end
-
-      ##
-      # Get the new topic identifier from the result page
-
-      def get_topic_from_result(page)
         error_message = page_error_message(page)
         if error_message =~ /You cannot make another post so soon after your last/
           raise Impostor::ThrottledError.new("too many posts in too short amount of time, #{error_message}")
@@ -173,6 +166,13 @@ class Impostor
           raise Impostor::PostError.new(error_message)
         end
 
+        page
+      end
+
+      ##
+      # Get the new topic identifier from the result page
+
+      def get_topic_from_result(page)
         link = page.links.detect{ |l| l.text =~ /View your submitted message/i }
         link ||= page.links.detect{ |l| l.href =~ /viewtopic\.php/ }
         raise Impostor::TopicError.new("new topic did not post") unless link

@@ -300,17 +300,6 @@ describe "a phpbb2 impostor" do
     end
 
     it "should not raise topic error on valid reply validate_new_topic_result(page)" do
-      new_topic_page = mock "new topic page"
-      @topic.config.agent.should_receive(:get).with(
-        {:url=>"http://localhost/phpBB2/viewtopic.php?p=60#60", :referer=>instance_of(Mechanize::Page) }
-      ).and_return(new_topic_page)
-
-      lambda {
-        @topic.validate_new_topic_result(@new_topic_good_result).should == new_topic_page
-      }.should_not raise_error
-    end
-
-    it "should raise topic error on invalid reply validate_new_topic_result(page)" do
       @topic.config.agent.should_receive(:get).with(
         {:url=>"http://localhost/phpBB2/viewtopic.php?p=60#60", :referer=>instance_of(Mechanize::Page) }
       ).and_return(@viewtopic_from_new_topic_good_result)
