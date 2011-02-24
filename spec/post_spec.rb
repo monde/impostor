@@ -21,7 +21,7 @@ describe "impostor's post routines" do
       post.should_receive(:get_post_form).with(reply_page).once.and_return(reply_form)
       post.should_receive(:set_message).with(reply_form, "Hello World").once
       post.should_receive(:post_message).with(reply_form).once.and_return(result_page)
-      post.should_receive(:validate_post_result).with(result_page).once.and_return(3)
+      post.should_receive(:get_post_from_result).with(result_page).once.and_return(3)
 
       lambda {
         post.post(formum=1, topic=2, message="Hello World").should == {
@@ -122,10 +122,10 @@ describe "impostor's post routines" do
       }.should raise_error( Impostor::PostError )
     end
 
-    it "should raise not implemented error when validate_post_result called" do
-      lambda { post.validate_post_result(nil) }.should raise_error(
+    it "should raise not implemented error when get_post_from_result called" do
+      lambda { post.get_post_from_result(nil) }.should raise_error(
         Impostor::MissingTemplateMethodError,
-        "Impostor error: validate_post_result must be implemented (StandardError)"
+        "Impostor error: get_post_from_result must be implemented (StandardError)"
       )
     end
 

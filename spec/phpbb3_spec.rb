@@ -211,15 +211,15 @@ describe "a phpbb3 impostor" do
       }.should raise_error( Impostor::PostError )
     end
 
-    it "should not raise post error on valid reply validate_post_result(page)" do
+    it "should not raise post error on valid reply get_post_from_result(page)" do
       lambda {
-        @post.validate_post_result(@good_response_page).should == 355
+        @post.get_post_from_result(@good_response_page).should == 355
       }.should_not raise_error
     end
 
-    it "should raise post error on invalid reply validate_post_result(page)" do
+    it "should raise post error on invalid reply get_post_from_result(page)" do
       lambda {
-        @post.validate_post_result(@junk_page)
+        @post.get_post_from_result(@junk_page)
       }.should raise_error( Impostor::PostError )
     end
 

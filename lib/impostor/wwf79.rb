@@ -85,10 +85,10 @@ class Impostor
       end
 
       ##
-      # validate the result of posting the message form
+      # get post id from the result of posting the message form
       # FIXME this validation is copied into topic module as well
 
-      def validate_post_result(page)
+      def get_post_from_result(page)
         error = page.body =~ /Message Not Posted/
         if error
 

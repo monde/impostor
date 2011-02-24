@@ -83,7 +83,17 @@ describe "a phpbb3 impostor" do
   end
 
   it "should fail create topic because of over limit" do
-    pending
+    VCR.use_cassette('phpbb3-should-be-overlimit-creating-topic', :record => :new_episodes) do
+      conf = self.sample_phpbb3_config_params(
+        :app_root => 'http://localhost/phpbb3/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      lambda {
+        impostor.new_topic(forum=2, subject='First', message='a message')
+        impostor.new_topic(forum=2, subject='Second', message='should fail')
+      }.should raise_error( Impostor::ThrottledError )
+    end
   end
 
 end

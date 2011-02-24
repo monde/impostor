@@ -23,7 +23,7 @@ class Impostor::Post
   # * get_post_form(page)
   # * set_message(form, message)
   # * post_message(form)
-  # * validate_post_result(page)
+  # * get_post_from_result(page)
   #
   # A hash of results is returned, having keys to the :forum, :topic, new :post
   # id, :message, and :result
@@ -36,7 +36,7 @@ class Impostor::Post
     form = get_post_form(page)
     set_message(form, message)
     page = post_message(form)
-    post = validate_post_result(page)
+    post = get_post_from_result(page)
 
     { :forum => forum,
       :topic => topic,
@@ -102,10 +102,10 @@ class Impostor::Post
   end
 
   ##
-  # validate the result of posting the message form
+  # get post id from the result of posting the message form
 
-  def validate_post_result(page)
-    raise Impostor::MissingTemplateMethodError.new("validate_post_result must be implemented")
+  def get_post_from_result(page)
+    raise Impostor::MissingTemplateMethodError.new("get_post_from_result must be implemented")
   end
 
 end

@@ -85,9 +85,9 @@ class Impostor
       end
 
       ##
-      # validate the result of posting the message form
+      # get post id from the result of posting the message form
 
-      def validate_post_result(page)
+      def get_post_from_result(page)
         message = page_message(page)
         if message =~ /Your message has been entered successfully./
           kv = page.links.collect{ |l| l.uri }.compact.
