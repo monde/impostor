@@ -154,11 +154,15 @@ class Impostor
       def validate_new_topic_result(page)
         message = page_message(page)
         if message !~ /Your message has been entered successfully./
-          raise Impostor::TopicError.new("Topic did not post.")
+          if message =~ /You cannot make another post so soon after your last/
+            raise Impostor::ThrottledError.new("too many new topics in too short amount of time")
+          else
+            raise Impostor::TopicError.new("Topic did not post.")
+          end
         end
 
         begin
-          # <td align="center"><span class="gen">Your message has been entered successfully.<br /><br />Click <a href="viewtopic.php?p=9#9">Here<    /a> to view your message<br /><br />Click <a href="viewforum.php?f=1">Here</a> to return to the forum</span></td>
+          # <td align="center"><span class="gen">Your message has been entered successfully.<br /><br />Click <a href="viewtopic.php?p=9#9">Here</a> to view your message<br /><br />Click <a href="viewforum.php?f=1">Here</a> to return to the forum</span></td>
 
           # TODO the link has the postid specifically for the post, not all
           # forums make it easy to deduce the post id

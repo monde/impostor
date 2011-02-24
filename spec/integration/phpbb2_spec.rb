@@ -81,11 +81,30 @@ describe "a phpbb2 impostor" do
   end
 
   it "should fail creating a topic" do
-    pending
+    VCR.use_cassette('phpbb2-should-not-create-new-topic', :record => :new_episodes) do
+      conf = self.sample_phpbb2_config_params(
+        :app_root => 'http://localhost/phpbb2/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      lambda {
+        impostor.new_topic(forum=99, subject='Break Dance', message='Should not create new topic')
+      }.should raise_error( Impostor::TopicError )
+    end
   end
 
   it "should fail create topic because of over limit" do
-    pending
+    VCR.use_cassette('phpbb2-should-be-overlimit-creating-topic', :record => :new_episodes) do
+      conf = self.sample_phpbb2_config_params(
+        :app_root => 'http://localhost/phpbb2/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      lambda {
+        impostor.new_topic(forum=1, subject='First', message='a message')
+        impostor.new_topic(forum=1, subject='Second', message='should fail')
+      }.should raise_error( Impostor::ThrottledError )
+    end
   end
 
 end
