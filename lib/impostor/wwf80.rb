@@ -167,7 +167,8 @@ class Impostor
            false)
            raise TopicError.new(error.last.text.gsub(/\s+/m,' ').strip) if had_error
          end
-         true
+
+         page
       end
 
       ##

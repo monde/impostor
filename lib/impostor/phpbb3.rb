@@ -159,8 +159,7 @@ class Impostor
       # Validate the result of posting the new topic
 
       def validate_new_topic_result(page)
-        #NOOP in phpbb3, #get_topic_from_result is the validation
-        true
+        page
       end
 
       ##

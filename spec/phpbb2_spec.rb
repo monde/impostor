@@ -277,9 +277,7 @@ describe "a phpbb2 impostor" do
       form = mock "phpbb2 topic form"
       form.should_receive(:subject=).with("OMG!")
       form.should_receive(:message=).with("Hello World")
-      form.should_receive(:disable_html=).with(nil)
-      form.should_receive(:disable_bbcode=).with('on')
-      form.should_receive(:disable_smilies=).with('on')
+      form.should_receive(:[]=).with("post", "Submit")
       lambda {
         @topic.set_subject_and_message(form, "OMG!", "Hello World")
       }.should_not raise_error
@@ -302,19 +300,28 @@ describe "a phpbb2 impostor" do
     end
 
     it "should not raise topic error on valid reply validate_new_topic_result(page)" do
+      new_topic_page = mock "new topic page"
+      @topic.config.agent.should_receive(:get).with(
+        {:url=>"http://localhost/phpBB2/viewtopic.php?p=60#60", :referer=>instance_of(Mechanize::Page) }
+      ).and_return(new_topic_page)
+
       lambda {
-        @topic.validate_new_topic_result(@new_topic_good_result).should be_true
+        @topic.validate_new_topic_result(@new_topic_good_result).should == new_topic_page
       }.should_not raise_error
     end
 
     it "should raise topic error on invalid reply validate_new_topic_result(page)" do
-      pending "needs a real fixture to implement against"
+      @topic.config.agent.should_receive(:get).with(
+        {:url=>"http://localhost/phpBB2/viewtopic.php?p=60#60", :referer=>instance_of(Mechanize::Page) }
+      ).and_return(@viewtopic_from_new_topic_good_result)
+      lambda {
+        @topic.validate_new_topic_result(@new_topic_good_result).should == @viewtopic_from_new_topic_good_result
+      }.should_not raise_error
     end
 
     it "should return the created topic id from get_topic_from_result" do
-      @topic.config.agent.should_receive(:get).with(URI.parse("http://example.com/forum/viewtopic.php?p=60#60")).and_return(@viewtopic_from_new_topic_good_result)
       lambda {
-        @topic.get_topic_from_result(@new_topic_good_result).should == 2
+        @topic.get_topic_from_result(@viewtopic_from_new_topic_good_result).should == 2
       }.should_not raise_error
     end
 
@@ -322,10 +329,7 @@ describe "a phpbb2 impostor" do
       form = mock "topic form", :submit => @new_topic_good_result
       form.should_receive(:subject=).with("OMG!")
       form.should_receive(:message=).with("Hello World")
-      form.should_receive(:disable_html=).with(nil)
-      form.should_receive(:disable_bbcode=).with('on')
-      form.should_receive(:disable_smilies=).with('on')
-      #form.should_receive(:submit).and_return(@new_topic_good_result)
+      form.should_receive(:[]=).with("post", "Submit")
 
       @topic.auth.should_receive(:login_with_raises)
       @topic.config.agent.should_receive(:get).with(@new_topic_uri).and_return(@new_topic_page)
@@ -333,7 +337,9 @@ describe "a phpbb2 impostor" do
 
       @topic.config.should_receive(:add_subject).with(1, 2, "OMG!")
 
-      @topic.config.agent.should_receive(:get).with(URI.parse("http://example.com/forum/viewtopic.php?p=60#60")).and_return(@viewtopic_from_new_topic_good_result)
+      @topic.config.agent.should_receive(:get).with(
+        {:url=>"http://localhost/phpBB2/viewtopic.php?p=60#60", :referer=>instance_of(Mechanize::Page) }
+      ).and_return(@viewtopic_from_new_topic_good_result)
 
       lambda {
         @topic.new_topic(formum=1, subject="OMG!", message="Hello World").should == {

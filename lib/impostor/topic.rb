@@ -32,7 +32,7 @@ class Impostor::Topic
     form = self.get_new_topic_form(page)
     self.set_subject_and_message(form, subject, message)
     page = self.post_new_topic(form)
-    self.validate_new_topic_result(page)
+    page = self.validate_new_topic_result(page)
     topic = self.get_topic_from_result(page)
 
     self.config.add_subject(forum, topic, subject)

@@ -68,7 +68,16 @@ describe "a phpbb2 impostor" do
   end
 
   it "should create a new topic and message" do
-    pending
+    VCR.use_cassette('phpbb2-should-create-topic', :record => :new_episodes) do
+      conf = self.sample_phpbb2_config_params(
+        :app_root => 'http://localhost/phpbb2/',
+        :sleep_before_post => 1
+      )
+      impostor = Impostor.new(conf)
+      impostor.new_topic(forum=1, subject='Teapots', message='Hello World').should == {
+        :forum => 1, :topic => 6, :subject => 'Teapots',  :message => "Hello World", :result => true
+      }
+    end
   end
 
   it "should fail creating a topic" do

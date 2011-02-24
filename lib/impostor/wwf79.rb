@@ -164,7 +164,7 @@ class Impostor
           raise Impostor::TopicError.new("There was an error making the post")
         end
 
-        true
+        page
       end
 
       ##

@@ -114,6 +114,7 @@ class Impostor
         prepend = '' if message.empty?
         "#{prepend}#{message}"
       end
+
     end
 
     module Topic
@@ -143,9 +144,7 @@ class Impostor
       def set_subject_and_message(form, subject, message)
         form.subject = subject
         form.message = message
-        form.disable_html = nil
-        form.disable_bbcode = 'on'
-        form.disable_smilies = 'on'
+        form["post"] = "Submit"
         form
       end
 
@@ -153,37 +152,44 @@ class Impostor
       # Validate the result of posting the new topic
 
       def validate_new_topic_result(page)
-        #NOOP in phpbb2, #get_topic_from_result is the validation
-        true
+        message = page_message(page)
+        if message !~ /Your message has been entered successfully./
+          raise Impostor::TopicError.new("Topic did not post.")
+        end
+
+        begin
+          # <td align="center"><span class="gen">Your message has been entered successfully.<br /><br />Click <a href="viewtopic.php?p=9#9">Here<    /a> to view your message<br /><br />Click <a href="viewforum.php?f=1">Here</a> to return to the forum</span></td>
+
+          # TODO the link has the postid specifically for the post, not all
+          # forums make it easy to deduce the post id
+          link = page.links.detect{ |l| l.href =~ /viewtopic\.php/ }
+          link.click
+        rescue StandardError => err
+          raise Impostor::TopicError.new(err)
+        end
       end
 
       ##
       # Get the new topic identifier from the result page
 
       def get_topic_from_result(page)
-        # if the response is correct there will be a meta link that looks something like
-        # <meta http-equiv="refresh" content="3;url=viewtopic.php?p=29#29">
-        # this link needs to be followed, the page it leads to will give us
-        # the topic id that was created for the topic name that we created
         begin
-          url = page.search("//meta[@http-equiv='refresh']").attr('content')
-          url = /url=(.*)/.match(url)[1]
-          raise StandardError.new('unexpected new topic response from refresh') unless url
-
-          url = URI.join(self.config.app_root, url)
-          page = self.config.agent.get(url)
-          link = page.search("//link[@rel='prev']").first['href']
-          raise StandardError.new('unexpected new topic response from link prev') unless link
-
-          # t=XXX will be our new topic id, i.e.
-          # <link rel="prev" href="http://localhost/phpBB2/viewtopic.php?t=5&amp;view=previous" title="View previous topic"
-          href = URI.parse(link)
-          topic = CGI::parse(href.query)['t'].first.to_i
-          raise StandardError.new('unexpected new topic ID') unless topic > 0
-          topic
-        rescue NoMethodError, StandardError => err
+          link = page.links.detect{ |l| l.href =~ /viewtopic\.php/ }
+          kv = link.uri.query.split('&').detect{|kv| kv =~ /^t=/ }
+          topicid = URI.unescape(kv).split('#').first.split('=').last.to_i
+        rescue StandardError => err
           raise Impostor::TopicError.new(err)
         end
+        raise Impostor::TopicError.new("Failed to create topic.") if topicid.zero?
+
+        topicid
+      end
+
+      def page_message(page, prepend = '')
+        message = page.search("//span[@class='gen']").last || ''
+        message = message.text if message.respond_to?(:text)
+        prepend = '' if message.empty?
+        "#{prepend}#{message}"
       end
 
     end
