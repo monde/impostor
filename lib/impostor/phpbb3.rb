@@ -101,7 +101,8 @@ class Impostor
           kv = page.links.collect{ |l| l.uri }.compact.
                           collect{ |l| l.query }.compact.
                           collect{ |q| q.split('&')}.flatten.
-                          detect{|kv| kv =~ /^p=/ }
+                          detect { |p| p =~ /^p=/ }
+          raise StandardError.new("Message did not post.") if kv.nil?
           postid = URI.unescape(kv).split('#').first.split('=').last.to_i
           raise StandardError.new("Message did not post.") if postid.zero?
           postid
