@@ -13,7 +13,7 @@ Makes automated posts to the following forum applications:
 
 * Web Wiz Forums (WWF) 7.9
 * Web Wiz Forums (WWF) 8.0
-* PHP Bullitin Board (phpBB) 2.0
+* PHP Bullitin Board (phpBB) 2.2
 * PHP Bullitin Board (phpBB) 3.0
 
 == SYNOPSIS:
