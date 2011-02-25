@@ -1,7 +1,7 @@
 impostor
     by Mike Mondragon
+    https://github.com/monde/impostor
     http://impostor.rubyforge.org/
-    http://github.com/monde/impostor/tree/master
 
 == DESCRIPTION:
 
@@ -13,7 +13,7 @@ Makes automated posts to the following forum applications:
 
 * Web Wiz Forums (WWF) 7.9
 * Web Wiz Forums (WWF) 8.0
-* PHP Bullitin Board (phpBB) 2.0 (2.0.22)
+* PHP Bullitin Board (phpBB) 2.0
 * PHP Bullitin Board (phpBB) 3.0
 
 == SYNOPSIS:
@@ -23,40 +23,34 @@ Makes automated posts to the following forum applications:
 # be accessed.
 # config can be keyed by symbols or strings
 config = YAML::load_file('conf/impostor.yml')
-post = Impostor.new(config)
+impostor = Impostor.new(config)
 message = %q{hello world is to application
 programmers as tea pots are to graphics programmers}
 # your application stores forum and topic ids
-post.post(forum=5,topic=10,message)
+impostor.post(forum=5,topic=10,message)
 # make a new topic
 subject = "about programmers..."
-post.new_topic(forum=7,subject,message)
-post.logout
+impostor.new_topic(forum=7,subject,message)
 
 == REQUIREMENTS:
 
+* hoe
 * mechanize
-* hpricot
+* nokogiri
 
 == SOURCE
 
 git clone git://github.com/monde/impostor.git
-svn co svn://rubyforge.org/var/svn/impostor/trunk impostor
 
 == INSTALL:
 
-conventional
-* sudo gem install impostor
-
-github
-* gem sources -a http://gems.github.com
-* sudo gem install monde-impostor
+* gem install impostor
 
 == LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2008 Mike Mondragon
+Copyright (c) 2008-2011 Mike Mondragon
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

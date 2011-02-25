@@ -1,8 +1,9 @@
 ### 1.0.0 / 2011-02-XX (move over bacon there's something leaner)
 
-* X major enhancements
-  * modularized architecture with base classes Config, Auth, Post, and Topic
-    using mixins to implement functionality specific to each forum
+* 2 major enhancements
+  * refactored to a modularized architecture with base classes Config, Auth,
+    Post, and Topic using mixins to specify behavior specific to each forum by
+    implementing defined template methods from the base classes
   * rspec and vcr used for specifying unit and integration behavior
 
 ### 0.2.1 / 2008-09-24 (to screen scrape is to love the internets)
