@@ -174,6 +174,9 @@ class Impostor
       # Get the new topic identifier from the result page
 
       def get_topic_from_result(page)
+        moderated = page.body =~ /it will need to be approved by a moderator/i
+        raise Impostor::TopicModerated.new("new topic has been moderated") if moderated
+
         link = page.links.detect{ |l| l.text =~ /View your submitted message/i }
         link ||= page.links.detect{ |l| l.href =~ /viewtopic\.php/ }
         raise Impostor::TopicError.new("new topic did not post") unless link

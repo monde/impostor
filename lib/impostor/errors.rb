@@ -54,4 +54,14 @@ class Impostor
 
   class MissingTemplateMethodError < ImpostorError; end
 
+  ##
+  # An exception for when a new topic has been moderated
+
+  class TopicModerated < ImpostorError; end
+
+  ##
+  # An exception for when a new post has been moderated
+
+  class PostModerated < ImpostorError; end
+
 end
