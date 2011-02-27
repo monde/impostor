@@ -32,8 +32,8 @@ describe "a phpbb3 impostor" do
         :sleep_before_post => 1
       )
       impostor = Impostor.new(conf)
-      impostor.post(forum=2, topic=3, message='Hello World').should == {
-        :forum => 2, :topic => 3, :post => 8, :message => "Hello World", :result => true
+      impostor.post(forum=2, topic=3, message='Hello World Again').should == {
+        :forum => 2, :topic => 3, :post => 17, :message => "Hello World Again", :result => true
       }
     end
   end
@@ -73,7 +73,7 @@ describe "a phpbb3 impostor" do
       )
       impostor = Impostor.new(conf)
       impostor.new_topic(forum=2, subject='A Special Message', message='Hello World').should == {
-        :forum => 2, :topic => 5, :subject => 'A Special Message',  :message => "Hello World", :result => true
+        :forum => 2, :topic => 8, :subject => 'A Special Message',  :message => "Hello World", :result => true
       }
     end
   end

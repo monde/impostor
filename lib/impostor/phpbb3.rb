@@ -81,8 +81,6 @@ class Impostor
       def set_message(form, message)
         form.message = message
         form["post"] = "Submit"
-        lastclick = form.lastclick || 60
-        form["lastclick"] = (lastclick.to_i - 60).to_s
         form
       end
 
@@ -151,8 +149,6 @@ class Impostor
         form.subject = subject
         form.message = message
         form["post"] = "Submit"
-        lastclick = form.lastclick || 60
-        form["lastclick"] = (lastclick.to_i - 60).to_s
         form
       end
 
