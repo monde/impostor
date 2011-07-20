@@ -3,6 +3,7 @@
 source :gemcutter
 
 gem "hoe", ">=2.8.0"
+gem "rdoc"
 gem "mechanize", "=1.0.0"
 gem "nokogiri", ">=1.4.4"
 

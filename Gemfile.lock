@@ -19,6 +19,7 @@ GEM
       gem_plugin (>= 0.2.3)
     nokogiri (1.5.0)
     rake (0.9.2)
+    rdoc (3.8)
     redgreen (1.2.2)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
@@ -41,6 +42,7 @@ DEPENDENCIES
   mechanize (= 1.0.0)
   mongrel (>= 1.1.5)
   nokogiri (>= 1.4.4)
+  rdoc
   redgreen (>= 1.2.2)
   rspec (>= 2.3.0)
   vcr (>= 1.5.1)
