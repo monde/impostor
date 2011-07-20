@@ -1,3 +1,7 @@
+### 1.0.2 / 2011-07-19 (help, I've fallen and can't get up, part dux)
+
+* re-release with correct gem deps in Rackfile
+
 ### 1.0.1 / 2011-07-19 (help, I've fallen and can't get up)
 
 * 1 bug fix
