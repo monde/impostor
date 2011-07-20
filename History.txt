@@ -1,3 +1,9 @@
+### 1.0.1 / 2011-07-19 (help, I've fallen and can't get up)
+
+* 1 bug fix
+  * Mechanize 2.* is incompatible with this implementation (for now), locking
+    down on Mechanize 1.0.0
+
 ### 1.0.0 / 2011-02-XX (move over bacon there's something leaner)
 
 * 2 major enhancements
