@@ -67,7 +67,7 @@ class Impostor::Config
     forum = forum.to_s
     topic = topic.to_s
     if self.topics[forum].nil?
-      self.topics[forum] = {topic, name}
+      self.topics[forum] = {topic => name}
     else
       self.topics[forum][topic] = name
     end

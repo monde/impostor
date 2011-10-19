@@ -185,7 +185,7 @@ describe "a phpbb2 impostor" do
 
     it "should set_message(form, message)" do
       form = @post.get_post_form(@reply_response_page)
-      form.should_receive(:message=, "Hello World")
+      form.should_receive(:message=).with("Hello World")
       lambda {
         @post.set_message(form, "Hello World")
       }.should_not raise_error

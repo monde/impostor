@@ -1,3 +1,10 @@
+### 1.1.0 / 2011-10-18
+
+* 1 major enhancement
+  * ruby 1.9.2 compatible
+* 1 major fix
+  * syntax bug fix
+
 ### 1.0.2 / 2011-07-19 (help, I've fallen and can't get up, part dux)
 
 * re-release with correct gem deps in Rackfile

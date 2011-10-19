@@ -5,8 +5,9 @@ module Net #:nodoc:
     alias :old_net_http_connect :connect
 
     def request(req, body = nil, &block)
-      prot = use_ssl ? "https" : "http"
-      uri_cls = use_ssl ? URI::HTTPS : URI::HTTP
+      # prot = use_ssl ? "https" : "http"
+      # uri_cls = use_ssl ? URI::HTTPS : URI::HTTP
+      uri_cls = URI::HTTP
       query = req.path.split('?',2)
       opts = {:host => self.address,
              :port => self.port, :path => query[0]}
