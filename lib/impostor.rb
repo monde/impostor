@@ -8,8 +8,6 @@
 end
 require 'logger'
 
-Dir.glob(File.join(File.dirname(__FILE__), 'impostor/**/*.rb')).each {|f| require f }
-
 class Impostor
 
   ##
@@ -52,7 +50,7 @@ class Impostor
   ##
   # Gem version of Impostor
 
-  VERSION = '1.1.1'
+  VERSION = '1.1.2'
 
   ##
   # Pass in a config hash to initialize
@@ -107,3 +105,5 @@ WARNMSG
   end
 
 end
+
+Dir.glob(File.join(File.dirname(__FILE__), 'impostor/**/*.rb')).each {|f| require f }
