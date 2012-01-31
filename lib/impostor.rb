@@ -52,7 +52,7 @@ class Impostor
   ##
   # Gem version of Impostor
 
-  VERSION = '1.1.0'
+  VERSION = '1.1.1'
 
   ##
   # Pass in a config hash to initialize

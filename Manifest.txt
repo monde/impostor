@@ -1,6 +1,5 @@
 .gitignore
 .rspec
-.rvmrc
 Gemfile
 Gemfile.lock
 History.txt
