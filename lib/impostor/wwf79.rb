@@ -49,7 +49,7 @@ class Impostor
       ##
       # Sets the user name and pass word on the loing form.
       def set_username_and_password(form)
-        button = Mechanize::Form::Button.new('Submit', 'Forum Login')
+        button = Mechanize::Form::Button.new(form, 'Forum Login')
         form.add_button_to_query(button)
         form['name'] = self.config.username
         form['password'] = self.config.password
