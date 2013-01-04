@@ -23,8 +23,8 @@ Hoe.spec('impostor') do |p|
   p.readme_file = "README.txt"
   p.history_file = "History.txt"
   p.changes = p.paragraphs_of('History.txt', 0..1).join("\n\n")
-  p.extra_deps << ['nokogiri', '>= 1.4.4']
-  p.extra_deps << ['mechanize', '= 1.0.0']
+  p.extra_deps << ['nokogiri', '~> 1.4']
+  p.extra_deps << ['mechanize', '~> 2.5.1']
   p.clean_globs << 'coverage'
   p.testlib = :rspec
 end
