@@ -32,6 +32,42 @@ impostor.post(forum=5,topic=10,message)
 subject = "about programmers..."
 impostor.new_topic(forum=7,subject,message)
 
+
+== CONFIGURATION
+
+Configurable options:
+
+* :app_root
+* :cookie_jar
+* :follow_meta_refresh
+* :forum_posts_page
+* :logger
+* :login_page
+* :new_reply_page
+* :new_topic_page
+* :password
+* :post_message_page
+* :posting_page
+* :sleep_before_post
+* :topics_cache
+* :type
+* :user_agent
+* :username
+
+Example
+
+config = {
+ :app_root=>"http://example.com/phpBB/",
+ :login_page=>"login.php",
+ :password=>"pass",
+ :posting_page=>"posting.php",
+ :sleep_before_post=>2,
+ :type=>:phpbb2,
+ :user_agent=>"Windows IE 7",
+ :username=>"user",
+}
+impostor = Impostor.new(config)
+
 == REQUIREMENTS:
 
 * hoe
@@ -70,3 +106,6 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+

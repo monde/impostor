@@ -33,6 +33,7 @@ class Impostor::Config
 
   def setup_agent
     @agent = Mechanize.new do |mechanize|
+      mechanize.follow_meta_refresh = !!self.config(:follow_meta_refresh)
       if logger = self.config(:logger)
         if File.exist?(logger.to_s)
           mechanize.log = Logger.new(logger.to_s)

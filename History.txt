@@ -1,3 +1,8 @@
+### 1.3.2 / 2013-01-04
+
+* 1 minor enhancement
+  * allow mechanize to follow meta refreshes
+
 ### 1.3.1 / 2013-01-04
 
 * 1 dependency error
