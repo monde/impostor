@@ -22,19 +22,19 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<nokogiri>, ["~> 1.4.0"])
+      s.add_runtime_dependency(%q<nokogiri>, ">= 1.4", "< 1.13")
       s.add_runtime_dependency(%q<mechanize>, ["~> 2.5.0"])
       s.add_development_dependency(%q<rdoc>, ["~> 3.10"])
       s.add_development_dependency(%q<hoe>, ["~> 2.14"])
       s.add_development_dependency(%q<vcr>)
     else
-      s.add_dependency(%q<nokogiri>, ["~> 1.4.0"])
+      s.add_dependency(%q<nokogiri>, ">= 1.4", "< 1.13")
       s.add_dependency(%q<mechanize>, ["~> 2.5.0"])
       s.add_dependency(%q<rdoc>, ["~> 3.10"])
       s.add_dependency(%q<hoe>, ["~> 2.14"])
     end
   else
-    s.add_dependency(%q<nokogiri>, ["~> 1.4.0"])
+    s.add_dependency(%q<nokogiri>, ">= 1.4", "< 1.13")
     s.add_dependency(%q<mechanize>, ["~> 2.5.0"])
     s.add_dependency(%q<rdoc>, ["~> 3.10"])
     s.add_dependency(%q<hoe>, ["~> 2.14"])
